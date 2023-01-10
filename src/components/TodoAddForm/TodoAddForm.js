@@ -6,7 +6,7 @@ class TodoAddForm extends Component {
         this.addEvent('keyup', '.todoaddfrom-name', this.checkInput.bind(this));
         this.addEvent('keyup', '.todoaddform-desc', this.checkInput.bind(this));
         this.addEvent('click', '.ok-btn', this.okClicked.bind(this));
-        this.addEvent('click', '.cancel-btn', addCancel);
+        this.addEvent('click', '.cancel-btn, .todoaddform-bgbtn', addCancel);
     }
 
     okClicked() {
@@ -29,11 +29,14 @@ class TodoAddForm extends Component {
 
     template() {
         return `
-        <input class="todoaddform-name" type="text" placeholder="제목을 입력하세요">
-        <textarea class="todoaddform-desc" placeholder="내용을 입력하세요"></textarea>
-        <div>
-            <button class="cancel-btn">취소</button>
-            <button class="ok-btn" disabled>등록</button>
+        <button class="todoaddform-bgbtn"></button>
+        <div class="todoaddform-fgarea">
+            <input class="todoaddform-name" type="text" placeholder="제목을 입력하세요">
+            <textarea class="todoaddform-desc" placeholder="내용을 입력하세요"></textarea>
+            <div>
+                <button class="cancel-btn">취소</button>
+                <button class="ok-btn" disabled>등록</button>
+            </div>
         </div>
         `
     }

@@ -33,7 +33,7 @@ const getUser = () => {
 
 const TodoDatabase = {
     notify(notification) {
-        database.notifications.push(notification);
+        database.notifications.unshift(notification);
         this.notificationListener(notification);
     },
     notificationListener() {},
