@@ -51,7 +51,10 @@ class TodoCard extends Component {
                     </svg>
                 </button>            
             </div>
-            <textarea class="todocard-desc" ${isEdit || 'disabled'}>${todo.description}</textarea>
+            ${isEdit ?
+            `<textarea class="todocard-desc">${todo.description}</textarea>` :
+            `<pre class="todocard-desc">${todo.description}</pre>`
+            }
             <div class="todocard-btn-area" style="${isEdit ? 'height: auto' : 'height: 0'}; overflow: hidden">
                 <button class="todocard-edit-cancel">취소</button>
                 <button class="todocard-edit-ok">수정</button>
@@ -61,8 +64,9 @@ class TodoCard extends Component {
     }
 
     mounted() {
-        const $textarea = this.$target.querySelector('textarea');
+        const $textarea = this.$target.querySelector('.todocard-desc');
         $textarea.style.height = `${$textarea.scrollHeight}px`;
+        this.$target.draggable = !this.state.isEdit;
     }
 }
 

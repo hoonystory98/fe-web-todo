@@ -44,6 +44,10 @@ class DoubleClickInput extends Component {
 
     fitWidth() {
         const $input = this.$target.querySelector('input');
+        if (!$input.value.length) {
+            $input.style.width = '155px';
+            return;
+        }
         $input.style.width = '0';
         $input.style.width = `${$input.scrollWidth}px`;
     }
