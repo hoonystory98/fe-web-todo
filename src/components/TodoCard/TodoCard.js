@@ -1,5 +1,6 @@
 import Component from "../../core/Component.js";
 import TodoDatabase from "../../persistance/TodoDatabase.js";
+import DragManager from "../../core/DragManager.js";
 
 class TodoCard extends Component {
     initialize() {
@@ -75,9 +76,9 @@ class TodoCard extends Component {
     }
     renderEdit() {
         if (this.state.isEdit) {
-            this.$target.classList.add('edit');
+            this.$target.classList.add('edit', DragManager.BLOCK_DRAG_CLASS);
         } else {
-            this.$target.classList.remove('edit');
+            this.$target.classList.remove('edit', DragManager.BLOCK_DRAG_CLASS);
         }
     }
 }

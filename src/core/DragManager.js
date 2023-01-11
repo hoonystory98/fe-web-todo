@@ -18,7 +18,7 @@ const DragManager = {
 
     __mousedownEventListener(ev) {
         const $target = ev.target.closest(`[data-component="${this.draggableComponentName}"]`);
-        if (!$target)
+        if (!$target || $target.classList.contains(this.BLOCK_DRAG_CLASS))
             return;
         this.$dragstartComponent = $target;
         this.dragstartInnerPos = {
@@ -61,7 +61,8 @@ const DragManager = {
         document.addEventListener('mousedown', DragManager.__mousedownEventListener.bind(this));
         document.addEventListener('mousemove', DragManager.__mousemoveEventListener.bind(this));
         document.addEventListener('mouseup', DragManager.__mouseupEventListener.bind(this));
-    }
+    },
+    BLOCK_DRAG_CLASS: 'blockDrag'
 };
 
 const MOVEMENT_THRESHOLD = 5;
