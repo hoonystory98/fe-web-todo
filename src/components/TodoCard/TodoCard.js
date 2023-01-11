@@ -32,6 +32,7 @@ class TodoCard extends Component {
             `<textarea class="todocard-desc">${todo.description}</textarea>` :
             `<pre class="todocard-desc">${todo.description}</pre>`
             }
+            <p class="todocard-author">author by ${todo.author}</p>
             <div class="todocard-btn-area">
                 <button class="todocard-edit-cancel">취소</button>
                 <button class="todocard-edit-ok">수정</button>

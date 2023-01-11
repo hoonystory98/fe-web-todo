@@ -99,3 +99,13 @@
 .edit .todocard-btn-area {
     height: auto;
 }
+
+.todocard-author {
+    margin: 5px 0 0;
+    font-size: small;
+    font-weight: lighter;
+}
+
+.edit .todocard-author {
+    display: none;
+}
