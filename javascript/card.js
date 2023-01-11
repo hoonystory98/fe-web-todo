@@ -1,8 +1,6 @@
 //for card delete
-
 function RegisterFormShow(obj){
     const CardForm = obj.parentElement.parentElement.parentElement.getElementsByClassName('NewCard')[0];
-    const CardSection = obj.parentElement.parentElement.parentElement.getElementsByClassName('CardSection')[0];
     
     if(CardForm.style.display != 'block'){
         CardForm.style.display = 'block';
@@ -30,6 +28,9 @@ function CardHeightAdjust(InputArea){
 }
 
 function CardModifying(TargetCard){
+    if(TargetCard.classList.contains("NewCard")){
+        return;
+    }
     let BeforeTitle=TargetCard.getElementsByClassName('CardTitle')[0].innerText;
     let BeforeBody=TargetCard.getElementsByClassName('CardBody')[0].innerText.replace(/\* /g,"");
 
@@ -51,11 +52,9 @@ function CardModifyingCancel(obj){
     obj.parentElement.parentElement.className='ColumnCards';
     obj.parentElement.parentElement.draggable=true;
     obj.parentElement.parentElement.style.height='';
-    obj.parentElement.parentElement.innerHTML=`<div class="CardTitle">${BeforeTitle}<i class="fa-solid fa-xmark" onclick="ModalAlert(this)"></i></div>
+    obj.parentElement.parentElement.innerHTML=`<div class="CardTitle">${BeforeTitle}<i class="fa-solid fa-xmark" onclick="ModalDelete(this)"></i></div>
                                                 <div class="CardBody">${BeforeBody}</div>
                                                 <div class="CardAuthor">author by web</div>`;
-    console.log(Card);
-    Card.addEventListener("dblclick",CardModifying());
 }
 
 function CardModifyingYes(obj){
@@ -68,11 +67,9 @@ function CardModifyingYes(obj){
     obj.parentElement.parentElement.className='ColumnCards';
     obj.parentElement.parentElement.draggable=true;
     obj.parentElement.parentElement.style.height='';
-    obj.parentElement.parentElement.innerHTML=`<div class="CardTitle">${NewTitle}<i class="fa-solid fa-xmark" onclick="ModalAlert(this)"></i></div>
-                                                <div class="CardBody">${NewBody}</div>
-                                                <div class="CardAuthor">author by web</div>`;
-    console.log(Card);
-    Card.addEventListener("dblclick",CardModifying());
+    obj.parentElement.parentElement.innerHTML=`<div class="CardTitle">${NewTitle}<i class="fa-solid fa-xmark" onclick="ModalDelete(this)"></i></div>
+                                               <div class="CardBody">${NewBody}</div>
+                                               <div class="CardAuthor">author by web</div>`;
 }
 
 function CardMaking(obj){
@@ -81,18 +78,18 @@ function CardMaking(obj){
     if((/<br>/).test(NewBody)){
         NewBody = '* ' + NewBody;
     }
+    let NewCardIDNum = new Date().getTime();
     let NewCardForm = document.createElement("div");
     NewCardForm.classList.toggle("ColumnCards");
-    NewCardForm.innerHTML=`<div class="CardTitle">${NewTitle}<i class="fa-solid fa-xmark" onclick="ModalAlert(this)"></i></div>
+    NewCardForm.id=`${obj.getAttribute("data-section")}-${NewCardIDNum}`;
+    NewCardForm.innerHTML=`<div class="CardTitle">${NewTitle}<i class="fa-solid fa-xmark" onclick="ModalDelete(this)"></i></div>
                             <div class="CardBody">${NewBody}</div>
                             <div class="CardAuthor">author by web</div>`;
-    obj.parentElement.parentElement.parentElement.getElementsByClassName('CardSection')[0].appendChild(NewCardForm);
+    
+    obj.parentElement.parentElement.parentElement.getElementsByClassName('CardSection')[0].prepend(NewCardForm);
 
     obj.parentElement.parentElement.getElementsByClassName('TitleInput')[0].value='';
     obj.parentElement.parentElement.getElementsByClassName('CardInput')[0].value='';
     obj.parentElement.parentElement.parentElement.getElementsByClassName('NewCard')[0].style.display='none';
-}
-
-function CardDelete(TargetCard){
-    TargetCard.style.display = 'none';
+    document.getElementById(`Count-${obj.getAttribute("data-section")}`).innerText=parseInt(document.getElementById(`Count-${obj.getAttribute("data-section")}`).innerText)+1;
 }
