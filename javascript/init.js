@@ -34,3 +34,17 @@ const init={
         }
     ]
 };
+
+// const cardlog={
+//     "Logs":[
+//         {
+//             "Type":["등록","삭제","변경","이동"],
+//             "Title":"Github Study",
+//             "Column":"하는중인 일",
+//             "TitleTo":"Github 공부하기",
+//             "ColumnTo":"해야할 일",
+//             "Editor":"sam",
+//             "Time":1673406569094
+//         }
+//     ]
+// };

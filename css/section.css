@@ -121,7 +121,6 @@
 .ColumnList > div.CardSection{
     display: block;
     align-items: flex-start;
-    height: 640px;
     overflow-y: auto;
 }
 
