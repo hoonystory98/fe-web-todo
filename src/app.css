@@ -8,3 +8,7 @@
 * {
     user-select: none;
 }
+
+.dragstart {
+    opacity: 0.5;
+}

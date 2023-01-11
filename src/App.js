@@ -3,9 +3,13 @@ import Header from "./components/Header/Header.js";
 import AddColumnButton from "./components/AddColumnButton/AddColumnButton.js";
 import TodoHolder from "./components/TodoHolder/TodoHolder.js";
 import TodoDatabase from "./persistance/TodoDatabase.js";
+import DragManager from "./core/DragManager.js";
 
 class App extends Component {
     initialize() {
+        DragManager.setDraggableDatasetComponentName('TodoCard');
+        DragManager.setDraggableDatasetIdentifierName('todoId');
+        DragManager.initialize();
         this.state = {
             columnIds: TodoDatabase.findAllColumnIds()
         }

@@ -21,7 +21,10 @@ class TodoCard extends Component {
         <button class="todocard-bgbtn"></button>
         <div class="todocard-dblclick-area">
             <div class="todocard-header">
-                <input class="todocard-title" value="${todo.name}" ${isEdit || 'disabled'}>
+                ${isEdit ?
+                `<input class="todocard-title" value="${todo.name}">` :
+                `<h4 class="todocard-title">${todo.name}</h4>`
+                }
                 <button class="todocard-delete" ${!isEdit || 'disabled'}>
                     <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1.5 11.25L0.75 10.5L5.25 6L0.75 1.5L1.5 0.750004L6 5.25L10.5 0.750004L11.25 1.5L6.75 6L11.25 10.5L10.5 11.25L6 6.75L1.5 11.25Z"/>
@@ -42,7 +45,6 @@ class TodoCard extends Component {
     }
 
     mounted() {
-        this.renderDraggable();
         this.renderEdit();
         this.fitHeight();
     }
@@ -70,9 +72,6 @@ class TodoCard extends Component {
     fitHeight() {
         const $textarea = this.$target.querySelector('.todocard-desc');
         $textarea.style.height = `${$textarea.scrollHeight}px`;
-    }
-    renderDraggable() {
-        this.$target.draggable = !this.state.isEdit;
     }
     renderEdit() {
         if (this.state.isEdit) {
