@@ -1,6 +1,5 @@
 const DragManager = {
     draggableComponentName: undefined,
-    draggableIdentifierName: undefined,
     draggingStyle: '',
     $dragstartComponent: undefined,
     $draggingComponent: undefined,
@@ -9,15 +8,20 @@ const DragManager = {
         y: undefined
     },
     onDraggableCollapse: ($dragStart, $dragOver) => {},
+    onDragFinished: () => {},
+
     setDraggableDatasetComponentName(componentName) {
         this.draggableComponentName = componentName;
     },
-    setDraggableDatasetIdentifierName(identifierName) {
-        this.draggableIdentifierName = identifierName;
+    setDraggableCollapsedListener(listener) {
+        this.onDraggableCollapse = listener;
+    },
+    setDragFinishedListener(listener) {
+        this.onDragFinished = listener;
     },
 
     __mousedownEventListener(ev) {
-        const $target = ev.target.closest(`[data-component="${this.draggableComponentName}"]`);
+        const $target = findClosestComponent(ev.target, this.draggableComponentName);
         if (!$target || $target.classList.contains(this.BLOCK_DRAG_CLASS))
             return;
         this.$dragstartComponent = $target;
@@ -37,12 +41,18 @@ const DragManager = {
             this.$draggingComponent.innerHTML = this.$dragstartComponent.outerHTML;
             this.$draggingComponent.style.position = 'absolute';
             this.$draggingComponent.style.zIndex = '999';
+            this.$draggingComponent.style.pointerEvents = 'none';
             document.body.appendChild(this.$draggingComponent);
             this.$dragstartComponent.classList.add('dragstart');
         }
         if (this.$draggingComponent) {
             this.$draggingComponent.style.left = `${ev.clientX - this.dragstartInnerPos.x}px`;
             this.$draggingComponent.style.top = `${ev.clientY - this.dragstartInnerPos.y}px`;
+
+            const $collapsedComponentTarget = findClosestComponent(ev.target, this.draggableComponentName);
+            if ($collapsedComponentTarget && this.onDraggableCollapse) {
+                this.onDraggableCollapse(this.$dragstartComponent, $collapsedComponentTarget);
+            }
         }
     },
 
@@ -54,6 +64,7 @@ const DragManager = {
         if (this.$draggingComponent) {
             this.$draggingComponent.remove();
             this.$draggingComponent = null;
+            this.onDragFinished();
         }
     },
 
@@ -69,6 +80,10 @@ const MOVEMENT_THRESHOLD = 5;
 
 function vectorNorm({x, y}) {
     return Math.sqrt(x * x + y * y);
+}
+
+function findClosestComponent($child, componentName) {
+    return $child.closest(`[data-component="${componentName}"]`);
 }
 
 export default DragManager;

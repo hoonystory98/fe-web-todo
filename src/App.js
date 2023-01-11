@@ -8,7 +8,12 @@ import DragManager from "./core/DragManager.js";
 class App extends Component {
     initialize() {
         DragManager.setDraggableDatasetComponentName('TodoCard');
-        DragManager.setDraggableDatasetIdentifierName('todoId');
+        DragManager.setDraggableCollapsedListener(($start, $over) => {
+            console.log($start, $over);
+        });
+        DragManager.setDragFinishedListener(() => {
+            console.log('Drag Finished');
+        })
         DragManager.initialize();
         this.state = {
             columnIds: TodoDatabase.findAllColumnIds()
