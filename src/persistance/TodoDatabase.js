@@ -12,17 +12,39 @@ const database = {
     ],
     columns: [
         {
-            name: "Test Col",
+            name: "오늘 할 일",
             id: 0
+        },
+        {
+            name: "내일 할 일",
+            id: 1
+        },
+        {
+            name: "모레 할 일",
+            id: 2
         }
     ],
     todos: [
         {
             author: "randomlee",
-            name: "test",
-            description: "test test, test \n test test \n test! \n test!",
+            name: "인사하기",
+            description: "안녕하세용!!!\n반갑습니다~~",
             columnId: 0,
             id: 0
+        },
+        {
+            author: "randomlee",
+            name: "밥먹기",
+            description: "옴뇸뇸",
+            columnId: 0,
+            id: 1
+        },
+        {
+            author: "randomlee",
+            name: "잠자기",
+            description: "쿨쿨쿨",
+            columnId: 0,
+            id: 2
         }
     ]
 };
@@ -116,6 +138,33 @@ const TodoDatabase = {
             from: originName,
             to: name,
             action: '수정',
+            timestamp: Date.now(),
+            id: Date.now()
+        };
+        this.notify(notification);
+    },
+    moveTodo(srcTodoId, dstTodoId, columnId=-1) {
+        if (srcTodoId === dstTodoId)
+            return;
+        const srcIndex = database.todos.findIndex(({ id }) => id === srcTodoId);
+        const srcTodo = database.todos.splice(srcIndex, 1)[0];
+        const srcColumnName = this.findColumnById(srcTodo.columnId).name;
+        if (dstTodoId < 0) {
+            srcTodo.columnId = columnId;
+            database.todos.push(srcTodo);
+        } else {
+            const dstIndex = database.todos.findIndex(({ id }) => id === dstTodoId);
+            const dstTodo = database.todos[dstIndex];
+            srcTodo.columnId = dstTodo.columnId;
+            database.todos.splice(dstIndex, 0, srcTodo);
+        }
+        const dstColumnName = this.findColumnById(srcTodo.columnId).name;
+        const notification = {
+            author: getUser(),
+            name: srcTodo.name,
+            from: srcColumnName,
+            to: dstColumnName,
+            action: '이동',
             timestamp: Date.now(),
             id: Date.now()
         };

@@ -3,6 +3,7 @@ import TodoDatabase from "../../persistance/TodoDatabase.js";
 import TodoCard from "../TodoCard/TodoCard.js";
 import DoubleClickInput from "../DoubleClickInput/DoubleClickInput.js";
 import TodoAddForm from "../TodoAddForm/TodoAddForm.js";
+import DragManager from "../../core/DragManager.js";
 
 class TodoHolder extends Component {
     initialize() {
@@ -22,6 +23,7 @@ class TodoHolder extends Component {
     }
 
     template() {
+        const { columnId } = this.props;
         const { todoIds } = this.state;
         return `
         <div class="todoholder-header">
@@ -47,8 +49,10 @@ class TodoHolder extends Component {
         <article>
         <div data-component="TodoAddForm" hidden></div>
         ${todoIds.map(todoId => `
-           <div data-component="TodoCard" data-todo-id="${todoId}"></div>
+           <div data-component="TodoCard" data-todo-id="${todoId}" data-column-id="${columnId}"></div>
         `).join('')}
+        <div class="${DragManager.BLOCK_DRAG_CLASS}" 
+            data-component="TodoCard" data-todo-id="-1" data-column-id="${columnId}"></div>
         </article>
         `
     }
@@ -74,6 +78,8 @@ class TodoHolder extends Component {
         const $todoCards = this.$target.querySelectorAll(`[data-component="TodoCard"]`);
         $todoCards.forEach($todoCard => {
             const todoId = parseInt($todoCard.dataset.todoId);
+            if (todoId < 0)
+                return;
             new TodoCard($todoCard, { todoId });
         });
     }

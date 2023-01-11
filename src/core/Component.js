@@ -6,7 +6,7 @@ class Component {
         this.$target = $target;
         this.props = props;
         this.initialize();
-        this.#render();
+        this.render();
     }
     initialize() {}
     mounted() {}
@@ -27,10 +27,10 @@ class Component {
 
     setState (newState) {
         this.state = { ...this.state, ...newState };
-        this.#render();
+        this.render();
     }
 
-    #render() {
+    render() {
         this.$target.innerHTML = this.template();
         this.mounted();
     }
