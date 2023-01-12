@@ -3,7 +3,6 @@ import TodoDatabase from "../../persistance/TodoDatabase.js";
 import TodoCard from "../TodoCard/TodoCard.js";
 import DoubleClickInput from "../DoubleClickInput/DoubleClickInput.js";
 import TodoAddForm from "../TodoAddForm/TodoAddForm.js";
-import DragManager from "../../core/DragManager.js";
 
 class TodoHolder extends Component {
     initialize() {
@@ -12,10 +11,10 @@ class TodoHolder extends Component {
         this.state = {
             todoIds: todoIds
         }
-        this.addEvent('click', '.add-todo-btn', this.addClick.bind(this));
+        this.addEvent('click', '.add-todo-btn', this.addBtnClicked.bind(this));
     }
 
-    addClick() {
+    addBtnClicked() {
         const $addForm = this.$target.querySelector('[data-component="TodoAddForm"]');
         const checked = !$addForm.toggleAttribute('hidden');
         const $button = this.$target.querySelector('.add-todo-btn');
@@ -46,41 +45,49 @@ class TodoHolder extends Component {
                 </button>        
             </div>
         </div>
-        <article>
+        <article class="todoholder-actual">
         <div data-component="TodoAddForm" hidden></div>
         ${todoIds.map(todoId => `
            <div data-component="TodoCard" data-todo-id="${todoId}" data-column-id="${columnId}"></div>
         `).join('')}
-        <div class="${DragManager.BLOCK_DRAG_CLASS}" 
-            data-component="TodoCard" data-todo-id="-1" data-column-id="${columnId}"></div>
+        <div data-component="TodoCard" data-todo-id="-1" data-column-id="${columnId}"></div>
         </article>
         `
     }
 
     mounted() {
+        this.mountColumnNameInput();
+        this.mountAddForm();
+        this.mountTodoCards();
+    }
+
+    mountColumnNameInput() {
         const { columnId } = this.props;
         const column = TodoDatabase.findColumnById(columnId);
-
         const $doubleClickInput = this.$target.querySelector('[data-component="DoubleClickInput"]');
         new DoubleClickInput($doubleClickInput, {
             value: column.name,
             placeholder: '칼럼 이름을 입력하세요',
             onValueChanged: this.updateColumnName.bind(this)
         });
+    }
 
+    mountTodoCards() {
+        const { columnId } = this.props;
+        const $actualHolder = this.$target.querySelector('.todoholder-actual');
+        const $todoCards = this.$target.querySelectorAll(`[data-component="TodoCard"]`);
+        $todoCards.forEach($todoCard => {
+            const todoId = parseInt($todoCard.dataset.todoId);
+            new TodoCard($todoCard, { todoId, columnId, $actualHolder });
+        });
+    }
+
+    mountAddForm() {
         const $todoAddForm = this.$target.querySelector('[data-component="TodoAddForm"]');
         const addTodo = this.addTodo.bind(this);
         new TodoAddForm($todoAddForm, {
             addTodo,
-            addCancel: this.addClick.bind(this)
-        });
-
-        const $todoCards = this.$target.querySelectorAll(`[data-component="TodoCard"]`);
-        $todoCards.forEach($todoCard => {
-            const todoId = parseInt($todoCard.dataset.todoId);
-            if (todoId < 0)
-                return;
-            new TodoCard($todoCard, { todoId });
+            addCancel: this.addBtnClicked.bind(this)
         });
     }
 

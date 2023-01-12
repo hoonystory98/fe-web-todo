@@ -7,20 +7,14 @@ const DragManager = {
         x: undefined,
         y: undefined
     },
-    onDraggableCollapse: ($dragStart, $dragOver) => {},
-    onDragFinished: () => {},
+    $lastCollapsedComponent: undefined,
 
     setDraggableDatasetComponentName(componentName) {
         this.draggableComponentName = componentName;
     },
-    setDraggableCollapsedListener(listener) {
-        this.onDraggableCollapse = listener;
-    },
-    setDragFinishedListener(listener) {
-        this.onDragFinished = listener;
-    },
 
     __mousedownEventListener(ev) {
+        this.$lastCollapsedComponent = null;
         const $target = findClosestComponent(ev.target, this.draggableComponentName);
         if (!$target || $target.classList.contains(this.BLOCK_DRAG_CLASS))
             return;
@@ -50,21 +44,34 @@ const DragManager = {
             this.$draggingComponent.style.top = `${ev.clientY - this.dragstartInnerPos.y}px`;
 
             const $collapsedComponentTarget = findClosestComponent(ev.target, this.draggableComponentName);
-            if ($collapsedComponentTarget && this.onDraggableCollapse) {
-                this.onDraggableCollapse(this.$dragstartComponent, $collapsedComponentTarget);
+            if ($collapsedComponentTarget) {
+                if ($collapsedComponentTarget === this.$dragstartComponent)
+                    return;
+                this.$lastCollapsedComponent = $collapsedComponentTarget;
+                $collapsedComponentTarget.dispatchEvent(new MyDragEvent(
+                    DragManager.dragEventTypes.COLLAPSED,
+                    this.$dragstartComponent,
+                    $collapsedComponentTarget
+                ));
             }
         }
     },
 
     __mouseupEventListener(ev) {
+        const dragEvent = new MyDragEvent(
+            DragManager.dragEventTypes.END,
+            this.$dragstartComponent,
+            this.$lastCollapsedComponent
+        );
+        ev.target.dispatchEvent(dragEvent);
         if (this.$dragstartComponent) {
+            this.$dragstartComponent.dispatchEvent(dragEvent);
             this.$dragstartComponent.classList.remove('dragstart');
             this.$dragstartComponent = null;
         }
         if (this.$draggingComponent) {
             this.$draggingComponent.remove();
             this.$draggingComponent = null;
-            this.onDragFinished();
         }
     },
 
@@ -73,8 +80,21 @@ const DragManager = {
         document.addEventListener('mousemove', DragManager.__mousemoveEventListener.bind(this));
         document.addEventListener('mouseup', DragManager.__mouseupEventListener.bind(this));
     },
-    BLOCK_DRAG_CLASS: 'blockDrag'
+
+    BLOCK_DRAG_CLASS: 'block-drag',
+    dragEventTypes: {
+        COLLAPSED: 'mydragcollapsed',
+        END: 'mydragend'
+    }
 };
+
+class MyDragEvent extends CustomEvent {
+    constructor(type, $start, $lastCollapsed) {
+        super(type, { bubbles: true });
+        this.dragStartedElement = $start;
+        this.lastCollapsedElement = $lastCollapsed;
+    }
+}
 
 const MOVEMENT_THRESHOLD = 5;
 

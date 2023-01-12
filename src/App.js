@@ -11,6 +11,7 @@ class App extends Component {
         this.state = {
             columnIds: TodoDatabase.findAllColumnIds()
         }
+        this.addEvent(DragManager.dragEventTypes.END, '*', this.onDragFinished.bind(this));
     }
 
     template() {
@@ -51,30 +52,20 @@ class App extends Component {
     }
 
     initializeDragFeature() {
-        let startTodoId, endTodoId, endColumnId;
         DragManager.setDraggableDatasetComponentName('TodoCard');
-        DragManager.setDraggableCollapsedListener(($start, $over) => {
-            if ($start.dataset.todoId === $over.dataset.todoId) {
-                return;
-            }
-            startTodoId = parseInt($start.dataset.todoId);
-            endTodoId = parseInt($over.dataset.todoId);
-            endColumnId = parseInt($over.dataset.columnId);
-            this.updateTodoPosition($start, $over);
-        });
-        DragManager.setDragFinishedListener(() => {
-            if (startTodoId === undefined || endTodoId === undefined)
-                return;
-            TodoDatabase.moveTodo(startTodoId, endTodoId, endColumnId);
-            this.render();
-        });
         DragManager.initialize();
     }
 
-    updateTodoPosition($start, $over) {
-        if ($start.dataset.todoId !== $over.dataset.todoId) {
-            $over.parentElement.insertBefore($start, $over);
-        }
+    onDragFinished(ev) {
+        const $dragStartTodoCard = ev.dragStartedElement;
+        const $lastCollapsedTodoCard = ev.lastCollapsedElement;
+        if (!$lastCollapsedTodoCard)
+            return;
+        const srcTodoId = parseInt($dragStartTodoCard.dataset.todoId);
+        const dstTodoId = parseInt($lastCollapsedTodoCard.dataset.todoId);
+        const dstColumnId = parseInt($lastCollapsedTodoCard.dataset.columnId);
+        TodoDatabase.moveTodo(srcTodoId, dstTodoId, dstColumnId);
+        this.render();
     }
 }
 

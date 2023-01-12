@@ -89,6 +89,10 @@
     z-index: 71;
 }
 
+.todocard-dblclick-area > * {
+    width: 100%;
+}
+
 .todocard-btn-area {
     overflow: hidden;
     display: flex;

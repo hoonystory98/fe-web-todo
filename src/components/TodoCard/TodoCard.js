@@ -5,18 +5,35 @@ import DragManager from "../../core/DragManager.js";
 class TodoCard extends Component {
     initialize() {
         const { todoId } = this.props;
-        const todo = TodoDatabase.findTodoById(todoId);
-        this.state = {
-            todo: todo,
-            isEdit: false
+        this.setEvent();
+        if (this.isDummy()) {
+            this.$target.classList.add(DragManager.BLOCK_DRAG_CLASS);
+        } else {
+            const todo = TodoDatabase.findTodoById(todoId);
+            this.state = {
+                todo: todo,
+                isEdit: false
+            };
         }
+    }
+
+    setEvent() {
         this.addEvent('dblclick', '.todocard-dblclick-area', this.startEdit.bind(this));
         this.addEvent('click', '.todocard-edit-cancel', this.cancelEdit.bind(this));
         this.addEvent('click', '.todocard-edit-ok', this.finishEdit.bind(this));
         this.addEvent('click', '.todocard-bgbtn', this.cancelEdit.bind(this));
+        this.addEvent(DragManager.dragEventTypes.COLLAPSED, '*', this.onCollapsed.bind(this));
+    }
+
+    onCollapsed(ev) {
+        const { $actualHolder } = this.props
+        const $dragStart = ev.dragStartedElement;
+        $actualHolder.insertBefore($dragStart, this.$target);
     }
 
     template() {
+        if (this.isDummy())
+            return ``;
         const { todo, isEdit } = this.state;
         return `
         <button class="todocard-bgbtn"></button>
@@ -46,6 +63,8 @@ class TodoCard extends Component {
     }
 
     mounted() {
+        if (this.isDummy())
+            return;
         this.renderEdit();
         this.fitHeight();
     }
@@ -80,6 +99,10 @@ class TodoCard extends Component {
         } else {
             this.$target.classList.remove('edit', DragManager.BLOCK_DRAG_CLASS);
         }
+    }
+    isDummy() {
+        const { todoId } = this.props;
+        return todoId < 0;
     }
 }
 
