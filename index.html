@@ -10,57 +10,32 @@
     <title>TO-DO WEB</title>
 
     <link rel="stylesheet" href="css/common.css" />
-    <link rel="stylesheet" href="css/section.css" />
-    <link rel="stylesheet" href="css/interaction.css" />
+    <link rel="stylesheet" href="css/card.css" />
+    <link rel="stylesheet" href="css/column.css" />
+    <link rel="stylesheet" href="css/modal.css" />
+    <link rel="stylesheet" href="css/sidemenu.css" />
+    <link rel="stylesheet" href="css/title.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;400&display=swap" rel="stylesheet">
 
-    <script src="javascript/sidemenu.js"></script>
-    <script src="javascript/init.js"></script>
-    <script defer src="javascript/card.js"></script>
-    <script defer src="javascript/columns.js"></script>
-    <script defer src="javascript/modal.js"></script>
-    <script defer src="javascript/columns.js"></script>
-    <script defer src="javascript/modaldelete.js"></script>
     <script src="https://kit.fontawesome.com/55809f1341.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="TitleSection">
         <h1 class="MainTitle">TO-DO LIST</h1>
-        <i class="fa-solid fa-bars MenuButton" onclick="SideMenuShow()"></i>
+        <i class="fa-solid fa-bars MenuButton"></i>
     </div>
     <div class="SideMenu">
-        <div class="MenuHead"><i class="fa-solid fa-xmark" onclick="SideMenuShow()"></i></div>
+        <div class="MenuHead"><i class="fa-solid fa-xmark MenuButton"></i></div>
         <div class="MenuLog">
-            <div class="LogCard">
-                <span class="SmileIcon">🥳</span>
-                <div class="LogContent">
-                    <div class="CardUser">@sam</div>
-                    <div class="CardBody">HTML/CSS공부하기를 해야할 일에서 하고 있는 일로 이동하였습니다.</div>
-                    <div class="CardTime">1분 전</div>
-                </div>
-            </div>
-            <div class="LogCard">
-                <span class="SmileIcon">🥳</span>
-                <div class="LogContent">
-                    <div class="CardUser">@sam</div>
-                    <div class="CardBody">HTML/CSS공부하기를 해야할 일에서 하고 있는 일로 이동하였습니다.</div>
-                    <div class="CardTime">1분 전</div>
-                </div>
-            </div>
-            <div class="LogCard">
-                <span class="SmileIcon">🥳</span>
-                <div class="LogContent">
-                    <div class="CardUser">@sam</div>
-                    <div class="CardBody">HTML/CSS공부하기를 해야할 일에서 하고 있는 일로 이동하였습니다.</div>
-                    <div class="CardTime">1분 전</div>
-                </div>
-            </div>
         </div>
     </div>
-
     <div class="ColumnSection">
     </div>
 </body>
+
+<script defer type="module" src="javascript/init.js"></script>
+<script defer type="module" src="javascript/sidemenu.js"></script>
+
 </html>

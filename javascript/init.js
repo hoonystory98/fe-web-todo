@@ -1,19 +1,21 @@
-//fetch("/json/init.json").then((resp)=>resp.json()).then((json)=>console.log(json))
+import { ModalDelete } from "./modaldelete.js";
+import { MakeCardSection,MakeNewCard } from "./templates.js";
+import { RegisterFormShow,CardHeightAdjust,CardMaking,CardModifying } from "./card.js";
 
-const init={
+let init={
     "Column":[
         {
             "Name":"해야할 일",
             "ID":"todo",
             "Lists":[{
                 "CardID":1,
-                "Title":"GitHub 공부하기",
-                "Body":"add, commit, push",
+                "Title":"블로그에 포스팅할 것",
+                "Body":"GitHub 공부내용\n모던 자바스크립트 공부내용",
                 "Author":"web"
             },{
                 "CardID":2,
-                "Title":"블로그에 포스팅할 것",
-                "Body":"GitHub 공부내용\n모던 자바스크립트 공부내용",
+                "Title":"GitHub 공부하기",
+                "Body":"add, commit, push",
                 "Author":"web"
             }]
         },
@@ -34,17 +36,64 @@ const init={
         }
     ]
 };
+let events=[];
 
-// const cardlog={
-//     "Logs":[
-//         {
-//             "Type":["등록","삭제","변경","이동"],
-//             "Title":"Github Study",
-//             "Column":"하는중인 일",
-//             "TitleTo":"Github 공부하기",
-//             "ColumnTo":"해야할 일",
-//             "Editor":"sam",
-//             "Time":1673406569094
-//         }
-//     ]
-// };
+function MakeInitCol(){
+    init.Column.forEach(Column=>{
+        let ColumnCards=Column.Lists;
+        let ColumnID=Column.ID;
+        let ColumnHTML=MakeCardSection(Column.Name,ColumnID,ColumnCards.length);
+        document.getElementsByClassName("ColumnSection")[0].innerHTML+=(ColumnHTML);
+
+        ColumnCards.forEach(Card=>{
+            let NewCardForm = document.createElement("div");
+            NewCardForm.classList="ColumnCards";
+            NewCardForm.id=`${Column.ID}-${Card.CardID}`;
+            NewCardForm.innerHTML=MakeNewCard(Card.Title,Card.Body,Card.Author);
+            document.getElementById("cards-"+ColumnID).prepend(NewCardForm);
+        });
+    });
+}
+
+MakeInitCol();
+
+const acolumn = document.getElementsByClassName('ColumnSection')[0];
+
+acolumn.addEventListener('click', (e) => {
+    const inputbuttons = e.target.closest('.ShowInputForm');
+    if(inputbuttons != null){
+        const collist = inputbuttons.closest('.ColumnList');
+        RegisterFormShow(collist);
+    }
+});
+acolumn.addEventListener('click', (e) => {
+    const modifybuttons = e.target.closest('.CardModify');
+    if(modifybuttons != null){
+        const targetcard = modifybuttons.closest('.ColumnCards');
+        CardModifying(targetcard);
+    }
+});
+acolumn.addEventListener('input', (e) => {
+    const inputarea = e.target.closest('.CardInput');
+    if(inputarea != null){
+        CardHeightAdjust(inputarea);
+    }
+});
+acolumn.addEventListener('click', (e) => {
+    const deletebuttons = e.target.closest('.CardDelete');
+    if(deletebuttons != null){
+        const targetcard = deletebuttons.closest('.ColumnCards');
+        ModalDelete(targetcard);
+    }
+});
+acolumn.addEventListener('click', (e) => {
+    const registerbutton = e.target.closest('.CardRegister');
+    if(registerbutton != null){
+        const registerform = registerbutton.closest('.NewCard');
+        if(registerform != null){
+            CardMaking(registerform);
+        }
+    }
+})
+
+export {events};

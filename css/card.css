@@ -1,0 +1,263 @@
+.ColumnList > div.CardSection{
+    display: block;
+    align-items: flex-start;
+    overflow-y: auto;
+}
+
+.ColumnList > div.CardSection > div.ColumnCards{
+    display: block;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 16px;
+    margin: 20px 0px 20px 0px;
+
+    width: 308px;
+
+    background: #FFFFFF;
+
+    box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
+    border-radius: 6px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.ColumnList > div.CardSection > div.ColumnCards > div.CardTitle{
+    height: 23px;
+    display: flex;
+
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 23px;
+
+    color: #010101;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.ColumnList > div.CardSection > div.ColumnCards > div.CardTitle > i.fa-xmark{
+    display: flex;
+    margin-left: auto;
+    color: #828282;
+    cursor: pointer;
+}
+
+.ColumnList > div.CardSection > div.ColumnCards > div.CardTitle > i.fa-xmark:hover{
+    color: #ff4343;
+}
+
+.ColumnList > div.CardSection > div.ColumnCards:has(i.fa-xmark:hover){
+    background: #ffeeec;
+    border: 1px solid #ff4343;
+}
+
+.ColumnList > div.CardSection > div.ColumnCards:has(i.fa-xmark:hover) > div.CardBody > i.fa-pencil{
+    color: rgba(255, 67, 67, 0.3);
+}
+
+.ColumnList > div.CardSection > div.ColumnCards > div.CardBody {
+    display: flex;
+    margin: 10px 0px 10px 0px;
+
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    
+    color: #010101;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.ColumnList > div.CardSection > div.ColumnCards > div.CardBody > i.fa-pencil{
+    display: flex;
+    margin-left: auto;
+    color: #828282;
+    cursor: pointer;
+}
+
+.ColumnList > div.CardSection > div.ColumnCards > div.CardAuthor{
+    width: 252px;
+    height: 17px;
+    display: block;
+
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+
+    color: #BDBDBD;
+    margin-top: auto;
+    
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+.NewCard{
+    display: block;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 16px;
+    margin: 20px 0px 10px 0px;
+    
+    width: 308px;
+    
+    background: #FFFFFF;
+    
+    border: 1px solid #0075DE;
+    
+    box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
+    border-radius: 6px;
+}
+
+.NewCard > div.CardTitle > input{
+    width: 276px;
+    height: 23px;
+    
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 23px;
+    margin: 0px 0px 10px 0px;
+    
+    color: #010101;
+    border: none;
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.NewCard > div.CardTitle > input::placeholder{
+    color: #828282;
+}
+
+.NewCard > div.CardBody > textarea{
+    width: 276px;
+    height: 48px;
+    
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0px 0px 10px 0px;
+    
+    border: none;
+    resize: none;
+    
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.NewCard > div.CardBody > textarea::placeholder{
+    color: #828282;
+}
+
+.NewCard > div.CardButton{
+    display: flex;
+}
+
+.NewCard > div.CardButton > button.CardCancel{
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 10px;
+    
+    width: 134px;
+    height: 40px;
+    
+    background: #E0E0E0;
+    border-radius: 6px;
+    cursor: pointer;
+
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+
+    color: #828282;
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.NewCard > div.CardButton > button.CardCancel:hover{
+    background: #828282;
+    color: #ffffff;
+}
+
+.NewCard > div.CardButton > button.CardRegister{
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 10px;
+    
+    width: 134px;
+    height: 40px;
+    
+    margin-left: auto;
+    background: #0075DE;
+    border-radius: 6px;
+    cursor: pointer;
+
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+
+    color: #FFFFFF;
+    
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.NewCard > div.CardButton > button.CardRegister:disabled{
+    background: #86C6FF;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: default;
+}
+
+.NewCard > div.CardButton > button.CardRegister:enabled:hover{
+    background: #00529B;
+}
+
+.NewCard > div.CardButton > button.ModifyCard{
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 10px;
+    
+    width: 134px;
+    height: 40px;
+    
+    margin-left: auto;
+    background: #0075DE;
+    border-radius: 6px;
+    cursor: pointer;
+
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+
+    color: #FFFFFF;
+    
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.NewCard > div.CardButton > button.ModifyCard:disabled{
+    background: #86C6FF;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: default;
+}
+
+.NewCard > div.CardButton > button.ModifyCard:enabled:hover{
+    background: #00529B;
+}

@@ -1,0 +1,101 @@
+.ColumnSection{
+    margin-left: 5%;
+}
+
+.ColumnList{
+    margin-right: 1%;
+    height: 700px;
+    float: left;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 16px;
+}
+
+.ColumnList > div.ColumnHead{
+    width: 348px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+
+    padding: auto;
+
+    display: flex;
+    align-items: center;
+
+    color: #010101;
+}
+
+.ColumnList > div.ColumnHead > div.ColumnTitle{
+    height: 26px;
+    
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+    
+    display: flex;
+    align-items: center;
+    
+    color: #010101;
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.ColumnList > div.ColumnHead > div.ColumnTitle > span.CardCount{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 10px;
+    
+    width: 26px;
+    height: 26px;
+    
+    background: #bdbdbd;
+    border-radius: 20px;
+    margin-left: 8px;
+    
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.ColumnList > div.ColumnHead > div.ButtonGroup{
+    width: 114px;
+    height: 26px;
+    
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+    color: #bdbdbd;
+    
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.ColumnList > div.ColumnHead > div.ButtonGroup > i.fa-plus{
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.ColumnSection > div.ColumnList > div.ColumnHead > div.ButtonGroup > i.fa-plus:hover{
+    color: #0075de;
+}
+
+.ColumnList > div.ColumnHead > div.ButtonGroup > i.fa-xmark{
+    margin-left: 20px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.ColumnSection > div.ColumnList > div.ColumnHead > div.ButtonGroup > i.fa-xmark:hover{
+    color: #ff4343;
+}
