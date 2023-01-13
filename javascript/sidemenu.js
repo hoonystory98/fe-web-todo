@@ -1,5 +1,5 @@
 //for side menu function, log sorting, time counting
-import { MakeLogAddDelete,MakeLogModify } from "./templates.js";
+import { MakeLogAddDelete,MakeLogModify,MakeLogMove } from "./templates.js";
 import { events } from "./init.js";
 
 const SideMenu = document.getElementsByClassName('SideMenu')[0];
@@ -12,7 +12,7 @@ function SideMenuShow(){
             ModifyLogRegister(logevent.FromTitle,logevent.ToTitle,logevent.EventType,logevent.EventTime);
         }
         else if(logevent.EventType=="이동"){
-            console.log("Not Yet!");
+            MoveLogRegister(logevent.CardTitle,logevent.FromColumn,logevent.ToColumn,logevent.EventType,logevent.EventTime);
         }
         else{
             AddDeleteLogRegister(logevent.ColumnName,logevent.CardTitle,logevent.EventType,logevent.EventTime);
@@ -39,6 +39,13 @@ function ModifyLogRegister(FromTitle,ToTitle,EventType,EventTime){
     let NewLogCard=document.createElement("div");
     NewLogCard.classList="LogCard";
     NewLogCard.innerHTML=MakeLogModify(FromTitle,ToTitle,EventType,EventTime);
+    MenuLog.prepend(NewLogCard);
+}
+
+function MoveLogRegister(CardTitle,FromColumn,ToColumn,EventType,EventTime){
+    let NewLogCard=document.createElement("div");
+    NewLogCard.classList="LogCard";
+    NewLogCard.innerHTML=MakeLogMove(CardTitle,FromColumn,ToColumn,EventType,EventTime);
     MenuLog.prepend(NewLogCard);
 }
 

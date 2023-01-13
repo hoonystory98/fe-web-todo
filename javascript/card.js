@@ -15,7 +15,6 @@ function RegisterFormShow(Collist){
 }
 
 function CardHeightAdjust(InputArea){
-    const CardForm = InputArea.closest('.NewCard');
     const CardButton = InputArea.closest('.NewCard').getElementsByClassName('CardRegister')[0];
 
     if(InputArea.value.trim().length > 0){
@@ -27,7 +26,6 @@ function CardHeightAdjust(InputArea){
 
     InputArea.style.height = '1px';
     InputArea.style.height = (24 + InputArea.scrollHeight) + 'px';
-    CardForm.style.height = (87 + InputArea.scrollHeight) + 'px';
 }
 
 function CardMaking(CardRegisterForm){

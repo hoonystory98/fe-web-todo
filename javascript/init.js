@@ -1,6 +1,7 @@
 import { ModalDelete } from "./modaldelete.js";
 import { MakeCardSection,MakeNewCard } from "./templates.js";
 import { RegisterFormShow,CardHeightAdjust,CardMaking,CardModifying } from "./card.js";
+import { DragCard } from "./dragndrop.js";
 
 let init={
     "Column":[
@@ -37,6 +38,7 @@ let init={
     ]
 };
 let events=[];
+let dragchecker, holdingcards=0;
 
 function MakeInitCol(){
     init.Column.forEach(Column=>{
@@ -94,6 +96,30 @@ acolumn.addEventListener('click', (e) => {
             CardMaking(registerform);
         }
     }
-})
+});
+acolumn.addEventListener('mousedown', (e) => {
+    const cursoroncard = e.target.closest('.ColumnCards');
+    if(cursoroncard != null){
+        console.log("Really drag?")
+        dragchecker=true;
+    }
+});
+acolumn.addEventListener('mousemove', (e) => {
+    const cursoroncard = e.target.closest('.ColumnCards');
+    if(cursoroncard && dragchecker && (holdingcards == 0)){
+        console.log("You are trying to drag card!")
+        holdingcards=1;
+        DragCard(e);
+    }
+});
+acolumn.addEventListener('mouseup', (e) => {
+    const cursoroncard = e.target.closest('.ColumnSection');
+    if(cursoroncard && dragchecker){
+        console.log("Drag Done!")
+        holdingcards=0;
+        dragchecker=false;
+    }
+});
 
-export {events};
+
+export {events,acolumn};

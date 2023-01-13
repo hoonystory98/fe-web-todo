@@ -45,12 +45,19 @@ function MakeLogAddDelete(ColumnName, CardTitle, EventType, EventTime){
                 <div class="CardTime">${CalcTimeLapse(EventTime)}</div>
             </div>`;
 }
-
 function MakeLogModify(FromTitle, ToTitle, EventType, EventTime){
     return `<span class="SmileIcon">🥳</span>
             <div class="LogContent">
                 <div class="CardUser">@sam</div>
                 <div class="CardBody"><strong>${FromTitle}</strong>에서 <strong>${ToTitle}</strong>${((isSingleCharacter(ToTitle))?("로"):("으로"))} <strong>${EventType}</strong>하였습니다.</div>
+                <div class="CardTime">${CalcTimeLapse(EventTime)}</div>
+            </div>`;
+}
+function MakeLogMove(CardTitle,FromColumn,ToColumn,EventType,EventTime){
+    return `<span class="SmileIcon">🥳</span>
+            <div class="LogContent">
+                <div class="CardUser">@sam</div>
+                <div class="CardBody"><strong>${CardTitle}</strong>${((isSingleCharacter(CardTitle))?("를"):("을"))} <strong>${FromColumn}</strong>에서 <strong>${ToColumn}</strong>${((isSingleCharacter(ToColumn))?("로"):("으로"))} <strong>${EventType}</strong>하였습니다.</div>
                 <div class="CardTime">${CalcTimeLapse(EventTime)}</div>
             </div>`;
 }
@@ -68,4 +75,4 @@ function ModifyCardForm(BeforeTitle, BeforeBody){
             </div>`;
 }
 
-export {MakeCardSection, MakeNewCard, MakeLogAddDelete, MakeLogModify, ModifyCardForm};
+export {MakeCardSection, MakeNewCard, MakeLogAddDelete, MakeLogModify, MakeLogMove, ModifyCardForm};

@@ -4,7 +4,7 @@
     overflow-y: auto;
 }
 
-.ColumnList > div.CardSection > div.ColumnCards{
+.ColumnCards{
     display: block;
     flex-direction: row;
     align-items: flex-start;
@@ -23,7 +23,7 @@
     flex-grow: 0;
 }
 
-.ColumnList > div.CardSection > div.ColumnCards > div.CardTitle{
+.ColumnCards > div.CardTitle{
     height: 23px;
     display: flex;
 
@@ -38,27 +38,27 @@
     flex-grow: 0;
 }
 
-.ColumnList > div.CardSection > div.ColumnCards > div.CardTitle > i.fa-xmark{
+.ColumnCards > div.CardTitle > i.fa-xmark{
     display: flex;
     margin-left: auto;
     color: #828282;
     cursor: pointer;
 }
 
-.ColumnList > div.CardSection > div.ColumnCards > div.CardTitle > i.fa-xmark:hover{
+.ColumnCards > div.CardTitle > i.fa-xmark:hover{
     color: #ff4343;
 }
 
-.ColumnList > div.CardSection > div.ColumnCards:has(i.fa-xmark:hover){
+.ColumnCards:has(i.fa-xmark:hover){
     background: #ffeeec;
     border: 1px solid #ff4343;
 }
 
-.ColumnList > div.CardSection > div.ColumnCards:has(i.fa-xmark:hover) > div.CardBody > i.fa-pencil{
+.ColumnCards:has(i.fa-xmark:hover) > div.CardBody > i.fa-pencil{
     color: rgba(255, 67, 67, 0.3);
 }
 
-.ColumnList > div.CardSection > div.ColumnCards > div.CardBody {
+.ColumnCards > div.CardBody {
     display: flex;
     margin: 10px 0px 10px 0px;
 
@@ -73,14 +73,14 @@
     flex-grow: 0;
 }
 
-.ColumnList > div.CardSection > div.ColumnCards > div.CardBody > i.fa-pencil{
+.ColumnCards > div.CardBody > i.fa-pencil{
     display: flex;
     margin-left: auto;
     color: #828282;
     cursor: pointer;
 }
 
-.ColumnList > div.CardSection > div.ColumnCards > div.CardAuthor{
+.ColumnCards > div.CardAuthor{
     width: 252px;
     height: 17px;
     display: block;
@@ -98,8 +98,8 @@
 }
 
 .NewCard{
-    display: block;
-    flex-direction: row;
+    display: flex;
+    flex-direction: column;
     align-items: flex-start;
     padding: 16px;
     margin: 20px 0px 10px 0px;
@@ -260,4 +260,23 @@
 
 .NewCard > div.CardButton > button.ModifyCard:enabled:hover{
     background: #00529B;
+}
+
+.FloatingBox{
+    align-items: flex-start;
+    padding: 16px;
+    margin: 20px 0px 20px 0px;
+
+    width: 308px;
+
+    background: rgba(255, 255, 255, 0.8);
+    
+    box-shadow: 0px 0px 4px rgba(204, 204, 204, 0.5), 0px 2px 4px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(2px);
+    
+    border-radius: 6px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
 }
