@@ -1,5 +1,5 @@
 import { events } from "./init.js";
-import { MenuLog } from "./sidemenu.js";
+import { AddDeleteLogRegister } from "./sidemenu.js";
 
 function ModalDelete(TargetCard) {
     const ModalHTML = document.createElement("div");
@@ -25,8 +25,7 @@ function ModalDelete(TargetCard) {
     ModalConfirm.addEventListener("click",()=>{
         TargetCard.closest('.ColumnList').getElementsByClassName('CardCount')[0].innerHTML=TargetCard.closest('.ColumnList').getElementsByClassName('CardCount')[0].innerHTML-1;
         events.push({"ColumnName":TargetCard.closest('.ColumnList').getElementsByClassName('ColumnTitle')[0].innerText.split('\n')[0],"CardTitle":TargetCard.getElementsByClassName('CardTitle')[0].textContent,"EventType":"삭제","EventTime":new Date().getTime()});
-        console.log(MenuLog.style.display)
-        console.log(document.getElementsByClassName('MenuLog')[0].style.display)
+        AddDeleteLogRegister(events[events.length - 1].ColumnName,events[events.length - 1].CardTitle,events[events.length - 1].EventType,events[events.length - 1].EventTime);
         TargetCard.remove();
         ModalHTML.remove();
     });

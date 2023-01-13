@@ -1,4 +1,5 @@
 import { MakeNewCard,ModifyCardForm } from "./templates.js";
+import { AddDeleteLogRegister,ModifyLogRegister } from "./sidemenu.js";
 import { events } from "./init.js";
 
 function RegisterFormShow(Collist){
@@ -46,6 +47,7 @@ function CardMaking(CardRegisterForm){
     CardRegisterForm.style.display='none';
     CardRegisterForm.closest('.ColumnList').getElementsByClassName('CardCount')[0].innerHTML=CardRegisterForm.closest('.ColumnList').getElementsByClassName('CardSection')[0].children.length;
     events.push({"ColumnName":CardRegisterForm.closest('.ColumnList').getElementsByClassName('ColumnTitle')[0].innerText.split('\n')[0],"CardTitle":NewTitle,"EventType":"등록","EventTime":new Date().getTime()});
+    AddDeleteLogRegister(events[events.length - 1].ColumnName,events[events.length - 1].CardTitle,events[events.length - 1].EventType,events[events.length - 1].EventTime);
 }
 
 function CardModifying(TargetCard){
@@ -68,6 +70,7 @@ function CardModifying(TargetCard){
         TargetCard.style.height='';
         TargetCard.className='ColumnCards';
         events.push({"FromTitle":BeforeTitle,"ToTitle":NewTitle,"EventType":"변경","EventTime":new Date().getTime()});
+        ModifyLogRegister(events[events.length - 1].FromTitle,events[events.length - 1].ToTitle,events[events.length - 1].EventType,events[events.length - 1].EventTime)
     }
     
     TargetCard.getElementsByClassName('ModifyCancel')[0].addEventListener("click",CancelModify);
