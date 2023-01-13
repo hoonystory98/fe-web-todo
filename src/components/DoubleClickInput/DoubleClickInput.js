@@ -49,7 +49,7 @@ class DoubleClickInput extends Component {
             return;
         }
         $input.style.width = '0';
-        $input.style.width = `${$input.scrollWidth}px`;
+        $input.style.width = `${$input.scrollWidth + 10}px`;
     }
 
     mounted() {
