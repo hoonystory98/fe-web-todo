@@ -11,6 +11,11 @@
     outline: 1px solid #0075DE;
 }
 
+[data-component="TodoCard"]:has(.todocard-delete:hover:not([disabled])) {
+    outline: 1px solid red;
+    background: #FFEEEC;
+}
+
 .todocard-header {
     display: flex;
     justify-content: space-between;
@@ -23,6 +28,10 @@
 
 .todocard-delete[disabled]{
     opacity: 50%;
+}
+
+.todocard-delete:hover:not([disabled]){
+    fill: red;
 }
 
 .todocard-title {
@@ -101,6 +110,7 @@
 }
 
 .edit .todocard-btn-area {
+    overflow: visible;
     height: auto;
 }
 

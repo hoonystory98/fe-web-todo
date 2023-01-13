@@ -49,7 +49,7 @@
 
 .add-todo-btn, .delete-column-btn {
     fill: #010101;
-    display: contents;
+    padding: 0;
     background: transparent;
     border: none;
 }

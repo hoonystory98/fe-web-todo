@@ -9,6 +9,14 @@
     user-select: none;
 }
 
+button:hover:not([disabled]) {
+    transform: scale(1.1);
+}
+
+button {
+    transition: 0.1s;
+}
+
 .dragstart {
     opacity: 0.5;
 }
