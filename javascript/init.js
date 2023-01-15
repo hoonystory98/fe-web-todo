@@ -2,6 +2,7 @@ import { ModalDelete } from "./modaldelete.js";
 import { MakeCardSection,MakeNewCard } from "./templates.js";
 import { RegisterFormShow,CardHeightAdjust,CardMaking,CardModifying } from "./card.js";
 import { DragCard } from "./dragndrop.js";
+import { DeleteColumn,ChangeColTitle } from "./columns.js";
 
 let init={
     "Column":[
@@ -97,6 +98,20 @@ acolumn.addEventListener('click', (e) => {
         }
     }
 });
+acolumn.addEventListener('click', (e) => {
+    const coldeletebuttons = e.target.closest('.ColumnDelete');
+    if(coldeletebuttons != null){
+        const targetcolumn = coldeletebuttons.closest('.ColumnList');
+        DeleteColumn(targetcolumn);
+    }
+});
+acolumn.addEventListener('dblclick', (e) => {
+    const columntitle = e.target.closest('.ColumnTitle');
+    if(columntitle != null){
+        ChangeColTitle(columntitle);
+    }
+})
+
 acolumn.addEventListener('mousedown', (e) => {
     const cursoroncard = e.target.closest('.ColumnCards');
     if(cursoroncard != null){

@@ -84,7 +84,7 @@
     color: #ffffff;
 }
 
-.Modal > div.ModalAlert > div.ModalButton > button.ModalDelete{
+.Modal > div.ModalAlert > div.ModalButton > button.ModalConfirm{
     flex-direction: row;
     align-items: flex-start;
     padding: 10px;
@@ -110,6 +110,6 @@
     flex-grow: 0;
 }
 
-.Modal > div.ModalAlert > div.ModalButton > button.ModalDelete:hover{
+.Modal > div.ModalAlert > div.ModalButton > button.ModalConfirm:hover{
     background: #00529B;
 }

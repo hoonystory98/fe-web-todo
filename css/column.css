@@ -1,4 +1,8 @@
 .ColumnSection{
+    display: flex;
+    overflow-x: auto;
+    overflow-y: auto;
+    width: 90%;
     margin-left: 5%;
 }
 
@@ -21,7 +25,6 @@
     padding: auto;
 
     display: flex;
-    align-items: center;
 
     color: #010101;
 }
@@ -43,7 +46,23 @@
     flex-grow: 0;
 }
 
-.ColumnList > div.ColumnHead > div.ColumnTitle > span.CardCount{
+.ColumnList > div.ColumnHead > div.ColumnTitle > input{
+    width: 200px;
+    height: 26px;
+    
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+    
+    color: #010101;
+    border: none;
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.ColumnList > div.ColumnHead > div.CardCount{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -74,10 +93,9 @@
     
     display: flex;
     margin-left: auto;
-    align-items: center;
 
     flex: none;
-    order: 0;
+    order: 2;
     flex-grow: 0;
 }
 

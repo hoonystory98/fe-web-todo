@@ -68,7 +68,7 @@ function CardModifying(TargetCard){
         TargetCard.style.height='';
         TargetCard.className='ColumnCards';
         events.push({"FromTitle":BeforeTitle,"ToTitle":NewTitle,"EventType":"변경","EventTime":new Date().getTime()});
-        ModifyLogRegister(events[events.length - 1].FromTitle,events[events.length - 1].ToTitle,events[events.length - 1].EventType,events[events.length - 1].EventTime)
+        ModifyLogRegister(events[events.length - 1].FromTitle,events[events.length - 1].ToTitle,events[events.length - 1].EventType,events[events.length - 1].EventTime);
     }
     
     TargetCard.getElementsByClassName('ModifyCancel')[0].addEventListener("click",CancelModify);

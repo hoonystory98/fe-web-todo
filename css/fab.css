@@ -1,0 +1,46 @@
+.FabButton{
+    position: absolute;
+    left: 95%;
+    top: 90%;
+    transform: translate(-50%, -50%);
+    width: 64px;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0075de;
+    color:#ffffff;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all .5s;
+    box-shadow: 0px 0px 4px rgba(204, 204, 204, 0.5), 0px 2px 4px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(2px);
+}
+
+.FabButton:hover{
+    width: 80px;
+    height: 80px;
+}
+
+.Modal > div.ModalAlert > input.ModalInput{
+    width: 276px;
+    height: 24px;
+    
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    margin: 0px 0px 10px 0px;
+    
+    color: #010101;
+    border: none;
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.Modal > div.ModalAlert > div.ModalButton > button.ModalConfirm:disabled{
+    background: #86C6FF;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: default;
+}

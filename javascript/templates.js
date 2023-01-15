@@ -3,10 +3,11 @@ import { CalcTimeLapse,isSingleCharacter } from "./queryfunc.js";
 function MakeCardSection(ColName, ColId, ColCards){
     return `<div class="ColumnList" id="${ColId}">
                 <div class="ColumnHead">
-                    <div class="ColumnTitle">${ColName}<span class="CardCount" id="count-${ColId}">${ColCards}</span></div>
+                    <div class="ColumnTitle">${ColName}</div>
+                    <div class="CardCount" id="count-${ColId}">${ColCards}</div>
                     <div class="ButtonGroup">
                         <i class="fa-solid fa-plus ShowInputForm"></i>
-                        <i class="fa-solid fa-xmark"></i>
+                        <i class="fa-solid fa-xmark ColumnDelete"></i>
                     </div>
                 </div>
                 <div class="NewCard" style="display:none">

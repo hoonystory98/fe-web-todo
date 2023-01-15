@@ -9,13 +9,13 @@ function ModalDelete(TargetCard) {
                             <div class="ModalMessage">선택한 카드를 삭제할까요?</div>
                             <div class="ModalButton">
                                 <button class="ModalCancel">취소</button>
-                                <button class="ModalDelete">삭제</button>
+                                <button class="ModalConfirm">삭제</button>
                             </div>
                         </div>`;
     document.body.append(ModalHTML);
     let ModalTarget=ModalHTML;
     let ModalCancel=ModalHTML.getElementsByClassName("ModalCancel")[0];
-    let ModalConfirm=ModalHTML.getElementsByClassName("ModalDelete")[0];
+    let ModalConfirm=ModalHTML.getElementsByClassName("ModalConfirm")[0];
 
     ModalTarget.addEventListener('click', (event) => {
         if (event.target === ModalTarget) {
