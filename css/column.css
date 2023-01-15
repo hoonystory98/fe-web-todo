@@ -1,7 +1,6 @@
 .ColumnSection{
     display: flex;
     overflow-x: auto;
-    overflow-y: auto;
     width: 90%;
     margin-left: 5%;
 }
@@ -9,6 +8,7 @@
 .ColumnList{
     margin-right: 1%;
     height: 700px;
+    overflow-y: auto;
     float: left;
     flex-direction: column;
     align-items: center;
@@ -47,7 +47,7 @@
 }
 
 .ColumnList > div.ColumnHead > div.ColumnTitle > input{
-    width: 200px;
+    width: 196px;
     height: 26px;
     
     font-weight: 700;

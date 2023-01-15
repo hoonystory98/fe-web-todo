@@ -87,7 +87,12 @@ function ChangeColTitle(TargetTitle){
     inputform.focus();
 
     function RegisterTitle(){
-        TargetTitle.innerHTML=inputform.value;
+        if(inputform.value.length > 0){
+            TargetTitle.innerHTML=inputform.value;
+        }
+        else{
+            return;
+        }
     }
 
     inputform.addEventListener("focusout",RegisterTitle);
