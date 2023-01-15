@@ -36,12 +36,15 @@ const DragManager = {
             this.$draggingComponent.style.position = 'absolute';
             this.$draggingComponent.style.zIndex = '999';
             this.$draggingComponent.style.pointerEvents = 'none';
+            this.$draggingComponent.style.left = '0';
+            this.$draggingComponent.style.top = '0';
             document.body.appendChild(this.$draggingComponent);
             this.$dragstartComponent.classList.add('dragstart');
         }
         if (this.$draggingComponent) {
-            this.$draggingComponent.style.left = `${ev.clientX - this.dragstartInnerPos.x}px`;
-            this.$draggingComponent.style.top = `${ev.clientY - this.dragstartInnerPos.y}px`;
+            const translateX = ev.clientX - this.dragstartInnerPos.x;
+            const translateY = ev.clientY - this.dragstartInnerPos.y;
+            this.$draggingComponent.style.transform = `translate(${translateX}px, ${translateY}px)`;
 
             const $collapsedComponentTarget = findClosestComponent(ev.target, this.draggableComponentName);
             if ($collapsedComponentTarget) {
