@@ -1,8 +1,8 @@
 import { ModalDelete } from "./modaldelete.js";
 import { MakeCardSection,MakeNewCard } from "./templates.js";
 import { RegisterFormShow,CardHeightAdjust,CardMaking,CardModifying } from "./card.js";
-import { DragCard } from "./dragndrop.js";
 import { DeleteColumn,ChangeColTitle } from "./columns.js";
+import { DragCard } from "./dragndrop.js";
 
 let init={
     "Column":[
@@ -39,7 +39,7 @@ let init={
     ]
 };
 let events=[];
-let dragchecker, holdingcards=0;
+let dragAble=false;
 
 function MakeInitCol(){
     init.Column.forEach(Column=>{
@@ -112,29 +112,48 @@ acolumn.addEventListener('dblclick', (e) => {
     }
 })
 
+
 acolumn.addEventListener('mousedown', (e) => {
     const cursoroncard = e.target.closest('.ColumnCards');
     if(cursoroncard != null){
         console.log("Really drag?")
-        dragchecker=true;
+        dragAble=true;
     }
 });
 acolumn.addEventListener('mousemove', (e) => {
     const cursoroncard = e.target.closest('.ColumnCards');
-    if(cursoroncard && dragchecker && (holdingcards == 0)){
+    if(cursoroncard && dragAble){
         console.log("You are trying to drag card!")
-        holdingcards=1;
         DragCard(e);
+        dragAble=false;
     }
 });
 acolumn.addEventListener('mouseup', (e) => {
-    const cursoroncard = e.target.closest('.ColumnSection');
-    if(cursoroncard && dragchecker){
-        console.log("Drag Done!")
-        holdingcards=0;
-        dragchecker=false;
+    const colsec = e.target.closest('.ColumnSection');
+    if(colsec!=null){
+        dragAble=false;
     }
 });
-
+// acolumn.addEventListener('mousedown', (e) => {
+//     const cardundercursor = e.target.closest('.ColumnCards');
+//     if(cardundercursor != null){
+//         dragchecker=true;
+//         start_drag(e,cardundercursor);
+//     }
+// });
+// acolumn.addEventListener('mousemove', (e) => {
+//     const cursoroncard = e.target.closest('.FloatingCard');
+//     if(cursoroncard && dragchecker){
+//         console.log(e.pageX,e.pageY);
+//         on_drag(e,cursoroncard)
+//     }
+// });
+// acolumn.addEventListener('mouseup', (e) => {
+//     const cursoroncard = e.target.closest('.ColumnCards');
+//     if(cursoroncard && dragchecker){
+//         console.log("Drag Done!")
+//         dragchecker=false;
+//     }
+// });
 
 export {events,acolumn};

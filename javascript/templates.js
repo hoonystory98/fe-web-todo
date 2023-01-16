@@ -42,7 +42,7 @@ function MakeLogAddDelete(ColumnName, CardTitle, EventType, EventTime){
     return `<span class="SmileIcon">🥳</span>
             <div class="LogContent">
                 <div class="CardUser">@sam</div>
-                <div class="CardBody"><strong>${ColumnName}</strong>에서 <strong>${CardTitle}</strong>${((isSingleCharacter(CardTitle))?("를"):("을"))} <strong>${EventType}</strong>하였습니다.</div>
+                <div class="CardBody"><b>${ColumnName}</b>에서 <b>${CardTitle}</b>${((isSingleCharacter(CardTitle))?("를"):("을"))} <b>${EventType}</b>하였습니다.</div>
                 <div class="CardTime">${CalcTimeLapse(EventTime)}</div>
             </div>`;
 }
