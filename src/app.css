@@ -1,0 +1,22 @@
+[data-component="App"] #article {
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 5%;
+}
+
+* {
+    user-select: none;
+}
+
+button:hover:not([disabled]) {
+    transform: scale(1.1);
+}
+
+button {
+    transition: 0.1s;
+}
+
+.dragstart {
+    opacity: 0.5;
+}

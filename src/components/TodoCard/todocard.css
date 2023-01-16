@@ -1,0 +1,125 @@
+[data-component="TodoCard"] {
+    width: 230px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 30px rgba(224, 224, 224, 0.5);
+    border-radius: 6px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.edit[data-component="TodoCard"] {
+    outline: 1px solid #0075DE;
+}
+
+[data-component="TodoCard"]:has(.todocard-delete:hover:not([disabled])) {
+    outline: 1px solid red;
+    background: #FFEEEC;
+}
+
+.todocard-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.todocard-delete {
+    border: none;
+    background: transparent;
+}
+
+.todocard-delete[disabled]{
+    opacity: 50%;
+}
+
+.todocard-delete:hover:not([disabled]){
+    fill: red;
+}
+
+.todocard-title {
+    color: #010101;
+    background: transparent;
+    outline: none;
+    padding: 0;
+    margin: 0 0 5px;
+    border: none;
+    font-style: normal;
+    font-weight: 700;
+    font-size: medium;
+    line-height: 23px;
+}
+
+.todocard-desc {
+    color: #010101;
+    background: transparent;
+    font-family: inherit;
+    width: 100%;
+    resize: none;
+    outline: none;
+    padding: 0;
+    border: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+}
+
+.todocard-edit-cancel, .todocard-edit-ok {
+    display: table-cell;
+    height: 40px;
+    width: 50%;
+    border-radius: 6px;
+    border: none;
+}
+
+.todocard-edit-ok {
+    margin-left: 10px;
+    background-color: #0075DE;
+    color: white;
+}
+
+.todocard-bgbtn {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    border: none;
+    background: transparent;
+    z-index: 70;
+}
+
+.edit .todocard-bgbtn {
+    display: block;
+    width: 100%;
+    height: 100vh;
+}
+
+.edit .todocard-dblclick-area {
+    position: relative;
+    z-index: 71;
+}
+
+.todocard-dblclick-area > * {
+    width: 100%;
+}
+
+.todocard-btn-area {
+    overflow: hidden;
+    display: flex;
+    width: 100%;
+    height: 0;
+}
+
+.edit .todocard-btn-area {
+    overflow: visible;
+    height: auto;
+}
+
+.todocard-author {
+    margin: 5px 0 0;
+    font-size: small;
+    font-weight: lighter;
+}
+
+.edit .todocard-author {
+    display: none;
+}

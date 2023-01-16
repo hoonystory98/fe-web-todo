@@ -1,0 +1,71 @@
+.todoaddform-bgbtn {
+    position: fixed;
+    background: transparent;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    border: none;
+    z-index: 61;
+}
+
+.todoaddform-fgarea {
+    outline: 1px solid #0075DE;
+    position: relative;
+    width: 230px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 30px rgba(224, 224, 224, 0.3);
+    border-radius: 6px;
+    margin-bottom: 10px;
+    padding: 10px;
+    z-index: 62;
+}
+
+.todoaddform-fgarea input[type=text] {
+    background: transparent;
+    outline: none;
+    padding: 0;
+    margin-bottom: 5px;
+    border: none;
+    font-style: normal;
+    font-weight: 700;
+    font-size: medium;
+    line-height: 23px;
+}
+
+.todoaddform-fgarea textarea {
+    background: transparent;
+    font-family: inherit;
+    width: 100%;
+    resize: none;
+    outline: none;
+    padding: 0;
+    border: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.todoaddform-fgarea div {
+    display: inline-flex;
+    width: 100%;
+}
+
+[data-component="TodoAddForm"] .cancel-btn, .ok-btn {
+    display: table-cell;
+    height: 40px;
+    width: 50%;
+    border-radius: 6px;
+    border: none;
+}
+
+[data-component="TodoAddForm"] .ok-btn {
+    margin-left: 10px;
+    background-color: #0075DE;
+    color: white;
+}
+
+.ok-btn[disabled] {
+    opacity: 50%;
+}
