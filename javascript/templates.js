@@ -42,7 +42,7 @@ function MakeLogAddDelete(ColumnName, CardTitle, EventType, EventTime){
     return `<span class="SmileIcon">🥳</span>
             <div class="LogContent">
                 <div class="CardUser">@sam</div>
-                <div class="CardBody"><b>${ColumnName}</b>에서 <b>${CardTitle}</b>${((isSingleCharacter(CardTitle))?("를"):("을"))} <b>${EventType}</b>하였습니다.</div>
+                <div class="CardBody"><span style="font-weight:700">${ColumnName}</span>에서 <span style="font-weight:700">${CardTitle}</span>${((isSingleCharacter(CardTitle))?("를"):("을"))} <span style="font-weight:700">${EventType}</span>하였습니다.</div>
                 <div class="CardTime">${CalcTimeLapse(EventTime)}</div>
             </div>`;
 }
@@ -50,7 +50,7 @@ function MakeLogModify(FromTitle, ToTitle, EventType, EventTime){
     return `<span class="SmileIcon">🥳</span>
             <div class="LogContent">
                 <div class="CardUser">@sam</div>
-                <div class="CardBody"><strong>${FromTitle}</strong>에서 <strong>${ToTitle}</strong>${((isSingleCharacter(ToTitle))?("로"):("으로"))} <strong>${EventType}</strong>하였습니다.</div>
+                <div class="CardBody"><span style="font-weight:700">${FromTitle}</span>에서 <span style="font-weight:700">${ToTitle}</span>${((isSingleCharacter(ToTitle))?("로"):("으로"))} <span style="font-weight:700">${EventType}</span>하였습니다.</div>
                 <div class="CardTime">${CalcTimeLapse(EventTime)}</div>
             </div>`;
 }
@@ -58,7 +58,7 @@ function MakeLogMove(CardTitle,FromColumn,ToColumn,EventType,EventTime){
     return `<span class="SmileIcon">🥳</span>
             <div class="LogContent">
                 <div class="CardUser">@sam</div>
-                <div class="CardBody"><strong>${CardTitle}</strong>${((isSingleCharacter(CardTitle))?("를"):("을"))} <strong>${FromColumn}</strong>에서 <strong>${ToColumn}</strong>${((isSingleCharacter(ToColumn))?("로"):("으로"))} <strong>${EventType}</strong>하였습니다.</div>
+                <div class="CardBody"><span style="font-weight:700">${CardTitle}</span>${((isSingleCharacter(CardTitle))?("를"):("을"))} <span style="font-weight:700">${FromColumn}</span>에서 <span style="font-weight:700">${ToColumn}</span>${((isSingleCharacter(ToColumn))?("로"):("으로"))} <span style="font-weight:700">${EventType}</span>하였습니다.</div>
                 <div class="CardTime">${CalcTimeLapse(EventTime)}</div>
             </div>`;
 }

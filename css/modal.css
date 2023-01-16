@@ -15,7 +15,7 @@
     display: block;
 }
 
-.Modal > div.ModalAlert {
+.ModalAlert {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -37,7 +37,7 @@
     border-radius: 6px;
 }
 
-.Modal > div.ModalAlert > div.ModalMessage{
+.ModalMessage{
     font-weight: 400;
     font-size: 18px;
     line-height: 26px;
@@ -49,12 +49,12 @@
     flex-grow: 0;
 }
 
-.Modal > div.ModalAlert > div.ModalButton{
+.ModalButton{
     display: block;
     text-align: end;
 }
 
-.Modal > div.ModalAlert > div.ModalButton > button.ModalCancel{
+.ModalButton > button.ModalCancel{
     flex-direction: row;
     align-items: flex-start;
     padding: 10px;
@@ -79,12 +79,12 @@
     flex-grow: 0;
 }
 
-.Modal > div.ModalAlert > div.ModalButton > button.ModalCancel:hover{
+.ModalButton > button.ModalCancel:hover{
     background: #828282;
     color: #ffffff;
 }
 
-.Modal > div.ModalAlert > div.ModalButton > button.ModalConfirm{
+.ModalButton > button.ModalConfirm{
     flex-direction: row;
     align-items: flex-start;
     padding: 10px;
@@ -110,6 +110,6 @@
     flex-grow: 0;
 }
 
-.Modal > div.ModalAlert > div.ModalButton > button.ModalConfirm:hover{
+.ModalButton > button.ModalConfirm:hover{
     background: #00529B;
 }

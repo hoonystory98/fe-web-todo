@@ -21,12 +21,12 @@
     display: flex;
 }
 
-.ColumnCards > div.CardTitle{
+.CardTitle{
     height: 23px;
     display: flex;
 
     font-weight: 700;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 23px;
 
     color: #010101;
@@ -36,14 +36,14 @@
     flex-grow: 0;
 }
 
-.ColumnCards > div.CardTitle > i.fa-xmark{
+.CardTitle > i.fa-xmark{
     display: flex;
     margin-left: auto;
     color: #828282;
     cursor: pointer;
 }
 
-.ColumnCards > div.CardTitle > i.fa-xmark:hover{
+.CardTitle > i.fa-xmark:hover{
     color: #ff4343;
 }
 
@@ -56,7 +56,7 @@
     color: rgba(255, 67, 67, 0.3);
 }
 
-.ColumnCards > div.CardBody {
+.CardBody {
     display: flex;
     margin: 10px 0px 10px 0px;
 
@@ -71,14 +71,14 @@
     flex-grow: 0;
 }
 
-.ColumnCards > div.CardBody > i.fa-pencil{
+.CardBody > i.fa-pencil{
     display: none;
     margin-left: auto;
     color: #828282;
     cursor: pointer;
 }
 
-.ColumnCards > div.CardAuthor{
+.CardAuthor{
     width: 252px;
     height: 17px;
     display: block;
@@ -112,7 +112,7 @@
     border-radius: 6px;
 }
 
-.NewCard > div.CardTitle > input{
+.CardTitle > input{
     width: 276px;
     height: 23px;
     
@@ -129,11 +129,11 @@
     flex-grow: 0;
 }
 
-.NewCard > div.CardTitle > input::placeholder{
+.CardTitle > input::placeholder{
     color: #828282;
 }
 
-.NewCard > div.CardBody > textarea{
+.CardBody > textarea{
     width: 276px;
     height: 48px;
     
@@ -150,17 +150,17 @@
     flex-grow: 0;
 }
 
-.NewCard > div.CardBody > textarea::placeholder{
+.CardBody > textarea::placeholder{
     color: #828282;
 }
 
-.NewCard > div.CardButton{
+.CardButton{
     display: flex;
     justify-content: space-between;
     flex-direction: row;
 }
 
-.NewCard > div.CardButton > button.CardCancel{
+.CardButton > button.CardCancel{
     padding: 10px;
     gap: 10px;
     
@@ -183,12 +183,12 @@
     flex-grow: 0;
 }
 
-.NewCard > div.CardButton > button.CardCancel:hover{
+.CardButton > button.CardCancel:hover{
     background: #828282;
     color: #ffffff;
 }
 
-.NewCard > div.CardButton > button.CardRegister{
+.CardButton > button.CardRegister{
     padding: 10px;
     gap: 10px;
     
@@ -211,13 +211,13 @@
     flex-grow: 0;
 }
 
-.NewCard > div.CardButton > button.CardRegister:disabled{
+.CardButton > button.CardRegister:disabled{
     background: #86C6FF;
     color: rgba(255, 255, 255, 0.4);
     cursor: default;
 }
 
-.NewCard > div.CardButton > button.CardRegister:enabled:hover{
+.CardButton > button.CardRegister:enabled:hover{
     background: #00529B;
 }
 

@@ -22,7 +22,7 @@
     height: 80px;
 }
 
-.Modal > div.ModalAlert > input.ModalInput{
+.ModalAlert > input.ModalInput{
     width: 276px;
     height: 24px;
     
@@ -39,7 +39,7 @@
     flex-grow: 0;
 }
 
-.Modal > div.ModalAlert > div.ModalButton > button.ModalConfirm:disabled{
+.ModalButton > button.ModalConfirm:disabled{
     background: #86C6FF;
     color: rgba(255, 255, 255, 0.4);
     cursor: default;

@@ -15,7 +15,7 @@
     gap: 16px;
 }
 
-.ColumnList > div.ColumnHead{
+.ColumnHead{
     width: 348px;
     font-weight: 700;
     font-size: 18px;
@@ -28,7 +28,7 @@
     color: #010101;
 }
 
-.ColumnList > div.ColumnHead > div.ColumnTitle{
+.ColumnTitle{
     height: 26px;
     
     font-weight: 700;
@@ -45,7 +45,7 @@
     flex-grow: 0;
 }
 
-.ColumnList > div.ColumnHead > div.ColumnTitle > input{
+.ColumnTitle > input{
     width: 196px;
     height: 26px;
     
@@ -61,7 +61,7 @@
     flex-grow: 0;
 }
 
-.ColumnList > div.ColumnHead > div.CardCount{
+.CardCount{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -81,7 +81,7 @@
     flex-grow: 0;
 }
 
-.ColumnList > div.ColumnHead > div.ButtonGroup{
+.ButtonGroup{
     width: 114px;
     height: 26px;
     
@@ -98,26 +98,26 @@
     flex-grow: 0;
 }
 
-.ColumnList > div.ColumnHead > div.ButtonGroup > i.fa-plus{
+.ButtonGroup > i.fa-plus{
     margin-left: auto;
     cursor: pointer;
 }
 
-.ColumnSection > div.ColumnList > div.ColumnHead > div.ButtonGroup > i.fa-plus:hover{
+.ButtonGroup > i.fa-plus:hover{
     color: #0075de;
 }
 
-.ColumnList > div.ColumnHead > div.ButtonGroup > i.fa-xmark{
+.ButtonGroup > i.fa-xmark{
     margin-left: 20px;
     margin-right: 20px;
     cursor: pointer;
 }
 
-.ColumnSection > div.ColumnList > div.ColumnHead > div.ButtonGroup > i.fa-xmark:hover{
+.ButtonGroup > i.fa-xmark:hover{
     color: #ff4343;
 }
 
-.ColumnList > div.CardSection{
+.CardSection{
     height: 75vh;
     overflow-y: auto;
 }
