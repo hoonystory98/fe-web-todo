@@ -1,0 +1,26 @@
+{
+  "name": "fe-web-todo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "json-server --static . --watch mock.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RandomlyChristen/fe-web-todo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RandomlyChristen/fe-web-todo/issues"
+  },
+  "homepage": "https://github.com/RandomlyChristen/fe-web-todo#readme",
+  "devDependencies": {
+    "json-server": "^0.17.1"
+  }
+}
