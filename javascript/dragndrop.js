@@ -1,9 +1,11 @@
-import { acolumn } from "./init.js";
+import { events } from "./init.js";
+import { MoveLogRegister } from "./sidemenu.js";
 
 let currentDroppable=null;
 
 function DragCard(e){
     let TargetCard=e.target.closest('.ColumnCards');
+    const BeforeColumn=TargetCard.closest('.ColumnList');
     let IllusionCard=TargetCard.cloneNode(true);
     let shiftX = e.clientX - e.target.getBoundingClientRect().left;
     let shiftY = e.clientY - e.target.getBoundingClientRect().top;
@@ -52,14 +54,23 @@ function DragCard(e){
 
     document.addEventListener("mousemove",onMouseMove);
 
-    document.onmouseup = function(){
+    function onMouseup(){
         document.removeEventListener("mousemove",onMouseMove);
         document.body.style.cursor='';
         document.body.style.userSelect='';
         IllusionCard.remove();
         TargetCard.classList.remove('ShadowCard');
+        const AfterColumn=TargetCard.closest('.ColumnList');
         TargetCard.style.pointerEvents='';
+
+        BeforeColumn.getElementsByClassName('CardCount')[0].innerHTML=BeforeColumn.getElementsByClassName('CardSection')[0].children.length;
+        AfterColumn.getElementsByClassName('CardCount')[0].innerHTML=AfterColumn.getElementsByClassName('CardSection')[0].children.length;
+        events.push({"CardTitle":TargetCard.getElementsByClassName('CardTitle')[0].innerText,"FromColumn":BeforeColumn.getElementsByClassName('ColumnTitle')[0].innerHTML,"ToColumn":AfterColumn.getElementsByClassName('ColumnTitle')[0].innerHTML,"EventType":"이동","EventTime":new Date().getTime()});
+        MoveLogRegister(TargetCard.getElementsByClassName('CardTitle')[0].innerText,BeforeColumn.getElementsByClassName('ColumnTitle')[0].innerHTML,AfterColumn.getElementsByClassName('ColumnTitle')[0].innerHTML,events[events.length - 1].EventType,events[events.length - 1].EventTime);
+        document.removeEventListener("mouseup",onMouseup);
     }
+
+    document.addEventListener("mouseup",onMouseup);
 }
 
 export {DragCard};

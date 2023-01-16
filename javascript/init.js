@@ -112,18 +112,15 @@ acolumn.addEventListener('dblclick', (e) => {
     }
 })
 
-
 acolumn.addEventListener('mousedown', (e) => {
     const cursoroncard = e.target.closest('.ColumnCards');
     if(cursoroncard != null){
-        console.log("Really drag?")
         dragAble=true;
     }
 });
 acolumn.addEventListener('mousemove', (e) => {
     const cursoroncard = e.target.closest('.ColumnCards');
     if(cursoroncard && dragAble){
-        console.log("You are trying to drag card!")
         DragCard(e);
         dragAble=false;
     }
@@ -134,26 +131,5 @@ acolumn.addEventListener('mouseup', (e) => {
         dragAble=false;
     }
 });
-// acolumn.addEventListener('mousedown', (e) => {
-//     const cardundercursor = e.target.closest('.ColumnCards');
-//     if(cardundercursor != null){
-//         dragchecker=true;
-//         start_drag(e,cardundercursor);
-//     }
-// });
-// acolumn.addEventListener('mousemove', (e) => {
-//     const cursoroncard = e.target.closest('.FloatingCard');
-//     if(cursoroncard && dragchecker){
-//         console.log(e.pageX,e.pageY);
-//         on_drag(e,cursoroncard)
-//     }
-// });
-// acolumn.addEventListener('mouseup', (e) => {
-//     const cursoroncard = e.target.closest('.ColumnCards');
-//     if(cursoroncard && dragchecker){
-//         console.log("Drag Done!")
-//         dragchecker=false;
-//     }
-// });
 
 export {events,acolumn};

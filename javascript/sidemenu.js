@@ -8,10 +8,10 @@ const MenuLog = SideMenu.getElementsByClassName('MenuLog')[0];
 function SideMenuShow(){
     MenuLog.innerHTML='';
     events.forEach(function(logevent){
-        if(logevent.EventType=="변경"){
+        if(logevent.EventType==="변경"){
             ModifyLogRegister(logevent.FromTitle,logevent.ToTitle,logevent.EventType,logevent.EventTime);
         }
-        else if(logevent.EventType=="이동"){
+        else if(logevent.EventType==="이동"){
             MoveLogRegister(logevent.CardTitle,logevent.FromColumn,logevent.ToColumn,logevent.EventType,logevent.EventTime);
         }
         else{
@@ -55,4 +55,4 @@ Array.prototype.forEach.call(menubuttons, (el)=>{
 });
 
 
-export { SideMenuShow,MenuLog,AddDeleteLogRegister,ModifyLogRegister };
+export { SideMenuShow,MenuLog,AddDeleteLogRegister,ModifyLogRegister,MoveLogRegister };
