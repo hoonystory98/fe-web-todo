@@ -1,13 +1,8 @@
-import { ModalDelete } from "./modaldelete.js";
-import { MakeCardSection, MakeNewCard } from "./templates.js";
-import {
-  RegisterFormShow,
-  CardHeightAdjust,
-  CardMaking,
-  CardModifying,
-} from "./card.js";
-import { DeleteColumn, ChangeColTitle } from "./columns.js";
-import { DragCard } from "./dragndrop.js";
+import { modaldeletecard } from "./modaldelete.js";
+import { makecardsection,makenewcardinner } from "./templates.js";
+import { showregisterform,cardheightadjust,makenewcard,modifycard } from "./card.js";
+import { deletecolumn, changecoltitle } from "./columns.js";
+import { dragcard } from "./dragndrop.js";
 
 // fetch("http://localhost:3000/Column")
 //   .then((resp) => resp.json())
@@ -49,24 +44,24 @@ let init={
 let events = [];
 let dragAble = false;
 
-function MakeInitCol() {
+function makeinitcol() {
   init.Column.forEach((Column) => {
     let ColumnCards = Column.Lists;
     let ColumnID = Column.ID;
-    let ColumnHTML = MakeCardSection(Column.Name, ColumnID, ColumnCards.length);
+    let ColumnHTML = makecardsection(Column.Name, ColumnID, ColumnCards.length);
     document.getElementsByClassName("ColumnSection")[0].innerHTML += ColumnHTML;
 
     ColumnCards.forEach((Card) => {
       let NewCardForm = document.createElement("div");
       NewCardForm.classList = "ColumnCards";
       NewCardForm.id = `${Column.ID}-${Card.CardID}`;
-      NewCardForm.innerHTML = MakeNewCard(Card.Title, Card.Body, Card.Author);
+      NewCardForm.innerHTML = makenewcardinner(Card.Title, Card.Body, Card.Author);
       document.getElementById("cards-" + ColumnID).prepend(NewCardForm);
     });
   });
 }
 
-MakeInitCol();
+makeinitcol();
 
 const acolumn = document.getElementsByClassName("ColumnSection")[0];
 
@@ -74,27 +69,27 @@ acolumn.addEventListener("click", (e) => {
   const inputbuttons = e.target.closest(".ShowInputForm");
   if (inputbuttons != null) {
     const collist = inputbuttons.closest(".ColumnList");
-    RegisterFormShow(collist);
+    showregisterform(collist);
   }
 });
 acolumn.addEventListener("click", (e) => {
   const modifybuttons = e.target.closest(".CardModify");
   if (modifybuttons != null) {
     const targetcard = modifybuttons.closest(".ColumnCards");
-    CardModifying(targetcard);
+    modifycard(targetcard);
   }
 });
 acolumn.addEventListener("input", (e) => {
   const inputarea = e.target.closest(".CardInput");
   if (inputarea != null) {
-    CardHeightAdjust(inputarea);
+    cardheightadjust(inputarea);
   }
 });
 acolumn.addEventListener("click", (e) => {
   const deletebuttons = e.target.closest(".CardDelete");
   if (deletebuttons != null) {
     const targetcard = deletebuttons.closest(".ColumnCards");
-    ModalDelete(targetcard);
+    modaldeletecard(targetcard);
   }
 });
 acolumn.addEventListener("click", (e) => {
@@ -102,7 +97,7 @@ acolumn.addEventListener("click", (e) => {
   if (registerbutton != null) {
     const registerform = registerbutton.closest(".NewCard");
     if (registerform != null) {
-      CardMaking(registerform);
+      makenewcard(registerform);
     }
   }
 });
@@ -110,13 +105,13 @@ acolumn.addEventListener("click", (e) => {
   const coldeletebuttons = e.target.closest(".ColumnDelete");
   if (coldeletebuttons != null) {
     const targetcolumn = coldeletebuttons.closest(".ColumnList");
-    DeleteColumn(targetcolumn);
+    deletecolumn(targetcolumn);
   }
 });
 acolumn.addEventListener("dblclick", (e) => {
   const columntitle = e.target.closest(".ColumnTitle");
   if (columntitle != null) {
-    ChangeColTitle(columntitle);
+    changecoltitle(columntitle);
   }
 });
 
@@ -129,7 +124,7 @@ acolumn.addEventListener("mousedown", (e) => {
 acolumn.addEventListener("mousemove", (e) => {
   const cursoroncard = e.target.closest(".ColumnCards");
   if (cursoroncard && dragAble) {
-    DragCard(e);
+    dragcard(e);
     dragAble = false;
   }
 });

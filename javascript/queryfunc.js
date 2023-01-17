@@ -1,11 +1,11 @@
-function TraversalFindCard(node, target){
-    if(node.classList.contains(target)){
-        return node;
-    }
-    return TraversalFindCard(node.parentElement);
-}
+// function TraversalFindCard(node, target){
+//     if(node.classList.contains(target)){
+//         return node;
+//     }
+//     return TraversalFindCard(node.parentElement);
+// }
 
-function CalcTimeLapse(value) {
+function calctimelapse(value) {
     const today = new Date();
     const timeValue = new Date(value);
 
@@ -28,7 +28,7 @@ function CalcTimeLapse(value) {
     return `${Math.floor(betweenTimeDay / 365)}년 전`;
 }
 
-const isSingleCharacter = function(text) {
+const issinglecharacter = function(text) {
     const strGa = 44032;
     const strHih = 55203;
     
@@ -42,4 +42,4 @@ const isSingleCharacter = function(text) {
 
 //매직넘버 활용 이벤트 타입 부여
 
-export {TraversalFindCard, CalcTimeLapse, isSingleCharacter};
+export {calctimelapse, issinglecharacter};

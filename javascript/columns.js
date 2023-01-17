@@ -1,7 +1,7 @@
 //for card sort, title change
-import { MakeCardSection } from "./templates.js";
+import { makecardsection } from "./templates.js";
 
-function ModalNewCol() {
+function modalmakecol() {
     const ModalHTML = document.createElement("div");
     ModalHTML.classList="Modal";
     ModalHTML.style="display:block";
@@ -35,7 +35,7 @@ function ModalNewCol() {
     })
     ModalConfirm.addEventListener("click",()=>{
         let ColumnID="NewCol-"+new Date().getTime();
-        let ColumnHTML=MakeCardSection(ModalInput.value,ColumnID,0);
+        let ColumnHTML=makecardsection(ModalInput.value,ColumnID,0);
         document.getElementsByClassName("ColumnSection")[0].innerHTML+=(ColumnHTML);
         ModalHTML.remove();
     });
@@ -44,7 +44,7 @@ function ModalNewCol() {
     });
 }
 
-function DeleteColumn(TargetColumn){
+function deletecolumn(TargetColumn){
     const ModalHTML = document.createElement("div");
     ModalHTML.classList="Modal";
     ModalHTML.style="display:block";
@@ -74,7 +74,7 @@ function DeleteColumn(TargetColumn){
     });
 }
 
-function ChangeColTitle(TargetTitle){
+function changecoltitle(TargetTitle){
     let InputForm=document.createElement("input");
     InputForm.type="text";
     InputForm.placeholder=`${TargetTitle.textContent}`;
@@ -86,7 +86,7 @@ function ChangeColTitle(TargetTitle){
     const inputform=TargetTitle.getElementsByClassName('TitleInput')[0];
     inputform.focus();
 
-    function RegisterTitle(){
+    function registertitle(){
         if(inputform.value.length > 0){
             TargetTitle.innerHTML=inputform.value;
         }
@@ -95,10 +95,10 @@ function ChangeColTitle(TargetTitle){
         }
     }
 
-    inputform.addEventListener("focusout",RegisterTitle);
+    inputform.addEventListener("focusout",registertitle);
 }
 
 const fabbutton=document.getElementsByClassName('FabColumn')[0];
-fabbutton.addEventListener('click', ModalNewCol);
+fabbutton.addEventListener('click', modalmakecol);
 
-export { ModalNewCol,DeleteColumn,ChangeColTitle };
+export { modalmakecol,deletecolumn,changecoltitle };

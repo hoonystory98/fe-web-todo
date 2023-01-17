@@ -1,21 +1,21 @@
 //for side menu function, log sorting, time counting
-import { MakeLogAddDelete,MakeLogModify,MakeLogMove } from "./templates.js";
+import { makelogadddelete,makelogmodify,makelogmove } from "./templates.js";
 import { events } from "./init.js";
 
 const SideMenu = document.getElementsByClassName('SideMenu')[0];
 const MenuLog = SideMenu.getElementsByClassName('MenuLog')[0];
 
-function SideMenuShow(){
+function showsidemenu(){
     MenuLog.innerHTML='';
     events.forEach(function(logevent){
         if(logevent.EventType==="변경"){
-            ModifyLogRegister(logevent.FromTitle,logevent.ToTitle,logevent.EventType,logevent.EventTime);
+            modifylogregister(logevent.FromTitle,logevent.ToTitle,logevent.EventType,logevent.EventTime);
         }
         else if(logevent.EventType==="이동"){
-            MoveLogRegister(logevent.CardTitle,logevent.FromColumn,logevent.ToColumn,logevent.EventType,logevent.EventTime);
+            movelogregister(logevent.CardTitle,logevent.FromColumn,logevent.ToColumn,logevent.EventType,logevent.EventTime);
         }
         else{
-            AddDeleteLogRegister(logevent.ColumnName,logevent.CardTitle,logevent.EventType,logevent.EventTime);
+            adddeletelogregister(logevent.ColumnName,logevent.CardTitle,logevent.EventType,logevent.EventTime);
         }
     });
     if(SideMenu.style.visibility != 'visible'){
@@ -28,31 +28,31 @@ function SideMenuShow(){
     }
 }
 
-function AddDeleteLogRegister(ColumnName,CardTitle,EventType,EventTime){
+function adddeletelogregister(ColumnName,CardTitle,EventType,EventTime){
     let NewLogCard=document.createElement("div");
     NewLogCard.classList="LogCard";
-    NewLogCard.innerHTML=MakeLogAddDelete(ColumnName,CardTitle,EventType,EventTime);
+    NewLogCard.innerHTML=makelogadddelete(ColumnName,CardTitle,EventType,EventTime);
     MenuLog.prepend(NewLogCard);
 }
 
-function ModifyLogRegister(FromTitle,ToTitle,EventType,EventTime){
+function modifylogregister(FromTitle,ToTitle,EventType,EventTime){
     let NewLogCard=document.createElement("div");
     NewLogCard.classList="LogCard";
-    NewLogCard.innerHTML=MakeLogModify(FromTitle,ToTitle,EventType,EventTime);
+    NewLogCard.innerHTML=makelogmodify(FromTitle,ToTitle,EventType,EventTime);
     MenuLog.prepend(NewLogCard);
 }
 
-function MoveLogRegister(CardTitle,FromColumn,ToColumn,EventType,EventTime){
+function movelogregister(CardTitle,FromColumn,ToColumn,EventType,EventTime){
     let NewLogCard=document.createElement("div");
     NewLogCard.classList="LogCard";
-    NewLogCard.innerHTML=MakeLogMove(CardTitle,FromColumn,ToColumn,EventType,EventTime);
+    NewLogCard.innerHTML=makelogmove(CardTitle,FromColumn,ToColumn,EventType,EventTime);
     MenuLog.prepend(NewLogCard);
 }
 
 const menubuttons = document.getElementsByClassName("MenuButton");
 Array.prototype.forEach.call(menubuttons, (el)=>{
-    el.addEventListener("click",SideMenuShow);
+    el.addEventListener("click",showsidemenu);
 });
 
 
-export { SideMenuShow,MenuLog,AddDeleteLogRegister,ModifyLogRegister,MoveLogRegister };
+export { showsidemenu,MenuLog,adddeletelogregister,modifylogregister,movelogregister };
