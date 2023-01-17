@@ -1,6 +1,6 @@
 import { makenewcardinner,modifycardform } from "./templates.js";
 import { adddeletelogregister,modifylogregister } from "./sidemenu.js";
-import { events } from "./init.js";
+import { events } from "./main.js";
 
 function showregisterform(Collist){
     const CardForm = Collist.getElementsByClassName('NewCard')[0];
@@ -38,6 +38,15 @@ function makenewcard(CardRegisterForm){
     NewCardForm.innerHTML=makenewcardinner(NewTitle,NewBody,"web");
     
     CardRegisterForm.closest('.ColumnList').getElementsByClassName('CardSection')[0].prepend(NewCardForm);
+    // fetch(API_URL_Col,{
+    //     method: "POST",
+    //     headers: {
+    //         'Content-type': 'application/json',
+    //     },
+    //     body: JSON.stringify(NewColumn),
+    // }).then((resp)=>resp.json()).then(()=>{
+    //     console.log("Column Created")
+    // }).catch((error)=>console.error(error));
     CardRegisterForm.getElementsByClassName('TitleInput')[0].value='';
     CardRegisterForm.getElementsByClassName('CardInput')[0].value='';
     cardheightadjust(CardRegisterForm.getElementsByClassName('CardInput')[0])
@@ -57,7 +66,7 @@ function modifycard(TargetCard){
     cardheightadjust(TargetCard.getElementsByClassName('CardInput')[0]);
 
     function cancelmodify(){
-        TargetCard.innerHTML=makenewcardform(BeforeTitle,BeforeBody,"web");
+        TargetCard.innerHTML=makenewcardinner(BeforeTitle,BeforeBody,"web");
         TargetCard.style.height='';
         TargetCard.className='ColumnCards';
     }

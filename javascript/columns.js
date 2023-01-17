@@ -1,4 +1,5 @@
 //for card sort, title change
+import { API_URL_Col } from "./main.js";
 import { makecardsection } from "./templates.js";
 
 function modalmakecol() {
@@ -36,7 +37,21 @@ function modalmakecol() {
     ModalConfirm.addEventListener("click",()=>{
         let ColumnID="NewCol-"+new Date().getTime();
         let ColumnHTML=makecardsection(ModalInput.value,ColumnID,0);
+        const NewColumn={
+            "Name": `${ModalInput.value}`,
+            "id": `${ColumnID}`,
+            "Lists": []
+        }
         document.getElementsByClassName("ColumnSection")[0].innerHTML+=(ColumnHTML);
+        fetch(API_URL_Col,{
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(NewColumn),
+        }).then((resp)=>resp.json()).then(()=>{
+            console.log("Column Created")
+        }).catch((error)=>console.error(error));
         ModalHTML.remove();
     });
     ModalCancel.addEventListener("click",()=>{
@@ -66,7 +81,18 @@ function deletecolumn(TargetColumn){
         }
     });
     ModalConfirm.addEventListener("click",()=>{
+        const TargetColId=TargetColumn.id;
+        console.log(TargetColId);
         TargetColumn.remove();
+        fetch(`${API_URL_Col}/${TargetColId}`,{
+            method: "DELETE",
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({TargetColId}),
+        }).then((resp)=>resp.json()).then(()=>{
+            console.log("Column Deleted")
+        }).catch((error)=>console.error(error));
         ModalHTML.remove();
     });
     ModalCancel.addEventListener("click",()=>{
@@ -88,7 +114,18 @@ function changecoltitle(TargetTitle){
 
     function registertitle(){
         if(inputform.value.length > 0){
+            const TargetColId=TargetTitle.closest('.ColumnList').id;
+            const Name=inputform.value;
             TargetTitle.innerHTML=inputform.value;
+            fetch(`${API_URL_Col}/${TargetColId}`,{
+                method: "PATCH",
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({Name}),
+            }).then((resp)=>resp.json()).then(()=>{
+
+            }).catch((error)=>console.error(error));
         }
         else{
             return;

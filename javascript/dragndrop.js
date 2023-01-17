@@ -1,4 +1,4 @@
-import { events } from "./init.js";
+import { events } from "./main.js";
 import { movelogregister } from "./sidemenu.js";
 
 let currentDroppable=null;

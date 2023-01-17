@@ -1,4 +1,4 @@
-import { events } from "./init.js";
+import { events } from "./main.js";
 import { adddeletelogregister } from "./sidemenu.js";
 
 function modaldeletecard(TargetCard) {

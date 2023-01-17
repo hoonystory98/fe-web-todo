@@ -4,50 +4,18 @@ import { showregisterform,cardheightadjust,makenewcard,modifycard } from "./card
 import { deletecolumn, changecoltitle } from "./columns.js";
 import { dragcard } from "./dragndrop.js";
 
-// fetch("http://localhost:3000/Column")
-//   .then((resp) => resp.json())
-//   .then((data) => console.log(data));
-let init={
-    "Column":[
-        {
-            "Name":"해야할 일",
-            "ID":"todo",
-            "Lists":[{
-                "CardID":1,
-                "Title":"블로그에 포스팅할 것",
-                "Body":"GitHub 공부내용\n모던 자바스크립트 공부내용",
-                "Author":"web"
-            },{
-                "CardID":2,
-                "Title":"GitHub 공부하기",
-                "Body":"add, commit, push",
-                "Author":"web"
-            }]
-        },
-        {
-            "Name":"하고있는 일",
-            "ID":"doing",
-            "Lists":[{
-                "CardID":3,
-                "Title":"Javascript 공부하기",
-                "Body":"addEventListener",
-                "Author":"web"
-            }]
-        },
-        {
-            "Name":"완료한 일",
-            "ID":"done",
-            "Lists":[]
-        }
-    ]
-};
+const API_URL_Col="http://localhost:3000/Column";
+const API_URL_Eve="http://localhost:3000/Events";
+
+fetch(API_URL_Col).then((resp) => resp.json()).then((column) => makeinitcol(column)).catch((err)=>console.error(err));
+
 let events = [];
 let dragAble = false;
 
-function makeinitcol() {
-  init.Column.forEach((Column) => {
+function makeinitcol(Column) {
+  Column.forEach((Column) => {
     let ColumnCards = Column.Lists;
-    let ColumnID = Column.ID;
+    let ColumnID = Column.id;
     let ColumnHTML = makecardsection(Column.Name, ColumnID, ColumnCards.length);
     document.getElementsByClassName("ColumnSection")[0].innerHTML += ColumnHTML;
 
@@ -60,8 +28,6 @@ function makeinitcol() {
     });
   });
 }
-
-makeinitcol();
 
 const acolumn = document.getElementsByClassName("ColumnSection")[0];
 
@@ -135,4 +101,4 @@ acolumn.addEventListener("mouseup", (e) => {
   }
 });
 
-export { events, acolumn };
+export { events,API_URL_Col, acolumn };
