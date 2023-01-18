@@ -36,9 +36,7 @@ function modaldeletecard(TargetCard) {
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({TargetCardId}),
-        }).then((resp)=>resp.json()).then(()=>{
-            console.log("Card Deleted")
-        }).catch((error)=>console.error(error));
+        }).then((resp)=>resp.json()).catch((error)=>console.error(error));
 
         TargetCard.remove();
         ModalHTML.remove();
@@ -51,9 +49,7 @@ function modaldeletecard(TargetCard) {
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({Lists}),
-        }).then((resp)=>resp.json()).then(()=>{
-            console.log("Card Order Saved")
-        }).catch((error)=>console.error(error));
+        }).then((resp)=>resp.json()).catch((error)=>console.error(error));
     });
     ModalCancel.addEventListener("click",()=>{
         ModalHTML.remove();

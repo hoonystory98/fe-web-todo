@@ -4,26 +4,20 @@
       "Name": "해야할 일",
       "id": "todo",
       "Lists": [
-        1,
-        2
+        "1",
+        "2"
       ]
     },
     {
       "Name": "하고있는 일",
       "id": "doing",
       "Lists": [
-        "doing-1674018636628",
         "3"
       ]
     },
     {
       "Name": "완료한 일",
       "id": "done",
-      "Lists": []
-    },
-    {
-      "Name": "새칼럼",
-      "id": "NewCol-1674017394571",
       "Lists": []
     }
   ],
@@ -44,12 +38,6 @@
       "id": "3",
       "Title": "Javascript 공부하기",
       "Body": "addEventListener",
-      "Author": "web"
-    },
-    {
-      "id": "doing-1674018636628",
-      "Title": "ㅇㄹㅈㄷㄹ",
-      "Body": "1111",
       "Author": "web"
     }
   ],

@@ -1,6 +1,14 @@
 import { makenewcardinner,modifycardform } from "./templates.js";
 import { adddeletelogregister,modifylogregister } from "./sidemenu.js";
 import { events,API_URL_Box,API_URL_Col } from "./main.js";
+import { modaldeletecard } from "./modaldelete.js";
+
+function CardForm(){
+    this.title="";
+    this.body="";
+    this.author="web";
+
+}
 
 function showregisterform(Collist){
     const CardForm = Collist.getElementsByClassName('NewCard')[0];
@@ -62,18 +70,14 @@ function makenewcard(CardRegisterForm){
             'Content-type': 'application/json',
         },
         body: JSON.stringify(NewCardObj),
-    }).then((resp)=>resp.json()).then(()=>{
-        console.log("Card Created")
-    }).catch((error)=>console.error(error));
+    }).then((resp)=>resp.json()).catch((error)=>console.error(error));
     fetch(`${API_URL_Col}/${CardRegisterForm.closest('.ColumnList').id}`,{
         method: "PATCH",
         headers: {
             'Content-type': 'application/json',
         },
         body: JSON.stringify({Lists}),
-    }).then((resp)=>resp.json()).then(()=>{
-        console.log("Card Order Saved")
-    }).catch((error)=>console.error(error));
+    }).then((resp)=>resp.json()).catch((error)=>console.error(error));
 }
 
 function modifycard(TargetCard){
@@ -110,9 +114,7 @@ function modifycard(TargetCard){
                 'Content-type': 'application/json',
             },
             body: JSON.stringify(NewCardObj),
-        }).then((resp)=>resp.json()).then(()=>{
-            console.log("Card Modifyed")
-        }).catch((error)=>console.error(error));
+        }).then((resp)=>resp.json()).catch((error)=>console.error(error));
     }
     
     TargetCard.getElementsByClassName('ModifyCancel')[0].addEventListener("click",cancelmodify);

@@ -49,9 +49,7 @@ function modalmakecol() {
                 'Content-type': 'application/json',
             },
             body: JSON.stringify(NewColumn),
-        }).then((resp)=>resp.json()).then(()=>{
-            console.log("Column Created")
-        }).catch((error)=>console.error(error));
+        }).then((resp)=>resp.json()).catch((error)=>console.error(error));
         ModalHTML.remove();
     });
     ModalCancel.addEventListener("click",()=>{
@@ -90,9 +88,7 @@ function deletecolumn(TargetColumn){
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({TargetColId}),
-        }).then((resp)=>resp.json()).then(()=>{
-            console.log("Column Deleted")
-        }).catch((error)=>console.error(error));
+        }).then((resp)=>resp.json()).catch((error)=>console.error(error));
         ModalHTML.remove();
     });
     ModalCancel.addEventListener("click",()=>{
@@ -123,8 +119,6 @@ function changecoltitle(TargetTitle){
                     'Content-type': 'application/json',
                 },
                 body: JSON.stringify({Name}),
-            }).then((resp)=>resp.json()).then(()=>{
-
             }).catch((error)=>console.error(error));
         }
         else{
