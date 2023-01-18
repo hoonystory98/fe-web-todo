@@ -2,11 +2,10 @@ import Component from "../../core/Component.js";
 
 class TodoAddForm extends Component {
     initialize() {
-        const { addCancel } = this.props;
         this.addEvent('keyup', '.todoaddfrom-name', this.checkInput.bind(this));
         this.addEvent('keyup', '.todoaddform-desc', this.checkInput.bind(this));
         this.addEvent('click', '.ok-btn', this.okClicked.bind(this));
-        this.addEvent('click', '.cancel-btn, .todoaddform-bgbtn', addCancel);
+        this.addEvent('click', '.cancel-btn, .todoaddform-bgbtn', this.cancelClicked.bind(this));
     }
 
     okClicked() {
@@ -14,13 +13,29 @@ class TodoAddForm extends Component {
         const $name = this.$target.querySelector('.todoaddform-name');
         const $desc = this.$target.querySelector('.todoaddform-desc');
         addTodo($name.value, $desc.value);
+        this.clearInput();
+    }
+
+    cancelClicked() {
+        const { addCancel } = this.props;
+        addCancel();
+        this.clearInput();
+    }
+
+    clearInput() {
+        const $name = this.$target.querySelector('.todoaddform-name');
+        const $desc = this.$target.querySelector('.todoaddform-desc');
+        const $okBtn = this.$target.querySelector('.ok-btn');
+        $name.value = '';
+        $desc.value = '';
+        $okBtn.setAttribute('disabled', 'true');
     }
 
     checkInput() {
         const $name = this.$target.querySelector('.todoaddform-name');
         const $desc = this.$target.querySelector('.todoaddform-desc');
         const $okBtn = this.$target.querySelector('.ok-btn');
-        if ($name.value.length || $desc.value.length) {
+        if ($name.value.length && $desc.value.length) {
             $okBtn.removeAttribute('disabled');
         } else {
             $okBtn.setAttribute('disabled', 'true');
