@@ -3,21 +3,17 @@ import TodoDatabase from "../../persistance/TodoDatabase.js";
 import TodoCard from "../TodoCard/TodoCard.js";
 import DoubleClickInput from "../DoubleClickInput/DoubleClickInput.js";
 import TodoAddForm from "../TodoAddForm/TodoAddForm.js";
+import NotificationManager from "../../core/NotificationManager.js";
 
 class TodoHolder extends Component {
     initialize() {
-        this.state = { todos: [] }
+        const { column, todos } = this.props;
+        this.state = { todos: TodoHolder.getTopologySorted(todos), column };
         this.addEvent('click', '.add-todo-btn', this.addBtnClicked.bind(this));
-
-        const { todos, column } = this.props;
-        this.setState({
-            todos: TodoHolder.getTopologySorted(todos)
-        });
     }
 
     template() {
-        const { column } = this.props;
-        const { todos } = this.state;
+        const { todos, column } = this.state;
         return `
         <div class="todoholder-header">
             <div class="todoholder-colinfo">
@@ -56,7 +52,7 @@ class TodoHolder extends Component {
     }
 
     mountColumnNameInput() {
-        const { column } = this.props;
+        const { column } = this.state;
         const $doubleClickInput = this.$target.querySelector('[data-component="DoubleClickInput"]');
         new DoubleClickInput($doubleClickInput, {
             value: column.name,
@@ -66,8 +62,7 @@ class TodoHolder extends Component {
     }
 
     mountTodoCards() {
-        const { column } = this.props;
-        const { todos } = this.state;
+        const { todos, column } = this.state;
         const $actualHolder = this.$target.querySelector('.todoholder-actual');
         const $todoCards = this.$target.querySelectorAll(`[data-component="TodoCard"]`);
         $todoCards.forEach($todoCard => {
@@ -93,16 +88,28 @@ class TodoHolder extends Component {
     }
 
     addTodo(name, description) {
-        const columnId = this.props.column.id;
+        const columnId = this.state.column.id;
         TodoDatabase.postTodo({ name, description, columnId }).then(todo => {
             const todos = [ todo, ...this.state.todos ];
+            this.notifyAddTodo(todo);
             this.setState({ todos });
         });
     }
 
+    notifyAddTodo(todo) {
+        const { column } = this.state;
+        return NotificationManager.makeNotification({
+            type: NotificationManager.notificationTypes.ADD,
+            name: todo.name,
+            to: column.name
+        });
+    }
+
     updateColumnName(newName) {
-        const { column } = this.props;
-        TodoDatabase.patchColumn({...column, name: newName}).then(console.log);
+        const { column } = this.state;
+        TodoDatabase.patchColumn({...column, name: newName}).then(column => {
+            this.setState({ column });
+        });
     }
 
     updateMovedTodo(movedTodo) {
@@ -113,7 +120,7 @@ class TodoHolder extends Component {
             todos.splice(beforeMovedIdx, 1);
         }
 
-        const thisHolderColumnId = this.props.column.id;
+        const thisHolderColumnId = this.state.column.id;
         if (movedTodo.columnId === thisHolderColumnId) {
             const insertionIdx = todos.findIndex(todo => movedTodo.nextId === todo.id);
             if (insertionIdx < 0)

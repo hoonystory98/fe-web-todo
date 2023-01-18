@@ -1,6 +1,7 @@
 import Component from "../../core/Component.js";
 import TodoDatabase from "../../persistance/TodoDatabase.js";
 import DragManager from "../../core/DragManager.js";
+import NotificationManager from "../../core/NotificationManager.js";
 
 class TodoCard extends Component {
     initialize() {
@@ -32,11 +33,36 @@ class TodoCard extends Component {
         const $lastCollapsed = e.lastCollapsedElement;
 
         const srcTodoId = parseInt($dragStart.dataset.todoId);
+        const srcColumnId = parseInt($dragStart.dataset.columnId)
         const dstTodoId = parseInt($lastCollapsed.dataset.todoId);
         const dstColumnId = parseInt($lastCollapsed.dataset.columnId);
 
+        if (this.$target === $dragStart) {
+            this.notifyMoved(srcTodoId, srcColumnId, dstColumnId).then(console.log);
+        }
+
         TodoDatabase.moveTodo(srcTodoId, dstTodoId, dstColumnId).then(todo => {
             this.props.onTodoMoved(todo);
+        });
+    }
+
+    async notifyMoved(srcTodoId, srcColumnId, dstColumnId) {
+        const srcTodo = (await TodoDatabase.getTodos({ id: srcTodoId }))[0];
+        const srcColumn = (await TodoDatabase.getColumns({ id: srcColumnId }))[0];
+        const dstColumn = (await TodoDatabase.getColumns({ id: dstColumnId }))[0];
+        return NotificationManager.makeNotification({
+            type: NotificationManager.notificationTypes.MOVE,
+            name: srcTodo.name,
+            from: srcColumn.name,
+            to: dstColumn.name
+        });
+    }
+
+    notifyUpdate(beforeTodo, afterTodo) {
+        return NotificationManager.makeNotification({
+            type: NotificationManager.notificationTypes.UPDATE,
+            from: beforeTodo.name,
+            to: afterTodo.name
         });
     }
 
@@ -92,7 +118,9 @@ class TodoCard extends Component {
             name: $title.value,
             description: $desc.value
         }).then(todo => {
+            const oldTodo = { ...this.state.todo };
             this.setState({ isEdit: false, todo });
+            this.notifyUpdate(oldTodo, todo).then(console.log);
         });
     }
     fitHeight() {
