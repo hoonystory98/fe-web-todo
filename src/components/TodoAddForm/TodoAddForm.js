@@ -9,10 +9,9 @@ class TodoAddForm extends Component {
 
     okClicked() {
         const { addTodo } = this.props;
-        const $name = this.$target.querySelector('.todoaddform-name');
-        const $desc = this.$target.querySelector('.todoaddform-desc');
-        addTodo($name.value, $desc.value);
-        this.clearInput();
+        const name = this.$target.querySelector('.todoaddform-name').value;
+        const desc = this.$target.querySelector('.todoaddform-desc').value;
+        addTodo(name, desc);
     }
 
     cancelClicked() {
