@@ -31,7 +31,7 @@ const postColumn = async (column) => {
     const newColumnRes = await fetch(COLUMN_URI, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ name: column.name, headTodoId: column.headTodoId })
+        body: JSON.stringify({ name: column.name, headTodoId: -1 })
     });
     return await newColumnRes.json();
 }
