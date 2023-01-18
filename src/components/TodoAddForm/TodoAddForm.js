@@ -2,8 +2,7 @@ import Component from "../../core/Component.js";
 
 class TodoAddForm extends Component {
     initialize() {
-        this.addEvent('keyup', '.todoaddfrom-name', this.checkInput.bind(this));
-        this.addEvent('keyup', '.todoaddform-desc', this.checkInput.bind(this));
+        this.addEvent('keyup', '.todoaddform-name', this.checkInput.bind(this));
         this.addEvent('click', '.ok-btn', this.okClicked.bind(this));
         this.addEvent('click', '.cancel-btn, .todoaddform-bgbtn', this.cancelClicked.bind(this));
     }
@@ -33,9 +32,8 @@ class TodoAddForm extends Component {
 
     checkInput() {
         const $name = this.$target.querySelector('.todoaddform-name');
-        const $desc = this.$target.querySelector('.todoaddform-desc');
         const $okBtn = this.$target.querySelector('.ok-btn');
-        if ($name.value.length && $desc.value.length) {
+        if ($name.value.length) {
             $okBtn.removeAttribute('disabled');
         } else {
             $okBtn.setAttribute('disabled', 'true');
