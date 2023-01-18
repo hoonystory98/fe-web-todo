@@ -1,39 +1,56 @@
 {
-  "Column": [
+  "Columns": [
     {
       "Name": "해야할 일",
-      "id": "1",
+      "id": "todo",
       "Lists": [
-        {
-          "CardID": 1,
-          "Title": "블로그에 포스팅할 것",
-          "Body": "GitHub 공부내용\n모던 자바스크립트 공부내용",
-          "Author": "web"
-        },
-        {
-          "CardID": 2,
-          "Title": "GitHub 공부하기",
-          "Body": "add, commit, push",
-          "Author": "web"
-        }
+        1,
+        2
       ]
     },
     {
       "Name": "하고있는 일",
-      "id": "2",
+      "id": "doing",
       "Lists": [
-        {
-          "CardID": 3,
-          "Title": "Javascript 공부하기",
-          "Body": "addEventListener",
-          "Author": "web"
-        }
+        "doing-1674018636628",
+        "3"
       ]
     },
     {
       "Name": "완료한 일",
-      "id": "3",
+      "id": "done",
       "Lists": []
+    },
+    {
+      "Name": "새칼럼",
+      "id": "NewCol-1674017394571",
+      "Lists": []
+    }
+  ],
+  "Cards": [
+    {
+      "id": "1",
+      "Title": "GitHub 공부하기",
+      "Body": "add, commit, push",
+      "Author": "web"
+    },
+    {
+      "id": "2",
+      "Title": "블로그에 포스팅할 것",
+      "Body": "GitHub 공부내용\n모던 자바스크립트 공부내용",
+      "Author": "web"
+    },
+    {
+      "id": "3",
+      "Title": "Javascript 공부하기",
+      "Body": "addEventListener",
+      "Author": "web"
+    },
+    {
+      "id": "doing-1674018636628",
+      "Title": "ㅇㄹㅈㄷㄹ",
+      "Body": "1111",
+      "Author": "web"
     }
   ],
   "Events": []

@@ -4,30 +4,38 @@ import { showregisterform,cardheightadjust,makenewcard,modifycard } from "./card
 import { deletecolumn, changecoltitle } from "./columns.js";
 import { dragcard } from "./dragndrop.js";
 
-const API_URL_Col="http://localhost:3000/Column";
+const API_URL_Col="http://localhost:3000/Columns";
+const API_URL_Box="http://localhost:3000/Cards";
 const API_URL_Eve="http://localhost:3000/Events";
 
-fetch(API_URL_Col).then((resp) => resp.json()).then((column) => makeinitcol(column)).catch((err)=>console.error(err));
-
+let cards=[];
 let events = [];
 let dragAble = false;
 
-function makeinitcol(Column) {
-  Column.forEach((Column) => {
+function makecardarr(card){
+  cards.push(card);
+}
+
+function makeinitcol(Columns) {
+  Columns.forEach((Column) => {
     let ColumnCards = Column.Lists;
-    let ColumnID = Column.id;
-    let ColumnHTML = makecardsection(Column.Name, ColumnID, ColumnCards.length);
+    let ColumnHTML = makecardsection(Column.Name, Column.id, ColumnCards.length);
     document.getElementsByClassName("ColumnSection")[0].innerHTML += ColumnHTML;
 
-    ColumnCards.forEach((Card) => {
+    ColumnCards.forEach((CardNum) => {
       let NewCardForm = document.createElement("div");
+      let TargetCard = cards.find(card => card.id == CardNum);
       NewCardForm.classList = "ColumnCards";
-      NewCardForm.id = `${Column.ID}-${Card.CardID}`;
-      NewCardForm.innerHTML = makenewcardinner(Card.Title, Card.Body, Card.Author);
-      document.getElementById("cards-" + ColumnID).prepend(NewCardForm);
+      NewCardForm.id = `${TargetCard.id}`;
+      NewCardForm.innerHTML = makenewcardinner(TargetCard.Title, TargetCard.Body, TargetCard.Author);
+      document.getElementById("cards-" + Column.id).append(NewCardForm);
     });
   });
 }
+
+fetch(API_URL_Box).then((resp) => resp.json()).then((boxes) => boxes.forEach(card => makecardarr(card))).catch((err) => console.error(err));
+fetch(API_URL_Col).then((resp) => resp.json()).then((column) => makeinitcol(column)).catch((err) => console.error(err));
+fetch(API_URL_Eve).then((resp) => resp.json()).then().catch((err) => console.error(err));
 
 const acolumn = document.getElementsByClassName("ColumnSection")[0];
 
@@ -101,4 +109,4 @@ acolumn.addEventListener("mouseup", (e) => {
   }
 });
 
-export { events,API_URL_Col, acolumn };
+export { events,API_URL_Col,API_URL_Box,acolumn };
