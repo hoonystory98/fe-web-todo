@@ -1,21 +1,18 @@
 import Component from "../../core/Component.js";
-import Notification from "../../models/Notification.js"
-import TodoDatabase from "../../persistance/TodoDatabase.js";
+import NotificationManager from "../../core/NotificationManager.js";
 
 class NotificationCard extends Component {
     initialize() {
-        const { notificationId } = this.props;
-        const notification = TodoDatabase.findNotificationById(notificationId);
+        const { notification } = this.props;
         this.state = {
             timeDeltaMin: NotificationCard.calcDeltaMin(notification),
-            notification
         }
         this.refreshAuto();
     }
 
     refreshAuto() {
         const isConnected = this.$target.isConnected;
-        const { notification } = this.state;
+        const { notification } = this.props;
         if (isConnected) {
             setTimeout(() => {
                 this.setState({ timeDeltaMin:
@@ -30,7 +27,8 @@ class NotificationCard extends Component {
     }
 
     template() {
-        const { timeDeltaMin, notification } = { ...this.state };
+        const { timeDeltaMin } = this.state ;
+        const { notification } = this.props;
         const spanInner = this.getSpanInnerText();
         return `
         <div>🥳</div>
@@ -43,20 +41,20 @@ class NotificationCard extends Component {
     }
 
     getSpanInnerText() {
-        const actionTypes = Notification.actionTypes;
-        const { notification } = this.state;
+        const notificationTypes = NotificationManager.notificationTypes;
+        const { notification } = this.props;
         let spanInner;
-        switch (notification.action) {
-            case actionTypes.add:
+        switch (notification.type) {
+            case notificationTypes.ADD:
                 spanInner = `<b>${notification.to}</b>에 <b>${notification.name}</b>을 등록하였습니다.`
                 break;
-            case actionTypes.delete:
+            case notificationTypes.DELETE:
                 spanInner = `<b>${notification.from}</b>에서 <b>${notification.name}</b>을 삭제하였습니다.`
                 break;
-            case actionTypes.move:
+            case notificationTypes.MOVE:
                 spanInner = `<b>${notification.name}</b>을 <b>${notification.from}</b>에서 <b>${notification.to}</b>으로 이동하였습니다.`
                 break;
-            case actionTypes.update:
+            case notificationTypes.UPDATE:
                 spanInner = `<b>${notification.from}</b>를 <b>${notification.to}</b>으로 수정하였습니다.`
                 break;
         }

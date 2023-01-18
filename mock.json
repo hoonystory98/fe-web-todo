@@ -5,7 +5,7 @@
       "name": "test name",
       "from": "test col1",
       "to": "test col2",
-      "action": "등록",
+      "type": "add",
       "timestamp": 1673169047861,
       "id": 1
     }
@@ -14,7 +14,7 @@
     {
       "name": "오늘 할 일",
       "id": 1,
-      "headTodoId": 1
+      "headTodoId": 7
     },
     {
       "name": "내일 할 일",
@@ -25,6 +25,10 @@
       "name": "모레 할 일",
       "id": 3,
       "headTodoId": -1
+    },
+    {
+      "name": "New Column",
+      "id": 4
     }
   ],
   "todos": [
@@ -62,6 +66,22 @@
       "columnId": 2,
       "nextId": -1,
       "id": 5
+    },
+    {
+      "name": "123",
+      "description": "123",
+      "columnId": 1,
+      "nextId": 1,
+      "author": "randomlee",
+      "id": 6
+    },
+    {
+      "name": "123",
+      "description": "123",
+      "columnId": 1,
+      "nextId": 6,
+      "author": "randomlee",
+      "id": 7
     }
   ]
 }

@@ -1,20 +1,23 @@
 import Component from "../../core/Component.js";
 import NotificationCard from "../NotificationCard/NotificationCard.js";
 import TodoDatabase from "../../persistance/TodoDatabase.js";
+import NotificationManager from "../../core/NotificationManager.js";
 
 class Header extends Component {
     initialize() {
-        this.state = {
-            notificationIds: TodoDatabase.findAllNotificationIds()
-        }
+        this.state = { notifications: [] };
+        TodoDatabase.getNotifications().then(notifications => {
+            this.setState({ notifications: notifications.reverse() });
+        });
         this.addEvent('click', '#sidebar_open_btn', this.openSidebar.bind(this));
         this.addEvent('click', '#sidebar_close_btn, #sidebar_bgbtn', this.closeSidebar.bind(this));
-        TodoDatabase.setNotificationListener(this.addNotification.bind(this));
+        this.addEvent(NotificationManager.notificationEventType, '*', this.addNotification.bind(this));
     }
 
-    addNotification(notification) {
-        const newNotificationIds = [ notification.id, ...this.state.notificationIds ];
-        this.setState({ ...this.state, notificationIds: newNotificationIds });
+    addNotification({ notification }) {
+        TodoDatabase.postNotification(notification).then(notification => {
+            this.setState({ notifications: [notification, ...this.state.notifications] })
+        });
     }
 
     openSidebar() {
@@ -46,8 +49,8 @@ class Header extends Component {
                     </button>            
                 </header>
                 <ul>
-                ${this.state.notificationIds.map(notificationId =>
-                    `<li data-component="NotificationCard" data-notification-id="${notificationId}"></li>`
+                ${this.state.notifications.map(({ id }) =>
+                    `<li data-component="NotificationCard" data-notification-id="${id}"></li>`
                 ).join('')}       
                 </ul>
             </div>
@@ -57,9 +60,11 @@ class Header extends Component {
 
     mounted() {
         const $notificationCards = this.$target.querySelectorAll('[data-component="NotificationCard"]');
+        const { notifications } = this.state;
         $notificationCards.forEach($notificationCard => {
             const notificationId = parseInt($notificationCard.dataset.notificationId);
-            new NotificationCard($notificationCard, { notificationId });
+            const notification = notifications.find(notification => notification.id === notificationId);
+            new NotificationCard($notificationCard, { notification });
         });
     }
 }

@@ -1,9 +1,11 @@
 const getUser = () => {
-    return 'randomlee';
+    const params = new URLSearchParams(window.location.search);
+    return params.get('user');
 }
 const BASE_URL = 'http://localhost:3000';
 const TODO_URI = BASE_URL + '/todos';
 const COLUMN_URI = BASE_URL + '/columns';
+const NOTIFICATION_URI = BASE_URL + '/notifications'
 
 /**
  * @typedef {{id: number|undefined, name: string|undefined, author: string|undefined, description: string|undefined, columnId: number|undefined, nextId: number|undefined}} TodoEntity
@@ -51,7 +53,7 @@ const patchColumn = async (column) => {
  * @param {TodoEntity} todo
  * @returns {Promise<TodoEntity[]>}
  */
-const getTodos = async (todo) => {
+const getTodos = async (todo={}) => {
     const getTodosRes = await fetch(TODO_URI + getQueryString(todo), {
         cache: "no-store"
     });
@@ -69,7 +71,7 @@ const postTodo = async (todo) => {
     const newTodoRes = await fetch(TODO_URI, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify(todo)
+        body: JSON.stringify({ ...todo, author: getUser() })
     });
     const newTodo = await newTodoRes.json();
     await patchColumn({ id: column.id, headTodoId: newTodo.id });
@@ -124,6 +126,30 @@ const forceCloseTodo = async (todo) => {
 }
 
 /**
+ * @param {NotificationEntity} notification
+ * @returns {Promise<NotificationEntity[]>}
+ */
+const getNotifications = async (notification={}) => {
+    const getNotificationsRes = await fetch(NOTIFICATION_URI + getQueryString(notification), {
+        cache: "no-store"
+    });
+    return await getNotificationsRes.json();
+};
+
+/**
+ * @param {NotificationEntity} notification
+ * @returns {Promise<NotificationEntity>}
+ */
+const postNotification = async (notification) => {
+    const newNotificationRes = await fetch(NOTIFICATION_URI, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ ...notification, author: getUser() })
+    });
+    return await newNotificationRes.json();
+};
+
+/**
  * @param {TodoEntity|ColumnEntity} data
  * @returns {string}
  */
@@ -141,7 +167,9 @@ const TodoDatabase = {
     getTodos,
     postTodo,
     patchTodo,
-    moveTodo
+    moveTodo,
+    getNotifications,
+    postNotification
 }
 
 export default TodoDatabase;
