@@ -6,30 +6,24 @@ import TodoAddForm from "../TodoAddForm/TodoAddForm.js";
 
 class TodoHolder extends Component {
     initialize() {
-        const { columnId } = this.props;
-        const todoIds = TodoDatabase.findTodoIdsByColumnId(columnId);
-        this.state = {
-            todoIds: todoIds
-        }
+        this.state = { todos: [] }
         this.addEvent('click', '.add-todo-btn', this.addBtnClicked.bind(this));
-    }
 
-    addBtnClicked() {
-        const $addForm = this.$target.querySelector('[data-component="TodoAddForm"]');
-        const checked = !$addForm.toggleAttribute('hidden');
-        const $button = this.$target.querySelector('.add-todo-btn');
-        $button.style.fill = checked ? '#0075DE' : '#010101';
+        const { todos, column } = this.props;
+        this.setState({
+            todos: TodoHolder.getTopologySorted(todos)
+        });
     }
 
     template() {
-        const { columnId } = this.props;
-        const { todoIds } = this.state;
+        const { column } = this.props;
+        const { todos } = this.state;
         return `
         <div class="todoholder-header">
             <div class="todoholder-colinfo">
                 <div data-component="DoubleClickInput"></div>
                 <div class="count-circle">
-                    <h4>${todoIds.length}</h4>
+                    <h4>${todos.length}</h4>
                 </div>
             </div>
             <div class="todoholder-headerbtn-wrapper">
@@ -47,10 +41,10 @@ class TodoHolder extends Component {
         </div>
         <article class="todoholder-actual">
         <div data-component="TodoAddForm" hidden></div>
-        ${todoIds.map(todoId => `
-           <div data-component="TodoCard" data-todo-id="${todoId}" data-column-id="${columnId}"></div>
+        ${todos.map(({ id }) => `
+           <div data-component="TodoCard" data-todo-id="${id}" data-column-id="${column.id}"></div>
         `).join('')}
-        <div data-component="TodoCard" data-todo-id="-1" data-column-id="${columnId}"></div>
+        <div data-component="TodoCard" data-todo-id="-1" data-column-id="${column.id}"></div>
         </article>
         `
     }
@@ -62,8 +56,7 @@ class TodoHolder extends Component {
     }
 
     mountColumnNameInput() {
-        const { columnId } = this.props;
-        const column = TodoDatabase.findColumnById(columnId);
+        const { column } = this.props;
         const $doubleClickInput = this.$target.querySelector('[data-component="DoubleClickInput"]');
         new DoubleClickInput($doubleClickInput, {
             value: column.name,
@@ -73,34 +66,76 @@ class TodoHolder extends Component {
     }
 
     mountTodoCards() {
-        const { columnId } = this.props;
+        const { column } = this.props;
+        const { todos } = this.state;
         const $actualHolder = this.$target.querySelector('.todoholder-actual');
         const $todoCards = this.$target.querySelectorAll(`[data-component="TodoCard"]`);
         $todoCards.forEach($todoCard => {
             const todoId = parseInt($todoCard.dataset.todoId);
-            new TodoCard($todoCard, { todoId, columnId, $actualHolder });
+            const todo = todos.find(todo => todo.id === todoId) || { id: -1, columnId: column.id };
+            new TodoCard($todoCard, { todo, $actualHolder, onTodoMoved: this.updateMovedTodo.bind(this) });
         });
     }
 
     mountAddForm() {
         const $todoAddForm = this.$target.querySelector('[data-component="TodoAddForm"]');
-        const addTodo = this.addTodo.bind(this);
         new TodoAddForm($todoAddForm, {
-            addTodo,
+            addTodo: this.addTodo.bind(this),
             addCancel: this.addBtnClicked.bind(this)
         });
     }
 
+    addBtnClicked() {
+        const $addForm = this.$target.querySelector('[data-component="TodoAddForm"]');
+        const checked = !$addForm.toggleAttribute('hidden');
+        const $button = this.$target.querySelector('.add-todo-btn');
+        $button.style.fill = checked ? '#0075DE' : '#010101';
+    }
+
     addTodo(name, description) {
-        const { columnId } = this.props;
-        const newTodoId = TodoDatabase.addNewTodo(columnId, name, description);
-        const newTodoIds = [ newTodoId, ...this.state.todoIds ];
-        this.setState({ todoIds: newTodoIds });
+        const columnId = this.props.column.id;
+        TodoDatabase.postTodo({ name, description, columnId }).then(todo => {
+            const todos = [ todo, ...this.state.todos ];
+            this.setState({ todos });
+        });
     }
 
     updateColumnName(newName) {
-        const { columnId } = this.props;
-        TodoDatabase.updateColumnNameById(columnId, newName);
+        const { column } = this.props;
+        TodoDatabase.patchColumn({...column, name: newName}).then(console.log);
+    }
+
+    updateMovedTodo(movedTodo) {
+        const todos = [ ...this.state.todos ];
+        const beforeMovedTodo = todos.find(todo => todo.id === movedTodo.id);
+        if (beforeMovedTodo) {
+            const beforeMovedIdx = todos.indexOf(beforeMovedTodo);
+            todos.splice(beforeMovedIdx, 1);
+        }
+
+        const thisHolderColumnId = this.props.column.id;
+        if (movedTodo.columnId === thisHolderColumnId) {
+            const insertionIdx = todos.findIndex(todo => movedTodo.nextId === todo.id);
+            if (insertionIdx < 0)
+                todos.push(movedTodo);
+            else
+                todos.splice(insertionIdx, 0, movedTodo);
+        }
+
+        this.setState({ todos });
+    }
+
+    static getTopologySorted(todos) {
+        let tail = -1;
+        const newTodos = [];
+        while (true) {
+            const lastTodo = todos.find(todo => todo.nextId === tail);
+            if (!lastTodo)
+                break;
+            newTodos.unshift(lastTodo);
+            tail = lastTodo.id;
+        }
+        return newTodos;
     }
 }
 

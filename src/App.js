@@ -8,19 +8,19 @@ import DragManager from "./core/DragManager.js";
 class App extends Component {
     initialize() {
         this.initializeDragFeature();
-        this.state = {
-            columnIds: TodoDatabase.findAllColumnIds()
-        }
-        this.addEvent(DragManager.dragEventTypes.END, '*', this.onDragFinished.bind(this));
+        this.state = { columns: [] };
+        TodoDatabase.getColumns().then(columns => {
+            this.setState({ columns });
+        });
     }
 
     template() {
-        const columnIds = [ ...this.state.columnIds ];
+        const { columns } = this.state;
         return `
-        <div data-component="Header"></div>
+<!--        <div data-component="Header"></div>-->
         <div data-component="AddColumnButton"></div>
         <div id="article">
-        ${columnIds.map((_, idx) => `
+        ${columns.map((_, idx) => `
             <div data-component="TodoHolder" data-index="${idx}"></div>
         `).join('')}
         </div>
@@ -28,44 +28,33 @@ class App extends Component {
     }
 
     mounted() {
-        const $header = this.$target.querySelector('[data-component="Header"]');
-        new Header($header);
+        // const $header = this.$target.querySelector('[data-component="Header"]');
+        // new Header($header);
 
         const $addColBtn = this.$target.querySelector('[data-component="AddColumnButton"]');
-        const addColumn = this.addColumn.bind(this);
-        new AddColumnButton($addColBtn, { addColumn });
+        new AddColumnButton($addColBtn, { addColumn: this.addColumn.bind(this) });
 
         const $todoHolders = this.$target.querySelectorAll('[data-component="TodoHolder"]');
-        const columnIds = [ ...this.state.columnIds ];
+        const { columns } = this.state;
         $todoHolders.forEach($todoHolder => {
             const idx = parseInt($todoHolder.dataset.index);
-            const columnId = columnIds[idx];
-            new TodoHolder($todoHolder, { columnId });
+            const column = columns[idx];
+            TodoDatabase.getTodos({ columnId: column.id }).then(todos => {
+                new TodoHolder($todoHolder, { todos, column });
+            });
         });
     }
 
     addColumn() {
-        const newColumn = TodoDatabase.addNewColumn();
-        const newColumnIds = [ ...this.state.columnIds ];
-        newColumnIds.push(newColumn.id);
-        this.setState({ columnIds: newColumnIds });
+        TodoDatabase.postColumn({ name: 'New Column' }).then(column => {
+            const columns = [ ...this.state.columns, column ];
+            this.setState({ columns });
+        });
     }
 
     initializeDragFeature() {
         DragManager.setDraggableDatasetComponentName('TodoCard');
         DragManager.initialize();
-    }
-
-    onDragFinished(ev) {
-        const $dragStartTodoCard = ev.dragStartedElement;
-        const $lastCollapsedTodoCard = ev.lastCollapsedElement;
-        if (!$lastCollapsedTodoCard)
-            return;
-        const srcTodoId = parseInt($dragStartTodoCard.dataset.todoId);
-        const dstTodoId = parseInt($lastCollapsedTodoCard.dataset.todoId);
-        const dstColumnId = parseInt($lastCollapsedTodoCard.dataset.columnId);
-        TodoDatabase.moveTodo(srcTodoId, dstTodoId, dstColumnId);
-        this.render();
     }
 }
 

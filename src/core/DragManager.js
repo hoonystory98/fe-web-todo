@@ -60,22 +60,21 @@ const DragManager = {
         }
     },
 
-    __mouseupEventListener(ev) {
+    __mouseupEventListener(e) {
         const dragEvent = new MyDragEvent(
             DragManager.dragEventTypes.END,
             this.$dragstartComponent,
             this.$lastCollapsedComponent
         );
-        ev.target.dispatchEvent(dragEvent);
-        if (this.$dragstartComponent) {
+        if (this.$dragstartComponent && this.$draggingComponent && this.$lastCollapsedComponent) {
+            this.$lastCollapsedComponent.dispatchEvent(dragEvent);
             this.$dragstartComponent.dispatchEvent(dragEvent);
-            this.$dragstartComponent.classList.remove('dragstart');
-            this.$dragstartComponent = null;
         }
-        if (this.$draggingComponent) {
-            this.$draggingComponent.remove();
-            this.$draggingComponent = null;
-        }
+        this.$dragstartComponent?.classList.remove('dragstart');
+        this.$draggingComponent?.remove();
+        this.$dragstartComponent = null;
+        this.$draggingComponent = null;
+        this.$lastCollapsedComponent = null;
     },
 
     initialize() {

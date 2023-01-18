@@ -4,17 +4,12 @@ import DragManager from "../../core/DragManager.js";
 
 class TodoCard extends Component {
     initialize() {
-        const { todoId } = this.props;
+        this.state = {
+            todo: this.props.todo,
+            isEdit: false
+        };
         this.setEvent();
-        if (this.isDummy()) {
-            this.$target.classList.add(DragManager.BLOCK_DRAG_CLASS);
-        } else {
-            const todo = TodoDatabase.findTodoById(todoId);
-            this.state = {
-                todo: todo,
-                isEdit: false
-            };
-        }
+        this.setDraggable();
     }
 
     setEvent() {
@@ -23,17 +18,31 @@ class TodoCard extends Component {
         this.addEvent('click', '.todocard-edit-ok', this.finishEdit.bind(this));
         this.addEvent('click', '.todocard-bgbtn', this.cancelEdit.bind(this));
         this.addEvent(DragManager.dragEventTypes.COLLAPSED, '*', this.onCollapsed.bind(this));
+        this.addEvent(DragManager.dragEventTypes.END, '*', this.onDragEnded.bind(this));
     }
 
-    onCollapsed(ev) {
+    onCollapsed(e) {
         const { $actualHolder } = this.props
-        const $dragStart = ev.dragStartedElement;
+        const $dragStart = e.dragStartedElement;
         $actualHolder.insertBefore($dragStart, this.$target);
+    }
+
+    onDragEnded(e) {
+        const $dragStart = e.dragStartedElement;
+        const $lastCollapsed = e.lastCollapsedElement;
+
+        const srcTodoId = parseInt($dragStart.dataset.todoId);
+        const dstTodoId = parseInt($lastCollapsed.dataset.todoId);
+        const dstColumnId = parseInt($lastCollapsed.dataset.columnId);
+
+        TodoDatabase.moveTodo(srcTodoId, dstTodoId, dstColumnId).then(todo => {
+            this.props.onTodoMoved(todo);
+        });
     }
 
     template() {
         if (this.isDummy())
-            return ``;
+            return '';
         const { todo, isEdit } = this.state;
         return `
         <button class="todocard-bgbtn"></button>
@@ -78,16 +87,13 @@ class TodoCard extends Component {
     finishEdit() {
         const $title = this.$target.querySelector('.todocard-title');
         const $desc = this.$target.querySelector('.todocard-desc');
-        const newTodo = {
-            ...this.state.todo,
+        TodoDatabase.patchTodo({
+            id: this.state.todo.id,
             name: $title.value,
             description: $desc.value
-        };
-        this.setState({
-            isEdit: false,
-            todo: newTodo
+        }).then(todo => {
+            this.setState({ isEdit: false, todo });
         });
-        TodoDatabase.updateTodo(newTodo);
     }
     fitHeight() {
         const $textarea = this.$target.querySelector('.todocard-desc');
@@ -101,8 +107,12 @@ class TodoCard extends Component {
         }
     }
     isDummy() {
-        const { todoId } = this.props;
-        return todoId < 0;
+        const { todo } = this.state;
+        return todo.id < 0;
+    }
+    setDraggable() {
+        if (this.isDummy())
+            this.$target.classList.add(DragManager.BLOCK_DRAG_CLASS);
     }
 }
 

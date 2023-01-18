@@ -1,19 +1,67 @@
 {
-  "posts": [
+  "notifications": [
     {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
+      "author": "randomlee",
+      "name": "test name",
+      "from": "test col1",
+      "to": "test col2",
+      "action": "등록",
+      "timestamp": 1673169047861,
+      "id": 1
     }
   ],
-  "comments": [
+  "columns": [
     {
+      "name": "오늘 할 일",
       "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "headTodoId": 1
+    },
+    {
+      "name": "내일 할 일",
+      "id": 2,
+      "headTodoId": -1
+    },
+    {
+      "name": "모레 할 일",
+      "id": 3,
+      "headTodoId": -1
     }
   ],
-  "profile": {
-    "name": "typicode"
-  }
+  "todos": [
+    {
+      "name": "1",
+      "description": "",
+      "columnId": 1,
+      "nextId": 2,
+      "id": 1
+    },
+    {
+      "name": "2",
+      "description": "",
+      "columnId": 1,
+      "nextId": 3,
+      "id": 2
+    },
+    {
+      "name": "3",
+      "description": "",
+      "columnId": 1,
+      "nextId": 4,
+      "id": 3
+    },
+    {
+      "name": "4",
+      "description": "",
+      "columnId": 1,
+      "nextId": 5,
+      "id": 4
+    },
+    {
+      "name": "5",
+      "description": "",
+      "columnId": 1,
+      "nextId": -1,
+      "id": 5
+    }
+  ]
 }
