@@ -8,8 +8,8 @@ const COLUMN_URI = BASE_URL + '/columns';
 const NOTIFICATION_URI = BASE_URL + '/notifications'
 
 /**
- * @typedef {{id: number|undefined, name: string|undefined, author: string|undefined, description: string|undefined, columnId: number|undefined, nextId: number|undefined}} TodoEntity
- * @typedef {{id: number|undefined, name: string|undefined, headTodoId: number|undefined}} ColumnEntity
+ * @typedef {{id: number|undefined, name: string|undefined, author: string|undefined, description: string|undefined}} TodoEntity
+ * @typedef {{id: number|undefined, name: string|undefined, todoIds: number[]|undefined}} ColumnEntity
  */
 
 /**
@@ -17,10 +17,13 @@ const NOTIFICATION_URI = BASE_URL + '/notifications'
  * @returns {Promise<ColumnEntity[]>}
  */
 const getColumns = async (column={}) => {
-    const getColumnRes = await fetch(COLUMN_URI + getQueryString(column), {
-        cache: "no-store"
+    const getColumnRes = await fetch(COLUMN_URI + getQueryString(column),
+        { cache: "no-store" });
+    const columns = await getColumnRes.json();
+    columns.forEach((col, idx) => {
+        columns[idx] = JSON.parse(col.todoIds);
     });
-    return await getColumnRes.json();
+    return columns;
 }
 
 /**
@@ -31,7 +34,7 @@ const postColumn = async (column) => {
     const newColumnRes = await fetch(COLUMN_URI, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ name: column.name, headTodoId: -1 })
+        body: JSON.stringify({ name: column.name, todoIds: "[]" })
     });
     return await newColumnRes.json();
 }
@@ -44,7 +47,7 @@ const patchColumn = async (column) => {
     const patchColumnRes = await fetch(`${COLUMN_URI}/${column.id}`, {
         method: 'PATCH',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify(column)
+        body: JSON.stringify({ ...column, todoIds: JSON.stringify(column.todoIds)})
     });
     return await patchColumnRes.json();
 }
@@ -65,17 +68,12 @@ const getTodos = async (todo={}) => {
  * @returns {Promise<TodoEntity|false>}
  */
 const postTodo = async (todo) => {
-    const column = (await getColumns({ id: todo.columnId }))[0];
-    if (!column) return false;
-    todo.nextId = column.headTodoId;
     const newTodoRes = await fetch(TODO_URI, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ ...todo, author: getUser() })
     });
-    const newTodo = await newTodoRes.json();
-    await patchColumn({ id: column.id, headTodoId: newTodo.id });
-    return newTodo;
+    return await newTodoRes.json();
 };
 
 /**
@@ -92,47 +90,12 @@ const patchTodo = async (todo) => {
 }
 
 /**
- * @param {number} srcTodoId
- * @param {number} dstTodoId
- * @param {number} dstColumnId
- * @returns {Promise<TodoEntity|false>}
- */
-const moveTodo = async (srcTodoId, dstTodoId, dstColumnId) => {
-    let srcTodo = (await getTodos({ id: srcTodoId }))[0];
-    if (!(srcTodo = await forceCloseTodo(srcTodo)))
-        return false;
-    const dstPrevTodoFound = (await getTodos({ columnId: dstColumnId, nextId: dstTodoId }))[0];
-    if (dstPrevTodoFound) {
-        await patchTodo({ id: dstPrevTodoFound.id, nextId: srcTodo.id });
-    } else {
-        await patchColumn({ id: dstColumnId, headTodoId: srcTodo.id });
-    }
-    return await patchTodo(
-        { id: srcTodo.id, columnId: dstColumnId, nextId: dstTodoId });
-}
-
-/**
- * @param {TodoEntity} todo
- * @returns {Promise<TodoEntity>}
- */
-const forceCloseTodo = async (todo) => {
-    const prevTodoFound = (await getTodos({ columnId: todo.columnId, nextId: todo.id }))[0];
-    if (prevTodoFound) {
-        await patchTodo({ id: prevTodoFound.id, nextId: todo.nextId });
-    } else {
-        await patchColumn({ id: todo.columnId, headTodoId: todo.nextId });
-    }
-    return await patchTodo({ id: todo.id, columnId: 0, nextId: 0 });
-}
-
-/**
  * @param {NotificationEntity} notification
  * @returns {Promise<NotificationEntity[]>}
  */
 const getNotifications = async (notification={}) => {
-    const getNotificationsRes = await fetch(NOTIFICATION_URI + getQueryString(notification), {
-        cache: "no-store"
-    });
+    const getNotificationsRes = await fetch(NOTIFICATION_URI + getQueryString(notification),
+        { cache: "no-store" });
     return await getNotificationsRes.json();
 };
 
@@ -156,8 +119,7 @@ const postNotification = async (notification) => {
 const getQueryString = (data) => {
     if (data.id)
         return `?id=${data.id}`;
-    return '?' + (data.columnId ? `&columnId=${data.columnId}` : '')
-        + (data.nextId ? `&nextId=${data.nextId}` : '');
+    return '?' + (data.author ? `&author=${data.author}` : '');
 }
 
 const TodoDatabase = {
@@ -167,7 +129,6 @@ const TodoDatabase = {
     getTodos,
     postTodo,
     patchTodo,
-    moveTodo,
     getNotifications,
     postNotification
 }
