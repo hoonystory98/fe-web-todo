@@ -1,135 +1,129 @@
 //for card sort, title change
 import { API_URL_Col } from "./main.js";
-import { makecardsection } from "./templates.js";
+import { newcolumnmodal, makecardsection } from "./templates.js";
 
 function modalmakecol() {
-    const ModalHTML = document.createElement("div");
-    ModalHTML.classList="Modal";
-    ModalHTML.style="display:block";
-    ModalHTML.innerHTML=`<div class="ModalAlert">
-                            <div class="ModalMessage">새로운 칼럼의 제목을 입력해주세요.</div>
-                            <input type="text" placeholder="제목을 입력하세요" class="ModalInput" maxlength="50"></input>
-                            <div class="ModalButton">
-                                <button class="ModalCancel">취소</button>
-                                <button class="ModalConfirm" disabled="true">등록</button>
-                            </div>
-                        </div>`;
-    document.body.append(ModalHTML);
-    let ModalTarget=ModalHTML;
-    let ModalInput=ModalHTML.getElementsByClassName("ModalInput")[0];
-    let ModalCancel=ModalHTML.getElementsByClassName("ModalCancel")[0];
-    let ModalConfirm=ModalHTML.getElementsByClassName("ModalConfirm")[0];
-    ModalInput.focus();
+  const ModalHTML = document.createElement("div");
+  ModalHTML.classList = "Modal";
+  ModalHTML.innerHTML = newcolumnmodal();
+  document.body.append(ModalHTML);
+  let ModalTarget = ModalHTML;
+  let ModalInput = ModalHTML.getElementsByClassName("ModalInput")[0];
+  let ModalCancel = ModalHTML.getElementsByClassName("ModalCancel")[0];
+  let ModalConfirm = ModalHTML.getElementsByClassName("ModalConfirm")[0];
+  ModalInput.focus();
 
-    ModalTarget.addEventListener('click', (event) => {
-        if (event.target === ModalTarget) {
-            ModalTarget.remove();
-        }
-    });
-    ModalInput.addEventListener('input', ()=>{
-        if(ModalInput.value.length > 0){
-            ModalConfirm.disabled=false;
-        }
-        else{
-            ModalConfirm.disabled=true;
-        }
+  ModalTarget.addEventListener("click", (event) => {
+    if (event.target === ModalTarget) {
+      ModalTarget.remove();
+    }
+  });
+  ModalInput.addEventListener("input", () => {
+    if (ModalInput.value.length > 0) {
+      ModalConfirm.disabled = false;
+    } else {
+      ModalConfirm.disabled = true;
+    }
+  });
+  ModalConfirm.addEventListener("click", () => {
+    let ColumnID = "NewCol-" + new Date().getTime();
+    let ColumnHTML = makecardsection(ModalInput.value, ColumnID, 0);
+    const NewColumn = {
+      Name: `${ModalInput.value}`,
+      id: `${ColumnID}`,
+      Lists: [],
+    };
+    document.getElementsByClassName("ColumnSection")[0].innerHTML += ColumnHTML;
+    fetch(API_URL_Col, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(NewColumn),
     })
-    ModalConfirm.addEventListener("click",()=>{
-        let ColumnID="NewCol-"+new Date().getTime();
-        let ColumnHTML=makecardsection(ModalInput.value,ColumnID,0);
-        const NewColumn={
-            "Name": `${ModalInput.value}`,
-            "id": `${ColumnID}`,
-            "Lists": []
-        }
-        document.getElementsByClassName("ColumnSection")[0].innerHTML+=(ColumnHTML);
-        fetch(API_URL_Col,{
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(NewColumn),
-        }).then((resp)=>resp.json()).catch((error)=>console.error(error));
-        ModalHTML.remove();
-    });
-    ModalCancel.addEventListener("click",()=>{
-        ModalHTML.remove();
-    });
+      .then((resp) => resp.json())
+      .catch((error) => console.error(error));
+    ModalHTML.remove();
+  });
+  ModalCancel.addEventListener("click", () => {
+    ModalHTML.remove();
+  });
 }
 
-function deletecolumn(TargetColumn){
-    const ModalHTML = document.createElement("div");
-    ModalHTML.classList="Modal";
-    ModalHTML.style="display:block";
-    ModalHTML.innerHTML=`<div class="ModalAlert">
+function deletecolumn(TargetColumn) {
+  const ModalHTML = document.createElement("div");
+  ModalHTML.classList = "Modal";
+  ModalHTML.style = "display:block";
+  ModalHTML.innerHTML = `<div class="ModalAlert">
                             <div class="ModalMessage">선택한 칼럼을 삭제할까요?</div>
                             <div class="ModalButton">
                                 <button class="ModalCancel">취소</button>
                                 <button class="ModalConfirm">삭제</button>
                             </div>
                         </div>`;
-    document.body.append(ModalHTML);
-    let ModalTarget=ModalHTML;
-    let ModalCancel=ModalHTML.getElementsByClassName("ModalCancel")[0];
-    let ModalConfirm=ModalHTML.getElementsByClassName("ModalConfirm")[0];
+  document.body.append(ModalHTML);
+  let ModalTarget = ModalHTML;
+  let ModalCancel = ModalHTML.getElementsByClassName("ModalCancel")[0];
+  let ModalConfirm = ModalHTML.getElementsByClassName("ModalConfirm")[0];
 
-    ModalTarget.addEventListener('click', (event) => {
-        if (event.target === ModalTarget) {
-            ModalTarget.remove();
-        }
-    });
-    ModalConfirm.addEventListener("click",()=>{
-        const TargetColId=TargetColumn.id;
-        console.log(TargetColId);
-        TargetColumn.remove();
-        fetch(`${API_URL_Col}/${TargetColId}`,{
-            method: "DELETE",
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify({TargetColId}),
-        }).then((resp)=>resp.json()).catch((error)=>console.error(error));
-        ModalHTML.remove();
-    });
-    ModalCancel.addEventListener("click",()=>{
-        ModalHTML.remove();
-    });
-}
-
-function changecoltitle(TargetTitle){
-    let InputForm=document.createElement("input");
-    InputForm.type="text";
-    InputForm.placeholder=`${TargetTitle.textContent}`;
-    InputForm.value=`${TargetTitle.textContent}`;
-    InputForm.className="TitleInput";
-    InputForm.maxLength="50";
-    TargetTitle.innerHTML="";
-    TargetTitle.append(InputForm);
-    const inputform=TargetTitle.getElementsByClassName('TitleInput')[0];
-    inputform.focus();
-
-    function registertitle(){
-        if(inputform.value.length > 0){
-            const TargetColId=TargetTitle.closest('.ColumnList').id;
-            const Name=inputform.value;
-            TargetTitle.innerHTML=inputform.value;
-            fetch(`${API_URL_Col}/${TargetColId}`,{
-                method: "PATCH",
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: JSON.stringify({Name}),
-            }).catch((error)=>console.error(error));
-        }
-        else{
-            return;
-        }
+  ModalTarget.addEventListener("click", (event) => {
+    if (event.target === ModalTarget) {
+      ModalTarget.remove();
     }
-
-    inputform.addEventListener("focusout",registertitle);
+  });
+  ModalConfirm.addEventListener("click", () => {
+    const TargetColId = TargetColumn.id;
+    console.log(TargetColId);
+    TargetColumn.remove();
+    fetch(`${API_URL_Col}/${TargetColId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({ TargetColId }),
+    })
+      .then((resp) => resp.json())
+      .catch((error) => console.error(error));
+    ModalHTML.remove();
+  });
+  ModalCancel.addEventListener("click", () => {
+    ModalHTML.remove();
+  });
 }
 
-const fabbutton=document.getElementsByClassName('FabColumn')[0];
-fabbutton.addEventListener('click', modalmakecol);
+function changecoltitle(TargetTitle) {
+  let InputForm = document.createElement("input");
+  InputForm.type = "text";
+  InputForm.placeholder = `${TargetTitle.textContent}`;
+  InputForm.value = `${TargetTitle.textContent}`;
+  InputForm.className = "TitleInput";
+  InputForm.maxLength = "50";
+  TargetTitle.innerHTML = "";
+  TargetTitle.append(InputForm);
+  const inputform = TargetTitle.getElementsByClassName("TitleInput")[0];
+  inputform.focus();
 
-export { modalmakecol,deletecolumn,changecoltitle };
+  function registertitle() {
+    if (inputform.value.length > 0) {
+      const TargetColId = TargetTitle.closest(".ColumnList").id;
+      const Name = inputform.value;
+      TargetTitle.innerHTML = inputform.value;
+      fetch(`${API_URL_Col}/${TargetColId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ Name }),
+      }).catch((error) => console.error(error));
+    } else {
+      return;
+    }
+  }
+
+  inputform.addEventListener("focusout", registertitle);
+}
+
+const fabbutton = document.getElementsByClassName("FabColumn")[0];
+fabbutton.addEventListener("click", modalmakecol);
+
+export { modalmakecol, deletecolumn, changecoltitle };

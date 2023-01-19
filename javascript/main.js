@@ -1,41 +1,80 @@
 import { modaldeletecard } from "./modaldelete.js";
-import { makecardsection,makenewcardinner } from "./templates.js";
-import { showregisterform,cardheightadjust,makenewcard,modifycard } from "./card.js";
+import { makecardsection, makenewcardinner } from "./templates.js";
+import {
+  showregisterform,
+  cardheightadjust,
+  makenewcard,
+  modifycard,
+} from "./card.js";
 import { deletecolumn, changecoltitle } from "./columns.js";
+import { updatehistory } from "./sidemenu.js";
 import { dragcard } from "./dragndrop.js";
 
-const API_URL_Col="http://localhost:3000/Columns";
-const API_URL_Box="http://localhost:3000/Cards";
-const API_URL_Eve="http://localhost:3000/Events";
+const API_URL_Col = "http://localhost:3000/Columns";
+const API_URL_Box = "http://localhost:3000/Cards";
+const API_URL_Eve = "http://localhost:3000/Events";
 
-let cards=[];
+let cards = [];
 let events = [];
 let dragAble = false;
 
-function makecardarr(card){
+function makecardarr(card) {
   cards.push(card);
 }
 
 function makeinitcol(Columns) {
   Columns.forEach((Column) => {
     let ColumnCards = Column.Lists;
-    let ColumnHTML = makecardsection(Column.Name, Column.id, ColumnCards.length);
+    let ColumnHTML = makecardsection(
+      Column.Name,
+      Column.id,
+      ColumnCards.length
+    );
     document.getElementsByClassName("ColumnSection")[0].innerHTML += ColumnHTML;
 
+    if (ColumnCards.length === 0) return;
     ColumnCards.forEach((CardNum) => {
       let NewCardForm = document.createElement("div");
-      let TargetCard = cards.find(card => card.id == CardNum);
+      let TargetCard = cards.find((card) => {
+        return card["id"] === CardNum;
+      });
       NewCardForm.classList = "ColumnCards";
       NewCardForm.id = `${TargetCard.id}`;
-      NewCardForm.innerHTML = makenewcardinner(TargetCard.Title, TargetCard.Body, TargetCard.Author);
+      NewCardForm.innerHTML = makenewcardinner(
+        TargetCard.Title,
+        TargetCard.Body,
+        TargetCard.Author
+      );
       document.getElementById("cards-" + Column.id).append(NewCardForm);
     });
   });
 }
 
-fetch(API_URL_Box).then((resp) => resp.json()).then((boxes) => boxes.forEach(card => makecardarr(card))).catch((err) => console.error(err));
-fetch(API_URL_Col).then((resp) => resp.json()).then((column) => makeinitcol(column)).catch((err) => console.error(err));
-fetch(API_URL_Eve).then((resp) => resp.json()).then().catch((err) => console.error(err));
+async function getCardinfo() {
+  await fetch(API_URL_Box)
+    .then((resp) => resp.json())
+    .then((boxes) => boxes.forEach((card) => makecardarr(card)))
+    .catch((err) => console.error(err));
+}
+async function getColumninfo() {
+  await fetch(API_URL_Col)
+    .then((resp) => resp.json())
+    .then((column) => makeinitcol(column))
+    .catch((err) => console.error(err));
+}
+async function getEventinfo() {
+  await fetch(API_URL_Eve)
+    .then((resp) => resp.json())
+    .then((history) => updatehistory(history))
+    .catch((err) => console.error(err));
+}
+async function callinitcol() {
+  await getCardinfo();
+  await getColumninfo();
+  await getEventinfo();
+}
+
+callinitcol();
 
 const acolumn = document.getElementsByClassName("ColumnSection")[0];
 
@@ -109,4 +148,4 @@ acolumn.addEventListener("mouseup", (e) => {
   }
 });
 
-export { events,API_URL_Col,API_URL_Box,acolumn };
+export { events, API_URL_Col, API_URL_Box, acolumn };

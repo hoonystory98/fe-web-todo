@@ -48,7 +48,7 @@ function dragcard(e){
                 cardbetween.insertAdjacentElement("beforebegin",TargetCard);
             }
         }
-        if(currentDroppable != droppableBelow){
+        if(droppableBelow && (currentDroppable != droppableBelow)){
             if(currentDroppable != null){
                 droppableBelow.append(TargetCard);
             }

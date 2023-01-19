@@ -1,238 +1,242 @@
-.ColumnCards{
-    display: block;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 16px;
-    margin: 20px 0px 20px 0px;
+.ColumnCards {
+  display: block;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 16px;
+  margin: 20px 0px 20px 0px;
 
-    width: 308px;
+  width: 308px;
 
-    background: #FFFFFF;
+  background: #ffffff;
 
-    box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
-    border-radius: 6px;
+  box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
+  border-radius: 6px;
 
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
 }
 
-.ColumnCards:hover > div.CardBody > i.fa-pencil{
-    display: flex;
+.ColumnCards:hover > div.CardBody > i.fa-pencil {
+  display: flex;
 }
 
-.CardTitle{
-    height: 23px;
-    display: flex;
+.CardTitle {
+  height: 23px;
+  display: flex;
 
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 23px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
 
-    color: #010101;
+  color: #010101;
 
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }
 
-.CardTitle > i.fa-xmark{
-    display: flex;
-    margin-left: auto;
-    color: #828282;
-    cursor: pointer;
+.CardTitle > i.fa-xmark {
+  display: flex;
+  margin-left: auto;
+  color: #828282;
+  cursor: pointer;
 }
 
-.CardTitle > i.fa-xmark:hover{
-    color: #ff4343;
+.CardTitle > i.fa-xmark:hover {
+  color: #ff4343;
 }
 
-.ColumnCards:has(i.fa-xmark:hover){
-    background: #ffeeec;
-    border: 1px solid #ff4343;
+.ColumnCards:has(i.fa-xmark:hover) {
+  background: #ffeeec;
+  border: 1px solid #ff4343;
 }
 
-.ColumnCards:has(i.fa-xmark:hover) > div.CardBody > i.fa-pencil{
-    color: rgba(255, 67, 67, 0.3);
+.ColumnCards:has(i.fa-xmark:hover) > div.CardBody > i.fa-pencil {
+  color: rgba(255, 67, 67, 0.3);
 }
 
 .CardBody {
-    display: flex;
-    margin: 10px 0px 10px 0px;
+  display: flex;
+  margin: 10px 0px 10px 0px;
 
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    
-    color: #010101;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
 
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+  color: #010101;
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
 }
 
-.CardBody > i.fa-pencil{
-    display: none;
-    margin-left: auto;
-    color: #828282;
-    cursor: pointer;
+.CardBody > i.fa-pencil {
+  display: none;
+  margin-left: auto;
+  color: #828282;
+  cursor: pointer;
 }
 
-.CardAuthor{
-    width: 252px;
-    height: 17px;
-    display: block;
+.CardAuthor {
+  width: 252px;
+  height: 17px;
+  display: block;
 
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 17px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 17px;
 
-    color: #BDBDBD;
-    margin-top: auto;
-    
-    flex: none;
-    order: 2;
-    flex-grow: 0;
+  color: #bdbdbd;
+  margin-top: auto;
+
+  flex: none;
+  order: 2;
+  flex-grow: 0;
 }
 
-.NewCard{
-    display: block;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 16px;
-    margin: 20px 0px 10px 0px;
-    
-    width: 308px;
-    
-    background: #FFFFFF;
-    
-    border: 1px solid #0075DE;
-    
-    box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
-    border-radius: 6px;
+.NewCard {
+  display: block;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px;
+  margin: 20px 0px 10px 0px;
+
+  width: 308px;
+
+  background: #ffffff;
+
+  border: 1px solid #0075de;
+
+  box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
+  border-radius: 6px;
 }
 
-.CardTitle > input{
-    width: 276px;
-    height: 23px;
-    
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 23px;
-    margin: 0px 0px 10px 0px;
-    
-    color: #010101;
-    border: none;
-    
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+.HiddenCard {
+  display: none;
 }
 
-.CardTitle > input::placeholder{
-    color: #828282;
+.CardTitle > input {
+  width: 276px;
+  height: 23px;
+
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 23px;
+  margin: 0px 0px 10px 0px;
+
+  color: #010101;
+  border: none;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }
 
-.CardBody > textarea{
-    width: 276px;
-    height: 48px;
-    
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    margin: 0px 0px 10px 0px;
-    
-    border: none;
-    resize: none;
-    
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+.CardTitle > input::placeholder {
+  color: #828282;
 }
 
-.CardBody > textarea::placeholder{
-    color: #828282;
+.CardBody > textarea {
+  width: 276px;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0px 0px 10px 0px;
+
+  border: none;
+  resize: none;
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
 }
 
-.CardButton{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
+.CardBody > textarea::placeholder {
+  color: #828282;
 }
 
-.CardButton > button.CardCancel{
-    padding: 10px;
-    gap: 10px;
-    
-    width: 134px;
-    height: 40px;
-    
-    background: #E0E0E0;
-    border-radius: 6px;
-    cursor: pointer;
-
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: center;
-
-    color: #828282;
-    
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+.CardButton {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
 }
 
-.CardButton > button.CardCancel:hover{
-    background: #828282;
-    color: #ffffff;
+.CardButton > button.CardCancel {
+  padding: 10px;
+  gap: 10px;
+
+  width: 134px;
+  height: 40px;
+
+  background: #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+
+  color: #828282;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }
 
-.CardButton > button.CardRegister{
-    padding: 10px;
-    gap: 10px;
-    
-    width: 134px;
-    height: 40px;
-    
-    background: #0075DE;
-    border-radius: 6px;
-    cursor: pointer;
-
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: center;
-
-    color: #FFFFFF;
-    
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+.CardButton > button.CardCancel:hover {
+  background: #828282;
+  color: #ffffff;
 }
 
-.CardButton > button.CardRegister:disabled{
-    background: #86C6FF;
-    color: rgba(255, 255, 255, 0.4);
-    cursor: default;
+.CardButton > button.CardRegister {
+  padding: 10px;
+  gap: 10px;
+
+  width: 134px;
+  height: 40px;
+
+  background: #0075de;
+  border-radius: 6px;
+  cursor: pointer;
+
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+
+  color: #ffffff;
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
 }
 
-.CardButton > button.CardRegister:enabled:hover{
-    background: #00529B;
+.CardButton > button.CardRegister:disabled {
+  background: #86c6ff;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: default;
 }
 
-.ShadowCard{
-    opacity: 0.4;
-    border: 1px solid #0075de;
-    box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
+.CardButton > button.CardRegister:enabled:hover {
+  background: #00529b;
 }
 
-.FloatingCard{
-    position: absolute;
-    z-index: 1000;
-    opacity: 0.8;
-    box-shadow: 0px 0px 4px rgba(204, 204, 204, 0.5), 0px 2px 4px rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(2px);
-    margin: 0px 0px 0px 0px;
-    cursor: move;
+.ShadowCard {
+  opacity: 0.4;
+  border: 1px solid #0075de;
+  box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
+}
+
+.FloatingCard {
+  position: absolute;
+  z-index: 1000;
+  opacity: 0.8;
+  box-shadow: 0px 0px 4px rgba(204, 204, 204, 0.5),
+    0px 2px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+  margin: 0px 0px 0px 0px;
+  cursor: move;
 }

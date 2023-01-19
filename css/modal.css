@@ -1,115 +1,116 @@
-.Modal{
-    position: absolute;
-    top: 0;
-    left: 0;
+.Modal {
+  position: absolute;
+  top: 0;
+  left: 0;
 
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 
-    display: none;
+  display: block;
 
-    background: rgba(1, 1, 1, 0.4);
+  background: rgba(1, 1, 1, 0.4);
 }
 
-.Modal.show{
-    display: block;
+.Modal.show {
+  display: block;
 }
 
 .ModalAlert {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 24px;
-    gap: 24px;
-    
-    position: absolute;
-    width: 400px;
-    height: 138px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    
-    background: #FFFFFF;
-    
-    box-shadow: 0px 0px 4px rgba(204, 204, 204, 0.5), 0px 2px 4px rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(2px);
-    
-    border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+  gap: 24px;
+
+  position: absolute;
+  width: 400px;
+  height: 138px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  background: #ffffff;
+
+  box-shadow: 0px 0px 4px rgba(204, 204, 204, 0.5),
+    0px 2px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+
+  border-radius: 6px;
 }
 
-.ModalMessage{
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 26px;
+.ModalMessage {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 26px;
 
-    color: #010101;
+  color: #010101;
 
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }
 
-.ModalButton{
-    display: block;
-    text-align: end;
+.ModalButton {
+  display: block;
+  text-align: end;
 }
 
-.ModalButton > button.ModalCancel{
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 10px;
-    gap: 10px;
-    
-    width: 134px;
-    height: 40px;
-    
-    background: #E0E0E0;
-    border-radius: 6px;
+.ModalButton > button.ModalCancel {
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+  gap: 10px;
 
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: center;
-    cursor: pointer;
-    
-    color: #828282;
-    
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+  width: 134px;
+  height: 40px;
+
+  background: #e0e0e0;
+  border-radius: 6px;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+
+  color: #828282;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }
 
-.ModalButton > button.ModalCancel:hover{
-    background: #828282;
-    color: #ffffff;
+.ModalButton > button.ModalCancel:hover {
+  background: #828282;
+  color: #ffffff;
 }
 
-.ModalButton > button.ModalConfirm{
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 10px;
-    gap: 10px;
-    margin-left: 10px;
-    
-    width: 134px;
-    height: 40px;
-    
-    background: #0075DE;
-    border-radius: 6px;
+.ModalButton > button.ModalConfirm {
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+  gap: 10px;
+  margin-left: 10px;
 
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: center;
-    cursor: pointer;
-    
-    color: #FFFFFF;
-    
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+  width: 134px;
+  height: 40px;
+
+  background: #0075de;
+  border-radius: 6px;
+
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+
+  color: #ffffff;
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
 }
 
-.ModalButton > button.ModalConfirm:hover{
-    background: #00529B;
+.ModalButton > button.ModalConfirm:hover {
+  background: #00529b;
 }

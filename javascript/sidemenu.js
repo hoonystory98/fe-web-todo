@@ -1,58 +1,96 @@
 //for side menu function, log sorting, time counting
-import { makelogadddelete,makelogmodify,makelogmove } from "./templates.js";
+import { makelogadddelete, makelogmodify, makelogmove } from "./templates.js";
 import { events } from "./main.js";
 
-const SideMenu = document.getElementsByClassName('SideMenu')[0];
-const MenuLog = SideMenu.getElementsByClassName('MenuLog')[0];
+const SideMenu = document.getElementsByClassName("SideMenu")[0];
+const MenuLog = SideMenu.getElementsByClassName("MenuLog")[0];
 
-function showsidemenu(){
-    MenuLog.innerHTML='';
-    events.forEach(function(logevent){
-        if(logevent.EventType==="변경"){
-            modifylogregister(logevent.FromTitle,logevent.ToTitle,logevent.EventType,logevent.EventTime);
-        }
-        else if(logevent.EventType==="이동"){
-            movelogregister(logevent.CardTitle,logevent.FromColumn,logevent.ToColumn,logevent.EventType,logevent.EventTime);
-        }
-        else{
-            adddeletelogregister(logevent.ColumnName,logevent.CardTitle,logevent.EventType,logevent.EventTime);
-        }
-    });
-    if(SideMenu.style.visibility != 'visible'){
-        SideMenu.style.right = '0%';
-        SideMenu.style.visibility = 'visible';
+function updatehistory() {
+  MenuLog.innerHTML = "";
+  events.forEach(function (logevent) {
+    if (logevent.EventType === "변경") {
+      modifylogregister(
+        logevent.FromTitle,
+        logevent.ToTitle,
+        logevent.EventType,
+        logevent.EventTime
+      );
+    } else if (logevent.EventType === "이동") {
+      movelogregister(
+        logevent.CardTitle,
+        logevent.FromColumn,
+        logevent.ToColumn,
+        logevent.EventType,
+        logevent.EventTime
+      );
+    } else {
+      adddeletelogregister(
+        logevent.ColumnName,
+        logevent.CardTitle,
+        logevent.EventType,
+        logevent.EventTime
+      );
     }
-    else{
-        SideMenu.style.visibility = 'hidden';
-        SideMenu.style.right = '-25%';
-    }
+  });
 }
 
-function adddeletelogregister(ColumnName,CardTitle,EventType,EventTime){
-    let NewLogCard=document.createElement("div");
-    NewLogCard.classList="LogCard";
-    NewLogCard.innerHTML=makelogadddelete(ColumnName,CardTitle,EventType,EventTime);
-    MenuLog.prepend(NewLogCard);
+function showsidemenu() {
+  SideMenu.classList.toggle("HiddenSideMenu");
 }
 
-function modifylogregister(FromTitle,ToTitle,EventType,EventTime){
-    let NewLogCard=document.createElement("div");
-    NewLogCard.classList="LogCard";
-    NewLogCard.innerHTML=makelogmodify(FromTitle,ToTitle,EventType,EventTime);
-    MenuLog.prepend(NewLogCard);
+function adddeletelogregister(ColumnName, CardTitle, EventType, EventTime) {
+  let NewLogCard = document.createElement("div");
+  NewLogCard.classList = "LogCard";
+  NewLogCard.innerHTML = makelogadddelete(
+    ColumnName,
+    CardTitle,
+    EventType,
+    EventTime
+  );
+  MenuLog.prepend(NewLogCard);
 }
 
-function movelogregister(CardTitle,FromColumn,ToColumn,EventType,EventTime){
-    let NewLogCard=document.createElement("div");
-    NewLogCard.classList="LogCard";
-    NewLogCard.innerHTML=makelogmove(CardTitle,FromColumn,ToColumn,EventType,EventTime);
-    MenuLog.prepend(NewLogCard);
+function modifylogregister(FromTitle, ToTitle, EventType, EventTime) {
+  let NewLogCard = document.createElement("div");
+  NewLogCard.classList = "LogCard";
+  NewLogCard.innerHTML = makelogmodify(
+    FromTitle,
+    ToTitle,
+    EventType,
+    EventTime
+  );
+  MenuLog.prepend(NewLogCard);
+}
+
+function movelogregister(
+  CardTitle,
+  FromColumn,
+  ToColumn,
+  EventType,
+  EventTime
+) {
+  let NewLogCard = document.createElement("div");
+  NewLogCard.classList = "LogCard";
+  NewLogCard.innerHTML = makelogmove(
+    CardTitle,
+    FromColumn,
+    ToColumn,
+    EventType,
+    EventTime
+  );
+  MenuLog.prepend(NewLogCard);
 }
 
 const menubuttons = document.getElementsByClassName("MenuButton");
-Array.prototype.forEach.call(menubuttons, (el)=>{
-    el.addEventListener("click",showsidemenu);
+Array.prototype.forEach.call(menubuttons, (el) => {
+  el.addEventListener("click", showsidemenu);
 });
 
-
-export { showsidemenu,MenuLog,adddeletelogregister,modifylogregister,movelogregister };
+export {
+  showsidemenu,
+  updatehistory,
+  MenuLog,
+  adddeletelogregister,
+  modifylogregister,
+  movelogregister,
+};

@@ -1,26 +1,22 @@
-.TitleSection{
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 2%;
+.TitleSection {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 2%;
 }
 
-.MainTitle{
-    display: inline;
-    margin-left: 5%;
-    color: #010101;
+.MainTitle {
+  display: inline;
+  margin-left: 5%;
+  color: #010101;
 }
 
-.MenuButton{
-    display: block;
-    margin: auto;
-    margin-left: auto;
-    margin-right: 5%;
-    width: 17px;
-    height: 11px;
-    left: 12.5%;
-    right: 16.67%;
-    top: 29.17%;
-    bottom: 25%;
-    color: #010101;
-    cursor: pointer;
+.MenuButton {
+  display: block;
+  margin: auto;
+  margin-left: auto;
+  margin-right: 5%;
+  width: 17px;
+  height: 11px;
+  color: #010101;
+  cursor: pointer;
 }
