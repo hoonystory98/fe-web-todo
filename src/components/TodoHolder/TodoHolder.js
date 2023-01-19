@@ -7,63 +7,61 @@ import NotificationManager from "../../core/NotificationManager.js";
 
 class TodoHolder extends Component {
     initialize() {
-        const { column, todos } = this.props;
-        this.state = { todos: TodoHolder.getTopologySorted(todos), column };
-        this.addEvent('click', '.add-todo-btn', this.addBtnClicked.bind(this));
+        this.addEvent('click', '.add-todo-btn', this.toogleAddForm.bind(this));
     }
 
     template() {
-        const { todos, column } = this.state;
         return `
         <div class="todoholder-header">
             <div class="todoholder-colinfo">
                 <div data-component="DoubleClickInput"></div>
                 <div class="count-circle">
-                    <h4>${todos.length}</h4>
+                    <h4 class="todoholder-counter"></h4>
                 </div>
             </div>
             <div class="todoholder-headerbtn-wrapper">
-                <button class="add-todo-btn">
-                    <svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0.105709 7.53033L0.105709 6.46967H6.46967V0.105713H7.53033V6.46967H13.8943V7.53033H7.53033V13.8943H6.46967V7.53033H0.105709Z"/>
-                    </svg>
-                </button>
-                <button class="delete-column-btn">
-                    <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1.5 11.25L0.75 10.5L5.25 6L0.75 1.5L1.5 0.750004L6 5.25L10.5 0.750004L11.25 1.5L6.75 6L11.25 10.5L10.5 11.25L6 6.75L1.5 11.25Z"/>
-                    </svg>
-                </button>        
+                <button class="add-todo-btn"><svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"><path d="M0.105709 7.53033L0.105709 6.46967H6.46967V0.105713H7.53033V6.46967H13.8943V7.53033H7.53033V13.8943H6.46967V7.53033H0.105709Z"/></svg></button>
+                <button class="delete-column-btn"><svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.25L0.75 10.5L5.25 6L0.75 1.5L1.5 0.750004L6 5.25L10.5 0.750004L11.25 1.5L6.75 6L11.25 10.5L10.5 11.25L6 6.75L1.5 11.25Z"/></svg></button>        
             </div>
         </div>
-        <article class="todoholder-actual">
         <div data-component="TodoAddForm" hidden></div>
-        ${todos.map(({ id }) => `
-           <div data-component="TodoCard" data-todo-id="${id}" data-column-id="${column.id}"></div>
-        `).join('')}
-        <div data-component="TodoCard" data-todo-id="-1" data-column-id="${column.id}"></div>
-        </article>
-        `
+        <article class="todoholder-actual"></article>
+        `;
     }
 
     mounted() {
+        this.mountTodoCounter();
         this.mountColumnNameInput();
         this.mountAddForm();
         this.mountTodoCards();
     }
 
+    async mountTodoCounter() {
+        const { id } = this.props.column;
+        const column = (await TodoDatabase.getColumns({ id }))[0];
+        const $counter = this.$target.querySelector('.todoholder-counter');
+        $counter.innerText = column.todoIds.length;
+    }
+
     mountColumnNameInput() {
-        const { column } = this.state;
+        const { name } = this.props.column;
         const $doubleClickInput = this.$target.querySelector('[data-component="DoubleClickInput"]');
         new DoubleClickInput($doubleClickInput, {
-            value: column.name,
+            value: name,
             placeholder: '칼럼 이름을 입력하세요',
             onValueChanged: this.updateColumnName.bind(this)
         });
     }
 
-    mountTodoCards() {
-        const { todos, column } = this.state;
+    async mountTodoCards() {
+        const { column } = this.props;
+        const todoIds = (await TodoDatabase.getColumns({ id: column.id }))[0].todoIds;
+        const todos = todoIds.length ? await TodoDatabase.getTodos(todoIds) : [];
         const $actualHolder = this.$target.querySelector('.todoholder-actual');
+        $actualHolder.innerHTML = `${todoIds.map(todoId => `
+            <div data-component="TodoCard" data-todo-id="${todoId}" data-column-id="${column.id}"></div>`).join('')}
+            <div data-component="TodoCard" data-todo-id="-1" data-column-id="${column.id}"></div>`;
+
         const $todoCards = this.$target.querySelectorAll(`[data-component="TodoCard"]`);
         $todoCards.forEach($todoCard => {
             const todoId = parseInt($todoCard.dataset.todoId);
@@ -76,73 +74,50 @@ class TodoHolder extends Component {
         const $todoAddForm = this.$target.querySelector('[data-component="TodoAddForm"]');
         new TodoAddForm($todoAddForm, {
             addTodo: this.addTodo.bind(this),
-            addCancel: this.addBtnClicked.bind(this)
+            addCancel: this.toogleAddForm.bind(this)
         });
     }
 
-    addBtnClicked() {
+    toogleAddForm() {
         const $addForm = this.$target.querySelector('[data-component="TodoAddForm"]');
         const checked = !$addForm.toggleAttribute('hidden');
         const $button = this.$target.querySelector('.add-todo-btn');
         $button.style.fill = checked ? '#0075DE' : '#010101';
     }
 
-    addTodo(name, description) {
-        const columnId = this.state.column.id;
-        TodoDatabase.postTodo({ name, description, columnId }).then(todo => {
-            const todos = [ todo, ...this.state.todos ];
-            this.notifyAddTodo(todo);
-            this.setState({ todos });
-        });
+    async addTodo(name, description) {
+        let { column } = this.props;
+        const newTodo = await TodoDatabase.postTodo({ name, description });
+        const newTodoIds = (await TodoDatabase.getColumns({ id: column.id }))[0].todoIds;
+        newTodoIds.unshift(newTodo.id);
+        column = await TodoDatabase.patchColumn({ id: column.id, todoIds: newTodoIds });
+
+        const $actualHolder = this.$target.querySelector('.todoholder-actual');
+        $actualHolder.insertAdjacentHTML('afterbegin',
+            `<div data-component="TodoCard" data-todo-id="${newTodo.id}" data-column-id="${column.id}"></div>`);
+        new TodoCard($actualHolder.firstElementChild, { todo: newTodo, $actualHolder, onTodoMoved: this.updateMovedTodo.bind(this) });
+
+        this.toogleAddForm();
+
+        this.notifyAddTodo(newTodo, column.name);
     }
 
-    notifyAddTodo(todo) {
-        const { column } = this.state;
+    notifyAddTodo(todo, columnName) {
         return NotificationManager.makeNotification({
             type: NotificationManager.notificationTypes.ADD,
-            name: todo.name,
-            to: column.name
+            name: columnName,
+            to: name
         });
     }
 
     updateColumnName(newName) {
-        const { column } = this.state;
-        TodoDatabase.patchColumn({...column, name: newName}).then(column => {
-            this.setState({ column });
-        });
+        const { column } = this.props;
+        TodoDatabase.patchColumn({ id: column.id, name: newName });
     }
 
-    updateMovedTodo(movedTodo) {
-        const todos = [ ...this.state.todos ];
-        const beforeMovedTodo = todos.find(todo => todo.id === movedTodo.id);
-        if (beforeMovedTodo) {
-            const beforeMovedIdx = todos.indexOf(beforeMovedTodo);
-            todos.splice(beforeMovedIdx, 1);
-        }
-
-        const thisHolderColumnId = this.state.column.id;
-        if (movedTodo.columnId === thisHolderColumnId) {
-            const insertionIdx = todos.findIndex(todo => movedTodo.nextId === todo.id);
-            if (insertionIdx < 0)
-                todos.push(movedTodo);
-            else
-                todos.splice(insertionIdx, 0, movedTodo);
-        }
-
-        this.setState({ todos });
-    }
-
-    static getTopologySorted(todos) {
-        let tail = -1;
-        const newTodos = [];
-        while (true) {
-            const lastTodo = todos.find(todo => todo.nextId === tail);
-            if (!lastTodo)
-                break;
-            newTodos.unshift(lastTodo);
-            tail = lastTodo.id;
-        }
-        return newTodos;
+    updateMovedTodo() {
+        this.mountTodoCards();
+        this.mountTodoCounter();
     }
 }
 

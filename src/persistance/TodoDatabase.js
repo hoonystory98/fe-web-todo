@@ -36,7 +36,8 @@ const postColumn = async (column) => {
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ name: column.name, todoIds: "[]" })
     });
-    return await newColumnRes.json();
+    const newColumn = await newColumnRes.json();
+    return {...newColumn, todoIds: JSON.parse(newColumn.todoIds)};
 }
 
 /**
@@ -49,15 +50,16 @@ const patchColumn = async (column) => {
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ ...column, todoIds: JSON.stringify(column.todoIds)})
     });
-    return await patchColumnRes.json();
+    const newColumn = await patchColumnRes.json();
+    return {...newColumn, todoIds: JSON.parse(newColumn.todoIds)};
 }
 
 /**
- * @param {TodoEntity} todo
+ * @param {*} query
  * @returns {Promise<TodoEntity[]>}
  */
-const getTodos = async (todo={}) => {
-    const getTodosRes = await fetch(TODO_URI + getQueryString(todo), {
+const getTodos = async (query) => {
+    const getTodosRes = await fetch(TODO_URI + getQueryString(query), {
         cache: "no-store"
     });
     return await getTodosRes.json();
@@ -112,11 +114,28 @@ const postNotification = async (notification) => {
     return await newNotificationRes.json();
 };
 
+const patchCollection = async (collection) => {
+    if (collection.columns?.length) {
+        collection.columns?.forEach(column => {
+            column.todoIds = JSON.stringify(column.todoIds);
+        });
+    }
+    const patchCollectionRes = await fetch(`${BASE_URL}/collection`, {
+        method: 'PATCH',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(collection)
+    });
+    return await patchCollectionRes.json();
+};
+
 /**
- * @param {TodoEntity|ColumnEntity} data
+ * @param {TodoEntity|ColumnEntity|number[]|undefined} data
  * @returns {string}
  */
 const getQueryString = (data) => {
+    if (!data) return '';
+    if (Array.isArray(data))
+        return `?${data.map(id => `id=${id}`).join('&')}`;
     if (data.id)
         return `?id=${data.id}`;
     return '?' + (data.author ? `&author=${data.author}` : '');
@@ -130,7 +149,8 @@ const TodoDatabase = {
     postTodo,
     patchTodo,
     getNotifications,
-    postNotification
+    postNotification,
+    patchCollection
 }
 
 export default TodoDatabase;

@@ -8,49 +8,54 @@ import NotificationManager from "./core/NotificationManager.js";
 
 class App extends Component {
     initialize() {
-        this.state = { columns: [] };
-        TodoDatabase.getColumns().then(columns => {
-            this.setState({ columns });
-        });
         this.initializeDragFeature();
         this.initializeNotificationFeature();
     }
 
     template() {
-        const { columns } = this.state;
         return `
         <div data-component="Header"></div>
         <div data-component="AddColumnButton"></div>
-        <div id="article">
-        ${columns.map((_, idx) => `
-            <div data-component="TodoHolder" data-index="${idx}"></div>
-        `).join('')}
-        </div>
+        <div id="article"></div>
         `;
     }
 
     mounted() {
+        this.mountAddColumnButton();
+        this.mountHeader();
+        this.mountTodoHolders();
+    }
+
+    mountHeader() {
         const $header = this.$target.querySelector('[data-component="Header"]');
         new Header($header);
+    }
 
-        const $addColBtn = this.$target.querySelector('[data-component="AddColumnButton"]');
-        new AddColumnButton($addColBtn, { addColumn: this.addColumn.bind(this) });
+    async mountTodoHolders() {
+        const columns = await TodoDatabase.getColumns();
+        const $article = this.$target.querySelector('#article');
+        $article.innerHTML = `${columns.map((column) =>
+            `<div data-component="TodoHolder" data-column-id="${column.id}"></div>`).join('')}`;
 
         const $todoHolders = this.$target.querySelectorAll('[data-component="TodoHolder"]');
-        const { columns } = this.state;
         $todoHolders.forEach($todoHolder => {
-            const idx = parseInt($todoHolder.dataset.index);
-            const column = columns[idx];
-            TodoDatabase.getTodos({ columnId: column.id }).then(todos => {
-                new TodoHolder($todoHolder, { todos, column });
-            });
+            const columnId = parseInt($todoHolder.dataset.columnId);
+            new TodoHolder($todoHolder, { column: columns.find(column => column.id === columnId) });
         });
+    }
+
+    mountAddColumnButton() {
+        const $addColBtn = this.$target.querySelector('[data-component="AddColumnButton"]');
+        new AddColumnButton($addColBtn, { addColumn: this.addColumn.bind(this) });
     }
 
     addColumn() {
         TodoDatabase.postColumn({ name: 'New Column' }).then(column => {
-            const columns = [ ...this.state.columns, column ];
-            this.setState({ columns });
+            const $article = this.$target.querySelector('#article');
+            $article.innerHTML +=
+                `<div data-component="TodoHolder" data-column-id="${column.id}"></div>`
+            const $todoHolder = $article.querySelector(`[data-column-id="${column.id}"]`);
+            new TodoHolder($todoHolder, { column });
         });
     }
 

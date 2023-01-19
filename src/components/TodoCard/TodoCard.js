@@ -28,7 +28,7 @@ class TodoCard extends Component {
         $actualHolder.insertBefore($dragStart, this.$target);
     }
 
-    onDragEnded(e) {
+    async onDragEnded(e) {
         const $dragStart = e.dragStartedElement;
         const $lastCollapsed = e.lastCollapsedElement;
 
@@ -37,13 +37,38 @@ class TodoCard extends Component {
         const dstTodoId = parseInt($lastCollapsed.dataset.todoId);
         const dstColumnId = parseInt($lastCollapsed.dataset.columnId);
 
+        const collection = { columns: [] };
+
+        const srcColumn = (await TodoDatabase.getColumns({ id: srcColumnId }))[0];
+        const dstColumn = srcColumnId === dstColumnId ? srcColumn :
+            (await TodoDatabase.getColumns({ id: dstColumnId }))[0];
+        const srcPos = srcColumn.todoIds.findIndex(id => id === srcTodoId);
+        if (srcPos >= 0) {
+            srcColumn.todoIds.splice(srcPos, 1);
+            collection.columns.push({ id: srcColumn.id, todoIds: srcColumn.todoIds });
+        }
+        if (dstColumn.todoIds.includes(srcTodoId)) {
+            return;
+        }
+
+        const dstPos = dstColumn.todoIds.findIndex(id => id === dstTodoId);
+        if (dstPos >= 0) {
+            dstColumn.todoIds.splice(dstPos, 0, srcTodoId);
+        } else {
+            dstColumn.todoIds.push(srcTodoId);
+        }
+        if (srcColumn === dstColumn && collection.columns.length) {
+            collection.columns[0].todoIds = dstColumn.todoIds;
+        } else {
+            collection.columns.push({ id: dstColumn.id, todoIds: dstColumn.todoIds });
+        }
+
+        console.log(await TodoDatabase.patchCollection(collection));
+        this.props.onTodoMoved();
+
         if (this.$target === $dragStart) {
             this.notifyMoved(srcTodoId, srcColumnId, dstColumnId).then(console.log);
         }
-
-        TodoDatabase.moveTodo(srcTodoId, dstTodoId, dstColumnId).then(todo => {
-            this.props.onTodoMoved(todo);
-        });
     }
 
     async notifyMoved(srcTodoId, srcColumnId, dstColumnId) {
@@ -78,11 +103,7 @@ class TodoCard extends Component {
                 `<input class="todocard-title" value="${todo.name}">` :
                 `<h4 class="todocard-title">${todo.name}</h4>`
                 }
-                <button class="todocard-delete" ${!isEdit || 'disabled'}>
-                    <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1.5 11.25L0.75 10.5L5.25 6L0.75 1.5L1.5 0.750004L6 5.25L10.5 0.750004L11.25 1.5L6.75 6L11.25 10.5L10.5 11.25L6 6.75L1.5 11.25Z"/>
-                    </svg>
-                </button>            
+                <button class="todocard-delete" ${!isEdit || 'disabled'}><svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.25L0.75 10.5L5.25 6L0.75 1.5L1.5 0.750004L6 5.25L10.5 0.750004L11.25 1.5L6.75 6L11.25 10.5L10.5 11.25L6 6.75L1.5 11.25Z"/></svg></button>            
             </div>
             ${isEdit ?
             `<textarea class="todocard-desc">${todo.description}</textarea>` :
@@ -120,7 +141,7 @@ class TodoCard extends Component {
         }).then(todo => {
             const oldTodo = { ...this.state.todo };
             this.setState({ isEdit: false, todo });
-            this.notifyUpdate(oldTodo, todo).then(console.log);
+            this.notifyUpdate(oldTodo, todo);
         });
     }
     fitHeight() {

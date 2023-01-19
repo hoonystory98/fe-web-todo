@@ -12,6 +12,7 @@ class TodoAddForm extends Component {
         const name = this.$target.querySelector('.todoaddform-name').value;
         const desc = this.$target.querySelector('.todoaddform-desc').value;
         addTodo(name, desc);
+        setTimeout(() => {this.clearInput()}, 1000);
     }
 
     cancelClicked() {
