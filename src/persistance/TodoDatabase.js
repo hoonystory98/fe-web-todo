@@ -21,7 +21,7 @@ const getColumns = async (column={}) => {
         { cache: "no-store" });
     const columns = await getColumnRes.json();
     columns.forEach((col, idx) => {
-        columns[idx] = JSON.parse(col.todoIds);
+        columns[idx] = {...col, todoIds: JSON.parse(col.todoIds)};
     });
     return columns;
 }
