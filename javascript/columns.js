@@ -1,6 +1,6 @@
 //for card sort, title change
 import { API_URL_Col } from "./main.js";
-import { newcolumnmodal, makecardsection } from "./templates.js";
+import { newcolumnmodal, delcolmodal, makecardsection } from "./templates.js";
 
 function modalmakecol() {
   const ModalHTML = document.createElement("div");
@@ -54,13 +54,7 @@ function deletecolumn(TargetColumn) {
   const ModalHTML = document.createElement("div");
   ModalHTML.classList = "Modal";
   ModalHTML.style = "display:block";
-  ModalHTML.innerHTML = `<div class="ModalAlert">
-                            <div class="ModalMessage">선택한 칼럼을 삭제할까요?</div>
-                            <div class="ModalButton">
-                                <button class="ModalCancel">취소</button>
-                                <button class="ModalConfirm">삭제</button>
-                            </div>
-                        </div>`;
+  ModalHTML.innerHTML = delcolmodal();
   document.body.append(ModalHTML);
   let ModalTarget = ModalHTML;
   let ModalCancel = ModalHTML.getElementsByClassName("ModalCancel")[0];

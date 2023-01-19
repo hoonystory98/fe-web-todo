@@ -1,5 +1,5 @@
-import { events, API_URL_Box, API_URL_Col } from "./main.js";
-import { adddeletelogregister } from "./sidemenu.js";
+import { API_URL_Box, API_URL_Col, API_URL_Eve } from "./main.js";
+//import { adddeletelogregister } from "./sidemenu.js";
 import { deletecardmodal } from "./templates.js";
 
 function modaldeletecard(TargetCard) {
@@ -22,20 +22,31 @@ function modaldeletecard(TargetCard) {
     )[0].innerHTML =
       TargetCard.closest(".ColumnList").getElementsByClassName("CardCount")[0]
         .innerHTML - 1;
-    events.push({
+
+    const NewEvent = {
+      id: new Date().getTime(),
       ColumnName: TargetCard.closest(".ColumnList")
         .getElementsByClassName("ColumnTitle")[0]
         .innerText.split("\n")[0],
       CardTitle: TargetCard.getElementsByClassName("CardTitle")[0].textContent,
       EventType: "삭제",
       EventTime: new Date().getTime(),
-    });
-    adddeletelogregister(
-      events[events.length - 1].ColumnName,
-      events[events.length - 1].CardTitle,
-      events[events.length - 1].EventType,
-      events[events.length - 1].EventTime
-    );
+    };
+    fetch(API_URL_Eve, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(NewEvent),
+    })
+      .then((resp) => resp.json())
+      .catch((error) => console.error(error));
+    // adddeletelogregister(
+    //   events[events.length - 1].ColumnName,
+    //   events[events.length - 1].CardTitle,
+    //   events[events.length - 1].EventType,
+    //   events[events.length - 1].EventTime
+    // );
 
     let TColumn = TargetCard.closest(".ColumnList");
     let TargetCardId = TargetCard.id;

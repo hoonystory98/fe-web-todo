@@ -1,11 +1,11 @@
 //for side menu function, log sorting, time counting
 import { makelogadddelete, makelogmodify, makelogmove } from "./templates.js";
-import { events } from "./main.js";
+import { API_URL_Eve } from "./main.js";
 
 const SideMenu = document.getElementsByClassName("SideMenu")[0];
 const MenuLog = SideMenu.getElementsByClassName("MenuLog")[0];
 
-function updatehistory() {
+function updatehistory(events) {
   MenuLog.innerHTML = "";
   events.forEach(function (logevent) {
     if (logevent.EventType === "변경") {

@@ -28,9 +28,10 @@ function makecardsection(ColName, ColId, ColCards) {
 }
 
 function makenewcardinner(CardTitle, CardBody, CardAuthor) {
-  CardBody = CardBody.replace(/\r\n|\n|\r/g, "<br>* ");
-  if (/<br>/.test(CardBody)) {
-    CardBody = "* " + CardBody;
+  if (CardBody.includes("\n")) {
+    CardBody = /\r\n|\n|\r/g.test(CardBody)
+      ? `<ul><li>${CardBody.replace(/\r\n|\n|\r/g, "<li>")}</ul>`
+      : CardBody;
   }
   return `<div class="CardTitle">${CardTitle}<i class="fa-solid fa-xmark CardDelete"></i></div>
             <div class="CardBody">${CardBody}<i class="fa-solid fa-pencil CardModify"></i></div>
@@ -105,6 +106,16 @@ function newcolumnmodal() {
             </div>`;
 }
 
+function delcolmodal() {
+  return `<div class="ModalAlert">
+                <div class="ModalMessage">선택한 칼럼을 삭제할까요?</div>
+                <div class="ModalButton">
+                    <button class="ModalCancel">취소</button>
+                    <button class="ModalConfirm">삭제</button>
+                </div>
+            </div>`;
+}
+
 export {
   makecardsection,
   makenewcardinner,
@@ -114,4 +125,5 @@ export {
   modifycardform,
   deletecardmodal,
   newcolumnmodal,
+  delcolmodal,
 };

@@ -1,6 +1,6 @@
 import { makenewcardinner, modifycardform } from "./templates.js";
-import { adddeletelogregister, modifylogregister } from "./sidemenu.js";
-import { events, API_URL_Box, API_URL_Col } from "./main.js";
+//import { adddeletelogregister, modifylogregister } from "./sidemenu.js";
+import { API_URL_Box, API_URL_Col, API_URL_Eve } from "./main.js";
 
 function showregisterform(Collist) {
   const CardForm = Collist.getElementsByClassName("NewCard")[0];
@@ -54,20 +54,31 @@ function makenewcard(CardRegisterForm) {
     CardRegisterForm.closest(".ColumnList").getElementsByClassName(
       "CardSection"
     )[0].children.length;
-  events.push({
+  const NewEvent = {
+    id: new Date().getTime(),
     ColumnName: CardRegisterForm.closest(".ColumnList")
       .getElementsByClassName("ColumnTitle")[0]
       .innerText.split("\n")[0],
     CardTitle: NewTitle,
     EventType: "등록",
     EventTime: new Date().getTime(),
-  });
-  adddeletelogregister(
-    events[events.length - 1].ColumnName,
-    events[events.length - 1].CardTitle,
-    events[events.length - 1].EventType,
-    events[events.length - 1].EventTime
-  );
+  };
+  fetch(API_URL_Eve, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(NewEvent),
+  })
+    .then((resp) => resp.json())
+    .catch((error) => console.error(error));
+
+  // adddeletelogregister(
+  //   events[events.length - 1].ColumnName,
+  //   events[events.length - 1].CardTitle,
+  //   events[events.length - 1].EventType,
+  //   events[events.length - 1].EventTime
+  // );
 
   const NewCardObj = {
     id: NewCardForm.id,
@@ -103,9 +114,7 @@ function makenewcard(CardRegisterForm) {
 
 function modifycard(TargetCard) {
   let BeforeTitle = TargetCard.getElementsByClassName("CardTitle")[0].innerText;
-  let BeforeBody = TargetCard.getElementsByClassName("CardBody")[0]
-    .innerText.replace(/\*\n/g, "\n")
-    .replace(/\* /g, "");
+  let BeforeBody = TargetCard.getElementsByClassName("CardBody")[0].innerText;
 
   TargetCard.className = "NewCard";
   TargetCard.innerHTML = modifycardform(BeforeTitle, BeforeBody);
@@ -123,18 +132,29 @@ function modifycard(TargetCard) {
     TargetCard.innerHTML = makenewcardinner(NewTitle, NewBody, "web");
     TargetCard.style.height = "";
     TargetCard.className = "ColumnCards";
-    events.push({
+    const NewEvent = {
+      id: new Date().getTime(),
       FromTitle: BeforeTitle,
       ToTitle: NewTitle,
       EventType: "변경",
       EventTime: new Date().getTime(),
-    });
-    modifylogregister(
-      events[events.length - 1].FromTitle,
-      events[events.length - 1].ToTitle,
-      events[events.length - 1].EventType,
-      events[events.length - 1].EventTime
-    );
+    };
+    fetch(API_URL_Eve, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(NewEvent),
+    })
+      .then((resp) => resp.json())
+      .catch((error) => console.error(error));
+
+    // modifylogregister(
+    //   events[events.length - 1].FromTitle,
+    //   events[events.length - 1].ToTitle,
+    //   events[events.length - 1].EventType,
+    //   events[events.length - 1].EventTime
+    // );
 
     const NewCardObj = {
       id: TargetCard.id,

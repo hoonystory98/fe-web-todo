@@ -15,7 +15,6 @@ const API_URL_Box = "http://localhost:3000/Cards";
 const API_URL_Eve = "http://localhost:3000/Events";
 
 let cards = [];
-let events = [];
 let dragAble = false;
 
 function makecardarr(card) {
@@ -148,4 +147,4 @@ acolumn.addEventListener("mouseup", (e) => {
   }
 });
 
-export { events, API_URL_Col, API_URL_Box, acolumn };
+export { API_URL_Col, API_URL_Box, API_URL_Eve, acolumn };
