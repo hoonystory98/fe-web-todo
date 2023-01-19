@@ -71,10 +71,19 @@ const DragManager = {
             this.$dragstartComponent.dispatchEvent(dragEvent);
         }
         this.$dragstartComponent?.classList.remove('dragstart');
-        this.$draggingComponent?.remove();
+        fadeOut(this.$draggingComponent, this.$dragstartComponent);
         this.$dragstartComponent = null;
         this.$draggingComponent = null;
         this.$lastCollapsedComponent = null;
+
+        function fadeOut($src, $des) {
+            if (!$src) return;
+            $src.style.transition = '0.2s';
+            $src.style.transform = `translate(${$des.offsetLeft}px, ${$des.offsetTop}px)`;
+            setTimeout(() => {
+                $src.remove();
+            }, 200);
+        }
     },
 
     initialize() {
