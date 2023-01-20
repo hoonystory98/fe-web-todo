@@ -17,15 +17,18 @@ function cardheightadjust(InputArea) {
   const CardButton =
     InputArea.closest(".NewCard").getElementsByClassName("CardRegister")[0];
 
-  if (InputArea.value.trim().length > 0) {
-    CardButton.disabled = false;
-  } else {
-    CardButton.disabled = true;
-  }
+  CardButton.disabled = InputArea.value.trim().length <= 0;
 
   InputArea.style.height = "auto";
   InputArea.style.height = `${InputArea.scrollHeight}px`;
 }
+
+const CardForm = {
+  makenewcard: function () {
+    dd;
+  },
+  cardheightadjust: function () {},
+};
 
 function makenewcard(CardRegisterForm) {
   let NewCardForm = document.createElement("div");

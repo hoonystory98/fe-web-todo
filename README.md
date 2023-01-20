@@ -1,2 +1,25 @@
 # fe-web-todo
-https://www.figma.com/proto/1RjRZOJFUvDhcZJjSrVPwI/%5B%EB%A7%88%EC%8A%A4%ED%84%B0%EC%A6%882022%5D-FE_%ED%88%AC%EB%91%90%EB%A6%AC%EC%8A%A4%ED%8A%B8?node-id=166%3A26&scaling=contain&page-id=166%3A0
+
+## 이번 주의 목표
+
+- [x] 서버와의 연동
+- [ ] QuerySelector 구현해서 사용하기
+- [ ] Prototype 활용 객체 많이 사용하기
+- [ ] ES-Classes 활용한 객체 사용하기
+- [ ] 객체 지향 프로그래밍
+- [ ] 함수형 프로그래밍 시도해보기
+- [ ] VMC 패턴 적용하기
+- [ ] 다양한 애니메이션 시도해보기(Ex. 키프레임 애니메이션, transform translate 등...)
+- [ ] Promise 객체 만들기
+- [ ] 상수 선언해서 활용하기
+- [ ] 에러 및 문제점 10개 이상 찾아서 수정하기 (2 / 10)
+  - [x] 비동기 함수 간 속도 차이로 순서 부여
+  - [x] 신규 카드 등록 폼 입력 칸 높이 조절 문제
+  - [ ] Live-Server json-server 수정 이후 의도하지 않은 새로고침
+  - [ ] 카드 제목, 본문 드래그 시 커서가 엉뚱한 곳에 옮겨짐
+  - [ ] 백틱, 더블 쿼트 혼재 문제
+  - [ ] 사이드 메뉴 전시 상태동안 로그가 갱신되지 않는 점
+  - [ ] 칼럼, 카드 ID 부여 방식 변경 필요
+  - [ ] ...
+  - [ ] ...
+  - [ ] ...

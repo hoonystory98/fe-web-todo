@@ -1,4 +1,4 @@
-import { movelogregister } from "./sidemenu.js";
+//import { movelogregister } from "./sidemenu.js";
 import { API_URL_Col, API_URL_Eve } from "./main.js";
 
 let currentDroppable = null;
@@ -17,8 +17,6 @@ function dragcard(e) {
   IllusionCard.classList.add("FloatingCard");
   document.body.style.cursor = "move";
   document.body.style.userSelect = "none";
-  IllusionCard.style.pointerEvents = "none";
-  TargetCard.style.pointerEvents = "none";
   document.body.append(IllusionCard);
 
   moveAt(e.pageX, e.pageY);
@@ -62,11 +60,11 @@ function dragcard(e) {
     document.removeEventListener("mousemove", onMouseMove);
     document.body.style.cursor = "";
     document.body.style.userSelect = "";
+    TargetCard.style.opacity = "0";
     IllusionCard.style.transition = "all .5s";
     IllusionCard.style.transform = `translate(${
       TargetCard.offsetLeft - IllusionCard.offsetLeft
     }px, ${TargetCard.offsetTop - IllusionCard.offsetTop}px)`;
-    IllusionCard.style.opacity = ".25";
     TargetCard.classList.remove("ShadowCard");
     const AfterColumn = TargetCard.closest(".ColumnList");
     TargetCard.style.pointerEvents = "";
@@ -93,16 +91,11 @@ function dragcard(e) {
     })
       .then((resp) => resp.json())
       .catch((error) => console.error(error));
-    // movelogregister(
-    //   TargetCard.getElementsByClassName("CardTitle")[0].innerText,
-    //   BeforeColumn.getElementsByClassName("ColumnTitle")[0].innerHTML,
-    //   AfterColumn.getElementsByClassName("ColumnTitle")[0].innerHTML,
-    //   events[events.length - 1].EventType,
-    //   events[events.length - 1].EventTime
-    // );
+
     document.removeEventListener("mouseup", onMouseup);
     setTimeout(() => {
       IllusionCard.remove();
+      TargetCard.style.opacity = "1";
     }, 500);
 
     Array.from(

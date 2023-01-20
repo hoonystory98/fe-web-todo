@@ -1,5 +1,5 @@
 //for card sort, title change
-import { API_URL_Col } from "./main.js";
+import { API_URL_Box, API_URL_Col } from "./main.js";
 import { newcolumnmodal, delcolmodal, makecardsection } from "./templates.js";
 
 function modalmakecol() {
@@ -53,7 +53,6 @@ function modalmakecol() {
 function deletecolumn(TargetColumn) {
   const ModalHTML = document.createElement("div");
   ModalHTML.classList = "Modal";
-  ModalHTML.style = "display:block";
   ModalHTML.innerHTML = delcolmodal();
   document.body.append(ModalHTML);
   let ModalTarget = ModalHTML;
@@ -67,7 +66,23 @@ function deletecolumn(TargetColumn) {
   });
   ModalConfirm.addEventListener("click", () => {
     const TargetColId = TargetColumn.id;
-    console.log(TargetColId);
+    let Lists = [];
+
+    Array.from(
+      TargetColumn.getElementsByClassName("CardSection")[0].children
+    ).forEach((card) => Lists.push(card.id));
+    Lists.forEach((TargetCardId) => {
+      fetch(`${API_URL_Box}/${TargetCardId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ TargetCardId }),
+      })
+        .then((resp) => resp.json())
+        .catch((error) => console.error(error));
+    });
+
     TargetColumn.remove();
     fetch(`${API_URL_Col}/${TargetColId}`, {
       method: "DELETE",

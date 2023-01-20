@@ -1,123 +1,124 @@
-.ColumnSection{
-    display: flex;
-    overflow-x: auto;
-    width: 90%;
-    margin-left: 5%;
+.ColumnSection {
+  display: flex;
+  overflow-x: auto;
+  width: 90%;
+  margin-left: 5%;
 }
 
-.ColumnList{
-    margin-right: 1%;
-    height: 80vh;
-    float: left;
-    flex-direction: column;
-    align-items: center;
-    padding: 0px;
-    gap: 16px;
+.ColumnList {
+  margin-right: 1%;
+  height: 80vh;
+  float: left;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  gap: 16px;
 }
 
-.ColumnHead{
-    width: 348px;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 26px;
+.ColumnHead {
+  width: 348px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 26px;
 
-    padding: auto;
+  padding: auto;
 
-    display: flex;
+  display: flex;
 
-    color: #010101;
+  color: #010101;
 }
 
-.ColumnTitle{
-    height: 26px;
-    
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 26px;
-    
-    display: flex;
-    align-items: center;
-    
-    color: #010101;
-    
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+.ColumnTitle {
+  height: 26px;
+
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 26px;
+
+  display: flex;
+  align-items: center;
+
+  color: #010101;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }
 
-.ColumnTitle > input{
-    width: 196px;
-    height: 26px;
-    
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 26px;
-    
-    color: #010101;
-    border: none;
-    
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+.ColumnTitle > input {
+  width: 196px;
+  height: 26px;
+
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 26px;
+  word-break: break-word;
+
+  color: #010101;
+  border: none;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }
 
-.CardCount{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 0px;
-    gap: 10px;
-    
-    width: 26px;
-    height: 26px;
-    
-    background: #bdbdbd;
-    border-radius: 20px;
-    margin-left: 8px;
-    
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+.CardCount {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+
+  width: 26px;
+  height: 26px;
+
+  background: #bdbdbd;
+  border-radius: 20px;
+  margin-left: 8px;
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
 }
 
-.ButtonGroup{
-    width: 114px;
-    height: 26px;
-    
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 26px;
-    color: #bdbdbd;
-    
-    display: flex;
-    margin-left: auto;
+.ButtonGroup {
+  width: 114px;
+  height: 26px;
 
-    flex: none;
-    order: 2;
-    flex-grow: 0;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 26px;
+  color: #bdbdbd;
+
+  display: flex;
+  margin-left: auto;
+
+  flex: none;
+  order: 2;
+  flex-grow: 0;
 }
 
-.ButtonGroup > i.fa-plus{
-    margin-left: auto;
-    cursor: pointer;
+.ButtonGroup > i.fa-plus {
+  margin-left: auto;
+  cursor: pointer;
 }
 
-.ButtonGroup > i.fa-plus:hover{
-    color: #0075de;
+.ButtonGroup > i.fa-plus:hover {
+  color: #0075de;
 }
 
-.ButtonGroup > i.fa-xmark{
-    margin-left: 20px;
-    margin-right: 20px;
-    cursor: pointer;
+.ButtonGroup > i.fa-xmark {
+  margin-left: 20px;
+  margin-right: 20px;
+  cursor: pointer;
 }
 
-.ButtonGroup > i.fa-xmark:hover{
-    color: #ff4343;
+.ButtonGroup > i.fa-xmark:hover {
+  color: #ff4343;
 }
 
-.CardSection{
-    height: 75vh;
-    overflow-y: auto;
+.CardSection {
+  height: 75vh;
+  overflow-y: auto;
 }

@@ -18,7 +18,7 @@
 }
 
 .ColumnCards:hover > div.CardBody > i.fa-pencil {
-  display: flex;
+  visibility: visible;
 }
 
 .CardTitle {
@@ -63,6 +63,7 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
+  word-break: break-word;
 
   color: #010101;
 
@@ -72,7 +73,8 @@
 }
 
 .CardBody > i.fa-pencil {
-  display: none;
+  display: flex;
+  visibility: hidden;
   margin-left: auto;
   color: #828282;
   cursor: pointer;
@@ -228,6 +230,7 @@
   opacity: 0.4;
   border: 1px solid #0075de;
   box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
+  pointer-events: none;
 }
 
 .FloatingCard {
@@ -239,4 +242,5 @@
   backdrop-filter: blur(2px);
   margin: 0px 0px 0px 0px;
   cursor: move;
+  pointer-events: none;
 }

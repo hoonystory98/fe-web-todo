@@ -1,6 +1,5 @@
 //for side menu function, log sorting, time counting
 import { makelogadddelete, makelogmodify, makelogmove } from "./templates.js";
-import { API_URL_Eve } from "./main.js";
 
 const SideMenu = document.getElementsByClassName("SideMenu")[0];
 const MenuLog = SideMenu.getElementsByClassName("MenuLog")[0];
