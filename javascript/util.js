@@ -1,11 +1,12 @@
-function getdom(className) {
+function getdom(ParNode, ClassName) {
   let domque = [];
-  domque.push(document.body);
+  domque.push(ParNode);
   DOMTokenList.prototype.find = Array.prototype.find;
   HTMLCollection.prototype.forEach = Array.prototype.forEach;
+
   while (domque.length > 0) {
     const curnode = domque.shift();
-    if (curnode.classList.find((cclass) => cclass === className)) {
+    if (curnode.classList.find((cclass) => cclass === ClassName)) {
       return curnode;
     }
     curnode.children.forEach((childnode) => {
@@ -15,6 +16,8 @@ function getdom(className) {
 
   return undefined;
 }
+
+function lcaelement(DomNameA, DomNameB) {}
 
 function calctimelapse(value) {
   const today = new Date();

@@ -17,7 +17,7 @@
   flex-grow: 0;
 }
 
-.ColumnCards:hover > div.CardBody > i.fa-pencil {
+.ColumnCards:hover > div.CardBody > i.fa-pen {
   visibility: visible;
 }
 
@@ -52,7 +52,7 @@
   border: 1px solid #ff4343;
 }
 
-.ColumnCards:has(i.fa-xmark:hover) > div.CardBody > i.fa-pencil {
+.ColumnCards:has(i.fa-xmark:hover) > div.CardBody > i.fa-pen {
   color: rgba(255, 67, 67, 0.3);
 }
 
@@ -72,12 +72,16 @@
   flex-grow: 0;
 }
 
-.CardBody > i.fa-pencil {
+.CardBody > i.fa-pen {
   display: flex;
   visibility: hidden;
   margin-left: auto;
   color: #828282;
   cursor: pointer;
+}
+
+.CardBody > i.fa-pen:hover {
+  color: #010101;
 }
 
 .CardAuthor {

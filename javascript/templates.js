@@ -1,4 +1,4 @@
-import { calctimelapse, issinglecharacter } from "./queryfunc.js";
+import { calctimelapse, issinglecharacter } from "./util.js";
 
 function makecardsection(ColName, ColId, ColCards) {
   return `<div class="ColumnList" id="${ColId}">
@@ -34,7 +34,7 @@ function makenewcardinner(CardTitle, CardBody, CardAuthor) {
       : CardBody;
   }
   return `<div class="CardTitle">${CardTitle}<i class="fa-solid fa-xmark CardDelete"></i></div>
-            <div class="CardBody">${CardBody}<i class="fa-solid fa-pencil CardModify"></i></div>
+            <div class="CardBody">${CardBody}<i class="fa-solid fa-pen CardModify"></i></div>
             <div class="CardAuthor">author by ${CardAuthor}</div>`;
 }
 

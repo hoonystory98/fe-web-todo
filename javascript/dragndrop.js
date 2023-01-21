@@ -57,15 +57,17 @@ function dragcard(e) {
   document.addEventListener("mousemove", onMouseMove);
 
   function onMouseup() {
+    const TargetCardName =
+      TargetCard.getElementsByClassName("CardTitle")[0].textContent;
     document.removeEventListener("mousemove", onMouseMove);
     document.body.style.cursor = "";
     document.body.style.userSelect = "";
-    TargetCard.style.opacity = "0";
     IllusionCard.style.transition = "all .5s";
     IllusionCard.style.transform = `translate(${
       TargetCard.offsetLeft - IllusionCard.offsetLeft
     }px, ${TargetCard.offsetTop - IllusionCard.offsetTop}px)`;
     TargetCard.classList.remove("ShadowCard");
+    TargetCard.style.visibility = "hidden";
     const AfterColumn = TargetCard.closest(".ColumnList");
     TargetCard.style.pointerEvents = "";
 
@@ -74,8 +76,7 @@ function dragcard(e) {
     AfterColumn.getElementsByClassName("CardCount")[0].innerHTML =
       AfterColumn.getElementsByClassName("CardSection")[0].children.length;
     const NewEvent = {
-      id: new Date().getTime(),
-      CardTitle: TargetCard.getElementsByClassName("CardTitle")[0].innerText,
+      CardTitle: TargetCardName,
       FromColumn:
         BeforeColumn.getElementsByClassName("ColumnTitle")[0].innerHTML,
       ToColumn: AfterColumn.getElementsByClassName("ColumnTitle")[0].innerHTML,
@@ -95,7 +96,7 @@ function dragcard(e) {
     document.removeEventListener("mouseup", onMouseup);
     setTimeout(() => {
       IllusionCard.remove();
-      TargetCard.style.opacity = "1";
+      TargetCard.style.visibility = "visible";
     }, 500);
 
     Array.from(

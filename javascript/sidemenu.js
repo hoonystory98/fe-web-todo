@@ -1,8 +1,13 @@
 //for side menu function, log sorting, time counting
 import { makelogadddelete, makelogmodify, makelogmove } from "./templates.js";
+import { getdom } from "./util.js";
 
 const SideMenu = document.getElementsByClassName("SideMenu")[0];
 const MenuLog = SideMenu.getElementsByClassName("MenuLog")[0];
+
+function darkmode() {
+  document.body.classList.toggle("Dark");
+}
 
 function updatehistory(events) {
   MenuLog.innerHTML = "";
@@ -84,8 +89,10 @@ const menubuttons = document.getElementsByClassName("MenuButton");
 Array.prototype.forEach.call(menubuttons, (el) => {
   el.addEventListener("click", showsidemenu);
 });
+getdom(document.body, "ToggleDark").addEventListener("click", darkmode);
 
 export {
+  darkmode,
   showsidemenu,
   updatehistory,
   MenuLog,

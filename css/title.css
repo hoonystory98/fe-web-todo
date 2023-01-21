@@ -10,6 +10,21 @@
   color: #010101;
 }
 
+.ToggleDark {
+  display: block;
+  margin: auto;
+  margin-left: 5%;
+  width: 30px;
+  height: 30px;
+  color: #828282;
+  cursor: pointer;
+}
+
+.ToggleDark:hover {
+  transition: all 0.5s;
+  color: #010101;
+}
+
 .MenuButton {
   display: block;
   margin: auto;

@@ -1,0 +1,126 @@
+.Dark {
+  transition: all 0.7s;
+  background-color: #050507;
+}
+
+.Dark > div.TitleSection > h1 {
+  color: #fff;
+}
+
+.Dark > div.TitleSection > i.fa-bars {
+  color: #fff;
+}
+
+.Dark > div.TitleSection > i.fa-moon:hover {
+  color: #fff;
+}
+
+.Dark div.ColumnTitle {
+  color: #fff;
+}
+
+.Dark .ColumnCards {
+  background: #010101;
+  border: 1px solid;
+  border-color: #fff;
+
+  box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.7);
+}
+
+.Dark div.CardTitle {
+  color: #fff;
+}
+
+.Dark div.CardBody {
+  color: #fff;
+}
+
+.Dark .SideMenu {
+  background: #010101;
+  border-left: 1px solid #fff;
+
+  box-shadow: 0px 0px 4px rgba(204, 204, 204, 0.5),
+    0px 2px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+}
+
+.Dark .MenuHead > i.fa-xmark {
+  color: #fff;
+}
+
+.Dark .LogCard {
+  background-color: #010101;
+  border: 1px solid #fff;
+}
+
+.Dark .CardUser {
+  color: #828282;
+}
+
+.Dark .ColumnCards:has(i.fa-xmark:hover) {
+  box-shadow: 0px 1px 30px rgba(224, 0, 0, 0.7);
+  background-color: #551113;
+  border: 1px solid #ff4343;
+}
+
+.CardBody > i.fa-pen:hover {
+  color: #fff;
+}
+
+.Dark .NewCard {
+  background: #010101;
+  border: 1px solid #0075de;
+
+  box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
+  border-radius: 6px;
+}
+
+.Dark .CardTitle > input {
+  background-color: #010101;
+  color: #fff;
+}
+
+.Dark .CardBody > textarea {
+  background-color: #010101;
+  color: #fff;
+}
+
+.Dark .CardButton > button.CardRegister:disabled {
+  background: #002055;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: default;
+}
+
+.Dark .FabButton {
+  background-color: #010101;
+  border: 5px solid #0075de;
+  color: #ffffff;
+}
+
+.Dark .FabButton:hover {
+  width: 64px;
+  height: 64px;
+  background-color: #0075de;
+}
+
+.Dark .ModalAlert {
+  background-color: #010101;
+  box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.7);
+  border: 3px solid #fff;
+}
+
+.Dark .ModalMessage {
+  color: #fff;
+}
+
+.Dark .ModalAlert > input.ModalInput {
+  color: #fff;
+  background-color: #010101;
+  border: none;
+}
+
+.Dark .ModalButton > button.ModalConfirm:disabled {
+  background: #002055;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: default;
+}

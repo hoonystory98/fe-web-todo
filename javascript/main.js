@@ -7,12 +7,13 @@ import {
   modifycard,
 } from "./card.js";
 import { deletecolumn, changecoltitle } from "./columns.js";
-import { updatehistory } from "./sidemenu.js";
+import { darkmode, updatehistory } from "./sidemenu.js";
 import { dragcard } from "./dragndrop.js";
 
-const API_URL_Col = "http://localhost:3000/Columns";
-const API_URL_Box = "http://localhost:3000/Cards";
-const API_URL_Eve = "http://localhost:3000/Events";
+const API_BASE_URL = "http://localhost:3000";
+const API_URL_Col = `${API_BASE_URL}/Columns`;
+const API_URL_Box = `${API_BASE_URL}/Cards`;
+const API_URL_Eve = `${API_BASE_URL}/Events`;
 
 let cards = [];
 let dragAble = false;
@@ -38,16 +39,23 @@ function makeinitcol(Columns) {
         return card["id"] === CardNum;
       });
       NewCardForm.classList = "ColumnCards";
-      NewCardForm.id = `${TargetCard.id}`;
+      NewCardForm.id = TargetCard.id;
       NewCardForm.innerHTML = makenewcardinner(
         TargetCard.Title,
         TargetCard.Body,
         TargetCard.Author
       );
-      document.getElementById("cards-" + Column.id).append(NewCardForm);
+      document.getElementById(`cards-${Column.id}`).append(NewCardForm);
     });
   });
 }
+
+fetch(`${API_BASE_URL}/IsDarkMode`)
+  .then((resp) => resp.json())
+  .then((viewmode) => {
+    if (viewmode.IsDarkMode) document.body.classList.toggle("Dark");
+  })
+  .catch((err) => console.error(err));
 
 async function getCardinfo() {
   await fetch(API_URL_Box)
