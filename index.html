@@ -34,11 +34,21 @@
   <body>
     <div class="TitleSection">
       <h1 class="MainTitle">TO-DO LIST</h1>
-      <i class="fa-solid fa-moon fa-2x ToggleDark"></i>
       <i class="fa-solid fa-bars MenuButton"></i>
     </div>
     <div class="ColumnSection"></div>
-    <div class="FabButton FabColumn">
+    <div class="FabMenu LightMode">
+      <div class="FabBtn ClearHistory">
+        <i class="fa-solid fa-brush fa-2x"></i>
+      </div>
+      <div class="FabBtn ToggleDark">
+        <i class="fa-solid fa-moon fa-2x"></i>
+      </div>
+      <div class="FabBtn FabColumn">
+        <i class="fa-solid fa-table-columns fa-2x"></i>
+      </div>
+    </div>
+    <div class="FabButton">
       <i class="fa-solid fa-plus fa-2x"></i>
     </div>
     <div class="SideMenu HiddenSideMenu">
@@ -49,6 +59,7 @@
 
   <script type="module" src="javascript/main.js"></script>
   <script type="module" src="javascript/sidemenu.js"></script>
+  <script type="module" src="javascript/fabmenu.js"></script>
   <script type="module" src="javascript/columns.js"></script>
   <script type="module" src="javascript/dragndrop.js"></script>
 </html>

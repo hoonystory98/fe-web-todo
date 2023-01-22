@@ -7,8 +7,9 @@ import {
   modifycard,
 } from "./card.js";
 import { deletecolumn, changecoltitle } from "./columns.js";
-import { darkmode, updatehistory } from "./sidemenu.js";
+import { updatehistory } from "./sidemenu.js";
 import { dragcard } from "./dragndrop.js";
+import { showfabmenu } from "./fabmenu.js";
 
 const API_BASE_URL = "http://localhost:3000";
 const API_URL_Col = `${API_BASE_URL}/Columns`;
@@ -83,6 +84,13 @@ async function callinitcol() {
 
 callinitcol();
 
+document.body.addEventListener("click", (e) => {
+  const fabbtn = e.target.closest(".FabButton");
+  if (fabbtn != null) {
+    showfabmenu(fabbtn);
+  }
+});
+
 const acolumn = document.getElementsByClassName("ColumnSection")[0];
 
 acolumn.addEventListener("click", (e) => {
@@ -155,4 +163,4 @@ acolumn.addEventListener("mouseup", (e) => {
   }
 });
 
-export { API_URL_Col, API_URL_Box, API_URL_Eve, acolumn };
+export { API_BASE_URL, API_URL_Col, API_URL_Box, API_URL_Eve, acolumn };

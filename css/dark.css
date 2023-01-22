@@ -7,11 +7,7 @@
   color: #fff;
 }
 
-.Dark > div.TitleSection > i.fa-bars {
-  color: #fff;
-}
-
-.Dark > div.TitleSection > i.fa-moon:hover {
+.Dark .fa-bars {
   color: #fff;
 }
 
@@ -40,7 +36,7 @@
   border-left: 1px solid #fff;
 
   box-shadow: 0px 0px 4px rgba(204, 204, 204, 0.5),
-    0px 2px 4px rgba(0, 0, 0, 0.25);
+    0px 2px 4px rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(2px);
 }
 
@@ -87,8 +83,15 @@
 
 .Dark .CardButton > button.CardRegister:disabled {
   background: #002055;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(0, 0, 255, 0.6);
   cursor: default;
+}
+
+.Dark .ShadowCard {
+  opacity: 0.4;
+  border: 1px solid #0075de;
+  box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
+  pointer-events: none;
 }
 
 .Dark .FabButton {
@@ -97,10 +100,29 @@
   color: #ffffff;
 }
 
+.Dark .FabMenuOn {
+  background-color: #0075de;
+}
+
+.Dark .FabBtn {
+  border: 3px solid #0075de;
+  background-color: #010101;
+}
+
 .Dark .FabButton:hover {
   width: 64px;
   height: 64px;
   background-color: #0075de;
+}
+
+.Dark .ToggleDark:hover {
+  transition: all 0.5s;
+  color: #0075de;
+}
+
+.Dark .FabBtn:hover {
+  border: 3px solid #fff;
+  transition: all 0.5s;
 }
 
 .Dark .ModalAlert {

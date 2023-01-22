@@ -5,7 +5,7 @@ const API_URL_Eve = `${API_BASE_URL}/Events`;
 
 let cards = [];
 
-function gedfromserver() {
+function getfromserver() {
   await;
 }
 

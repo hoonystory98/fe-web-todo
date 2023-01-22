@@ -132,7 +132,4 @@ function changecoltitle(TargetTitle) {
   inputform.addEventListener("focusout", registertitle);
 }
 
-const fabbutton = document.getElementsByClassName("FabColumn")[0];
-fabbutton.addEventListener("click", modalmakecol);
-
 export { modalmakecol, deletecolumn, changecoltitle };
