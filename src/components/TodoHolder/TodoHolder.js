@@ -105,8 +105,8 @@ class TodoHolder extends Component {
     notifyAddTodo(todo, columnName) {
         return NotificationManager.makeNotification({
             type: NotificationManager.notificationTypes.ADD,
-            name: columnName,
-            to: name
+            name: todo.name,
+            to: columnName
         });
     }
 
