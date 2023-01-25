@@ -7,12 +7,12 @@ assignees: ''
 
 ---
 
-- [ ] QuerySelector 구현해서 사용하기
+- [ ] 구현한 QuerySelector(getdom function) 사용하기
 - [ ] Prototype 활용 객체 많이 사용하기
 - [ ] ES-Classes 활용한 객체 사용하기
 - [ ] 객체 지향 프로그래밍
 - [ ] 함수형 프로그래밍 시도해보기
-- [ ] VMC 패턴 적용하기
+- [ ] MVVM 패턴 적용하기
 - [ ] 다양한 애니메이션 시도해보기(Ex. 키프레임 애니메이션, transform translate 등...)
 - [ ] Promise 객체 만들기
 - [ ] 상수 선언해서 활용하기
