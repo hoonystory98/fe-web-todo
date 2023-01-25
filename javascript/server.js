@@ -67,4 +67,8 @@ async function callinitcol() {
   await getEventinfo();
 }
 
-export {getIsDarkMode};
+const Server = {
+  getIsDarkMode,
+}
+
+export default Server;
