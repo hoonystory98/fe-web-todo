@@ -2,6 +2,8 @@ import Component from "../../core/Component.js";
 import TodoDatabase from "../../persistance/TodoDatabase.js";
 import DragManager from "../../core/DragManager.js";
 import NotificationManager from "../../core/NotificationManager.js";
+import LongClickManager from "../../core/LongClickManager.js";
+import ToastManager from "../../core/ToastManager.js";
 
 class TodoCard extends Component {
     initialize() {
@@ -20,6 +22,9 @@ class TodoCard extends Component {
         this.addEvent('click', '.todocard-bgbtn', this.cancelEdit.bind(this));
         this.addEvent(DragManager.dragEventTypes.COLLAPSED, '*', this.onCollapsed.bind(this));
         this.addEvent(DragManager.dragEventTypes.END, '*', this.onDragEnded.bind(this));
+        this.addEvent(LongClickManager.longClickEventTypes.START, '.todocard-delete', this.startLongclick.bind(this));
+        this.addEvent(LongClickManager.longClickEventTypes.CANCELED, '.todocard-delete', this.cancelLongclick.bind(this));
+        this.addEvent(LongClickManager.longClickEventTypes.END,'.todocard-delete', this.endLongclick.bind(this));
     }
 
     onCollapsed(e) {
@@ -97,6 +102,7 @@ class TodoCard extends Component {
         const { todo, isEdit } = this.state;
         return `
         <button class="todocard-bgbtn"></button>
+        <div class="progress-click"></div>
         <div class="todocard-dblclick-area">
             <div class="todocard-header">
                 ${isEdit ?
@@ -162,6 +168,18 @@ class TodoCard extends Component {
     setDraggable() {
         if (this.isDummy())
             this.$target.classList.add(DragManager.BLOCK_DRAG_CLASS);
+    }
+    startLongclick() {
+        this.$target.querySelector(".progress-click").classList.add("on");
+        ToastManager.show('삭제하려면 꾹 누르세요', 1000);
+    }
+    cancelLongclick() {
+        this.$target.querySelector(".progress-click").classList.remove("on");
+        ToastManager.show('취소되었습니다', 1000);
+    }
+    endLongclick() {
+        this.$target.querySelector(".progress-click").classList.remove("on");
+        ToastManager.show('삭제되었습니다', 1000);
     }
 }
 
