@@ -1,20 +1,16 @@
 import Component from "../../core/Component.js";
 import TodoDatabase from "../../persistance/TodoDatabase.js";
 import DragManager from "../../core/DragManager.js";
+import NotificationManager from "../../core/NotificationManager.js";
 
 class TodoCard extends Component {
     initialize() {
-        const { todoId } = this.props;
+        this.state = {
+            todo: this.props.todo,
+            isEdit: false
+        };
         this.setEvent();
-        if (this.isDummy()) {
-            this.$target.classList.add(DragManager.BLOCK_DRAG_CLASS);
-        } else {
-            const todo = TodoDatabase.findTodoById(todoId);
-            this.state = {
-                todo: todo,
-                isEdit: false
-            };
-        }
+        this.setDraggable();
     }
 
     setEvent() {
@@ -23,17 +19,81 @@ class TodoCard extends Component {
         this.addEvent('click', '.todocard-edit-ok', this.finishEdit.bind(this));
         this.addEvent('click', '.todocard-bgbtn', this.cancelEdit.bind(this));
         this.addEvent(DragManager.dragEventTypes.COLLAPSED, '*', this.onCollapsed.bind(this));
+        this.addEvent(DragManager.dragEventTypes.END, '*', this.onDragEnded.bind(this));
     }
 
-    onCollapsed(ev) {
+    onCollapsed(e) {
         const { $actualHolder } = this.props
-        const $dragStart = ev.dragStartedElement;
+        const $dragStart = e.dragStartedElement;
         $actualHolder.insertBefore($dragStart, this.$target);
+    }
+
+    async onDragEnded(e) {
+        const $dragStart = e.dragStartedElement;
+        const $lastCollapsed = e.lastCollapsedElement;
+
+        const srcTodoId = parseInt($dragStart.dataset.todoId);
+        const srcColumnId = parseInt($dragStart.dataset.columnId)
+        const dstTodoId = parseInt($lastCollapsed.dataset.todoId);
+        const dstColumnId = parseInt($lastCollapsed.dataset.columnId);
+
+        const collection = { columns: [] };
+
+        const srcColumn = (await TodoDatabase.getColumns({ id: srcColumnId }))[0];
+        const dstColumn = srcColumnId === dstColumnId ? srcColumn :
+            (await TodoDatabase.getColumns({ id: dstColumnId }))[0];
+        const srcPos = srcColumn.todoIds.findIndex(id => id === srcTodoId);
+        if (srcPos >= 0) {
+            srcColumn.todoIds.splice(srcPos, 1);
+            collection.columns.push({ id: srcColumn.id, todoIds: srcColumn.todoIds });
+        }
+        if (dstColumn.todoIds.includes(srcTodoId)) {
+            return;
+        }
+
+        const dstPos = dstColumn.todoIds.findIndex(id => id === dstTodoId);
+        if (dstPos >= 0) {
+            dstColumn.todoIds.splice(dstPos, 0, srcTodoId);
+        } else {
+            dstColumn.todoIds.push(srcTodoId);
+        }
+        if (srcColumn === dstColumn && collection.columns.length) {
+            collection.columns[0].todoIds = dstColumn.todoIds;
+        } else {
+            collection.columns.push({ id: dstColumn.id, todoIds: dstColumn.todoIds });
+        }
+
+        console.log(await TodoDatabase.patchCollection(collection));
+        this.props.onTodoMoved();
+
+        if (this.$target === $dragStart) {
+            this.notifyMoved(srcTodoId, srcColumnId, dstColumnId).then(console.log);
+        }
+    }
+
+    async notifyMoved(srcTodoId, srcColumnId, dstColumnId) {
+        const srcTodo = (await TodoDatabase.getTodos({ id: srcTodoId }))[0];
+        const srcColumn = (await TodoDatabase.getColumns({ id: srcColumnId }))[0];
+        const dstColumn = (await TodoDatabase.getColumns({ id: dstColumnId }))[0];
+        return NotificationManager.makeNotification({
+            type: NotificationManager.notificationTypes.MOVE,
+            name: srcTodo.name,
+            from: srcColumn.name,
+            to: dstColumn.name
+        });
+    }
+
+    notifyUpdate(beforeTodo, afterTodo) {
+        return NotificationManager.makeNotification({
+            type: NotificationManager.notificationTypes.UPDATE,
+            from: beforeTodo.name,
+            to: afterTodo.name
+        });
     }
 
     template() {
         if (this.isDummy())
-            return ``;
+            return '';
         const { todo, isEdit } = this.state;
         return `
         <button class="todocard-bgbtn"></button>
@@ -43,11 +103,7 @@ class TodoCard extends Component {
                 `<input class="todocard-title" value="${todo.name}">` :
                 `<h4 class="todocard-title">${todo.name}</h4>`
                 }
-                <button class="todocard-delete" ${!isEdit || 'disabled'}>
-                    <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1.5 11.25L0.75 10.5L5.25 6L0.75 1.5L1.5 0.750004L6 5.25L10.5 0.750004L11.25 1.5L6.75 6L11.25 10.5L10.5 11.25L6 6.75L1.5 11.25Z"/>
-                    </svg>
-                </button>            
+                <button class="todocard-delete" ${!isEdit || 'disabled'}><svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 11.25L0.75 10.5L5.25 6L0.75 1.5L1.5 0.750004L6 5.25L10.5 0.750004L11.25 1.5L6.75 6L11.25 10.5L10.5 11.25L6 6.75L1.5 11.25Z"/></svg></button>            
             </div>
             ${isEdit ?
             `<textarea class="todocard-desc">${todo.description}</textarea>` :
@@ -78,16 +134,15 @@ class TodoCard extends Component {
     finishEdit() {
         const $title = this.$target.querySelector('.todocard-title');
         const $desc = this.$target.querySelector('.todocard-desc');
-        const newTodo = {
-            ...this.state.todo,
+        TodoDatabase.patchTodo({
+            id: this.state.todo.id,
             name: $title.value,
             description: $desc.value
-        };
-        this.setState({
-            isEdit: false,
-            todo: newTodo
+        }).then(todo => {
+            const oldTodo = { ...this.state.todo };
+            this.setState({ isEdit: false, todo });
+            this.notifyUpdate(oldTodo, todo);
         });
-        TodoDatabase.updateTodo(newTodo);
     }
     fitHeight() {
         const $textarea = this.$target.querySelector('.todocard-desc');
@@ -101,8 +156,12 @@ class TodoCard extends Component {
         }
     }
     isDummy() {
-        const { todoId } = this.props;
-        return todoId < 0;
+        const { todo } = this.state;
+        return todo.id < 0;
+    }
+    setDraggable() {
+        if (this.isDummy())
+            this.$target.classList.add(DragManager.BLOCK_DRAG_CLASS);
     }
 }
 

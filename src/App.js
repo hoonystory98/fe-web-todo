@@ -4,51 +4,59 @@ import AddColumnButton from "./components/AddColumnButton/AddColumnButton.js";
 import TodoHolder from "./components/TodoHolder/TodoHolder.js";
 import TodoDatabase from "./persistance/TodoDatabase.js";
 import DragManager from "./core/DragManager.js";
+import NotificationManager from "./core/NotificationManager.js";
 
 class App extends Component {
     initialize() {
         this.initializeDragFeature();
-        this.state = {
-            columnIds: TodoDatabase.findAllColumnIds()
-        }
-        this.addEvent(DragManager.dragEventTypes.END, '*', this.onDragFinished.bind(this));
+        this.initializeNotificationFeature();
     }
 
     template() {
-        const columnIds = [ ...this.state.columnIds ];
         return `
         <div data-component="Header"></div>
         <div data-component="AddColumnButton"></div>
-        <div id="article">
-        ${columnIds.map((_, idx) => `
-            <div data-component="TodoHolder" data-index="${idx}"></div>
-        `).join('')}
-        </div>
+        <div id="article"></div>
         `;
     }
 
     mounted() {
+        this.mountAddColumnButton();
+        this.mountHeader();
+        this.mountTodoHolders();
+    }
+
+    mountHeader() {
         const $header = this.$target.querySelector('[data-component="Header"]');
         new Header($header);
+    }
 
-        const $addColBtn = this.$target.querySelector('[data-component="AddColumnButton"]');
-        const addColumn = this.addColumn.bind(this);
-        new AddColumnButton($addColBtn, { addColumn });
+    async mountTodoHolders() {
+        const columns = await TodoDatabase.getColumns();
+        const $article = this.$target.querySelector('#article');
+        $article.innerHTML = `${columns.map((column) =>
+            `<div data-component="TodoHolder" data-column-id="${column.id}"></div>`).join('')}`;
 
         const $todoHolders = this.$target.querySelectorAll('[data-component="TodoHolder"]');
-        const columnIds = [ ...this.state.columnIds ];
         $todoHolders.forEach($todoHolder => {
-            const idx = parseInt($todoHolder.dataset.index);
-            const columnId = columnIds[idx];
-            new TodoHolder($todoHolder, { columnId });
+            const columnId = parseInt($todoHolder.dataset.columnId);
+            new TodoHolder($todoHolder, { column: columns.find(column => column.id === columnId) });
         });
     }
 
+    mountAddColumnButton() {
+        const $addColBtn = this.$target.querySelector('[data-component="AddColumnButton"]');
+        new AddColumnButton($addColBtn, { addColumn: this.addColumn.bind(this) });
+    }
+
     addColumn() {
-        const newColumn = TodoDatabase.addNewColumn();
-        const newColumnIds = [ ...this.state.columnIds ];
-        newColumnIds.push(newColumn.id);
-        this.setState({ columnIds: newColumnIds });
+        TodoDatabase.postColumn({ name: 'New Column' }).then(column => {
+            const $article = this.$target.querySelector('#article');
+            $article.innerHTML +=
+                `<div data-component="TodoHolder" data-column-id="${column.id}"></div>`
+            const $todoHolder = $article.querySelector(`[data-column-id="${column.id}"]`);
+            new TodoHolder($todoHolder, { column });
+        });
     }
 
     initializeDragFeature() {
@@ -56,16 +64,9 @@ class App extends Component {
         DragManager.initialize();
     }
 
-    onDragFinished(ev) {
-        const $dragStartTodoCard = ev.dragStartedElement;
-        const $lastCollapsedTodoCard = ev.lastCollapsedElement;
-        if (!$lastCollapsedTodoCard)
-            return;
-        const srcTodoId = parseInt($dragStartTodoCard.dataset.todoId);
-        const dstTodoId = parseInt($lastCollapsedTodoCard.dataset.todoId);
-        const dstColumnId = parseInt($lastCollapsedTodoCard.dataset.columnId);
-        TodoDatabase.moveTodo(srcTodoId, dstTodoId, dstColumnId);
-        this.render();
+    initializeNotificationFeature() {
+        NotificationManager.setNotificationTargetComponentName('Header');
+        NotificationManager.initialize();
     }
 }
 

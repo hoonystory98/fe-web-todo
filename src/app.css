@@ -19,4 +19,10 @@ button {
 
 .dragstart {
     opacity: 0.5;
+    outline: 1px solid #0075DE;
+}
+
+dragging > * {
+    transform: scale(1.05);
+    box-shadow: 0 3px 15px rgb(224 224 224 / 50%) !important;
 }

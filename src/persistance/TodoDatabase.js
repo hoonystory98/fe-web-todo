@@ -1,175 +1,156 @@
-const database = {
-    notifications: [
-        {
-            author: 'randomlee',
-            name: 'test name',
-            from: 'test col1',
-            to: 'test col2',
-            action: '등록',
-            timestamp: 1673169047861,
-            id: 0
-        }
-    ],
-    columns: [
-        {
-            name: "오늘 할 일",
-            id: 0
-        },
-        {
-            name: "내일 할 일",
-            id: 1
-        },
-        {
-            name: "모레 할 일",
-            id: 2
-        }
-    ],
-    todos: [
-        {
-            author: "randomlee",
-            name: "인사하기",
-            description: "안녕하세용!!!\n반갑습니다~~",
-            columnId: 0,
-            id: 0
-        },
-        {
-            author: "randomlee",
-            name: "밥먹기",
-            description: "옴뇸뇸",
-            columnId: 0,
-            id: 1
-        },
-        {
-            author: "randomlee",
-            name: "잠자기",
-            description: "쿨쿨쿨",
-            columnId: 0,
-            id: 2
-        }
-    ]
+const getUser = () => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('user');
+}
+const BASE_URL = 'http://localhost:3000';
+const TODO_URI = BASE_URL + '/todos';
+const COLUMN_URI = BASE_URL + '/columns';
+const NOTIFICATION_URI = BASE_URL + '/notifications'
+
+/**
+ * @typedef {{id: number|undefined, name: string|undefined, author: string|undefined, description: string|undefined}} TodoEntity
+ * @typedef {{id: number|undefined, name: string|undefined, todoIds: number[]|undefined}} ColumnEntity
+ */
+
+/**
+ * @param {ColumnEntity} column
+ * @returns {Promise<ColumnEntity[]>}
+ */
+const getColumns = async (column={}) => {
+    const getColumnRes = await fetch(COLUMN_URI + getQueryString(column),
+        { cache: "no-store" });
+    const columns = await getColumnRes.json();
+    columns.forEach((col, idx) => {
+        columns[idx] = {...col, todoIds: JSON.parse(col.todoIds)};
+    });
+    return columns;
+}
+
+/**
+ * @param {ColumnEntity} column
+ * @returns {Promise<ColumnEntity>}
+ */
+const postColumn = async (column) => {
+    const newColumnRes = await fetch(COLUMN_URI, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ name: column.name, todoIds: "[]" })
+    });
+    const newColumn = await newColumnRes.json();
+    return {...newColumn, todoIds: JSON.parse(newColumn.todoIds)};
+}
+
+/**
+ * @param {ColumnEntity} column
+ * @returns {Promise<ColumnEntity>}
+ */
+const patchColumn = async (column) => {
+    const patchColumnRes = await fetch(`${COLUMN_URI}/${column.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ ...column, todoIds: JSON.stringify(column.todoIds)})
+    });
+    const newColumn = await patchColumnRes.json();
+    return {...newColumn, todoIds: JSON.parse(newColumn.todoIds)};
+}
+
+/**
+ * @param {*} query
+ * @returns {Promise<TodoEntity[]>}
+ */
+const getTodos = async (query) => {
+    const getTodosRes = await fetch(TODO_URI + getQueryString(query), {
+        cache: "no-store"
+    });
+    return await getTodosRes.json();
+}
+
+/**
+ * @param {TodoEntity} todo
+ * @returns {Promise<TodoEntity|false>}
+ */
+const postTodo = async (todo) => {
+    const newTodoRes = await fetch(TODO_URI, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ ...todo, author: getUser() })
+    });
+    return await newTodoRes.json();
 };
 
-const getUser = () => {
-    return `randomlee`;
+/**
+ * @param {TodoEntity} todo
+ * @returns {Promise<TodoEntity>}
+ */
+const patchTodo = async (todo) => {
+    const patchTodoRes = await fetch(`${TODO_URI}/${todo.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(todo)
+    });
+    return await patchTodoRes.json();
+}
+
+/**
+ * @param {NotificationEntity} notification
+ * @returns {Promise<NotificationEntity[]>}
+ */
+const getNotifications = async (notification={}) => {
+    const getNotificationsRes = await fetch(NOTIFICATION_URI + getQueryString(notification),
+        { cache: "no-store" });
+    return await getNotificationsRes.json();
+};
+
+/**
+ * @param {NotificationEntity} notification
+ * @returns {Promise<NotificationEntity>}
+ */
+const postNotification = async (notification) => {
+    const newNotificationRes = await fetch(NOTIFICATION_URI, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ ...notification, author: getUser() })
+    });
+    return await newNotificationRes.json();
+};
+
+const patchCollection = async (collection) => {
+    if (collection.columns?.length) {
+        collection.columns?.forEach(column => {
+            column.todoIds = JSON.stringify(column.todoIds);
+        });
+    }
+    const patchCollectionRes = await fetch(`${BASE_URL}/collection`, {
+        method: 'PATCH',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(collection)
+    });
+    return await patchCollectionRes.json();
+};
+
+/**
+ * @param {TodoEntity|ColumnEntity|number[]|undefined} data
+ * @returns {string}
+ */
+const getQueryString = (data) => {
+    if (!data) return '';
+    if (Array.isArray(data))
+        return `?${data.map(id => `id=${id}`).join('&')}`;
+    if (data.id)
+        return `?id=${data.id}`;
+    return '?' + (data.author ? `&author=${data.author}` : '');
 }
 
 const TodoDatabase = {
-    notify(notification) {
-        database.notifications.unshift(notification);
-        this.notificationListener(notification);
-    },
-    notificationListener() {},
-    setNotificationListener(callback) {
-        this.notificationListener = callback;
-    },
-    findAllNotificationIds() {
-        return [
-            ...database.notifications.map(notification => notification.id)
-        ];
-    },
-    findNotificationById(notificationId) {
-        return {
-            ...database.notifications.find(notification => notification.id === notificationId)
-        };
-    },
-    findAllColumnIds() {
-        return [
-            ...database.columns.map(column => column.id)
-        ];
-    },
-    findColumnById(columnId) {
-        return {
-            ...database.columns.find(column => column.id === columnId)
-        };
-    },
-    updateColumnNameById(columnId, newName) {
-        const column = database.columns.find(column => column.id === columnId);
-        column.name = newName;
-        return true;
-    },
-    addNewColumn() {
-        const column = { name: "New Column", id: Date.now() };
-        database.columns.push(column);
-        return column;
-    },
-    deleteColumnById(columnId) {
-        const idx = database.columns.findIndex(column => column.id === columnId);
-        database.columns.splice(idx, 1);
-        return true;
-    },
-    findTodoById(todoId) {
-        return database.todos.find(todo => todo.id === todoId);
-    },
-    findTodoIdsByColumnId(columnId) {
-        return database.todos.filter(todo => todo.columnId === columnId)
-            .map(todo => todo.id);
-    },
-    addNewTodo(columnId, name, description) {
-        const todo = {
-            author: getUser(),
-            name,
-            description,
-            columnId,
-            id: Date.now()
-        };
-        database.todos.unshift(todo);
-        const { name:columnName } = database.columns.find(column => column.id === columnId);
-        const notification = {
-            author: getUser(),
-            name: name,
-            from: '',
-            to: columnName,
-            action: '등록',
-            timestamp: Date.now(),
-            id: Date.now()
-        };
-        database.notifications.unshift(notification);
-        this.notify(notification);
-        return todo.id;
-    },
-    updateTodo({ id, name, description }) {
-        const originTodo = database.todos.find(todo => todo.id === id);
-        const originName = originTodo.name;
-        originTodo.name = name;
-        originTodo.description = description;
-        const notification = {
-            author: getUser(),
-            name: '',
-            from: originName,
-            to: name,
-            action: '수정',
-            timestamp: Date.now(),
-            id: Date.now()
-        };
-        this.notify(notification);
-    },
-    moveTodo(srcTodoId, dstTodoId, columnId=-1) {
-        if (srcTodoId === dstTodoId)
-            return;
-        const srcIndex = database.todos.findIndex(({ id }) => id === srcTodoId);
-        const srcTodo = database.todos.splice(srcIndex, 1)[0];
-        const srcColumnName = this.findColumnById(srcTodo.columnId).name;
-        if (dstTodoId < 0) {
-            srcTodo.columnId = columnId;
-            database.todos.push(srcTodo);
-        } else {
-            const dstIndex = database.todos.findIndex(({ id }) => id === dstTodoId);
-            const dstTodo = database.todos[dstIndex];
-            srcTodo.columnId = dstTodo.columnId;
-            database.todos.splice(dstIndex, 0, srcTodo);
-        }
-        const dstColumnName = this.findColumnById(srcTodo.columnId).name;
-        const notification = {
-            author: getUser(),
-            name: srcTodo.name,
-            from: srcColumnName,
-            to: dstColumnName,
-            action: '이동',
-            timestamp: Date.now(),
-            id: Date.now()
-        };
-        this.notify(notification);
-    }
+    getColumns,
+    postColumn,
+    patchColumn,
+    getTodos,
+    postTodo,
+    patchTodo,
+    getNotifications,
+    postNotification,
+    patchCollection
 }
 
 export default TodoDatabase;

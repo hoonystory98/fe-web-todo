@@ -2,6 +2,7 @@ import Component from "../../core/Component.js";
 
 class DoubleClickInput extends Component {
     initialize() {
+        this.state = { value: this.props.value };
         this.addEvent('dblclick', 'input', this.startEdit.bind(this));
         this.addEvent('focusout', 'input', this.endEdit.bind(this));
         this.addEvent('keyup', 'input', this.onKeyPress.bind(this));
@@ -16,7 +17,8 @@ class DoubleClickInput extends Component {
     }
 
     endEdit() {
-        const { value, onValueChanged } = this.props;
+        const { value } = this.state;
+        const { onValueChanged } = this.props;
         const $input = this.$target.querySelector('input');
         $input.setAttribute('readonly', '');
         if ($input.value.length) {
@@ -24,7 +26,7 @@ class DoubleClickInput extends Component {
         } else {
             $input.value = value;
         }
-        this.fitWidth();
+        this.setState({ value: $input.value });
     }
 
     onKeyPress(e) {
@@ -36,7 +38,8 @@ class DoubleClickInput extends Component {
     }
 
     template() {
-        const { value, placeholder } = this.props;
+        const { placeholder } = this.props;
+        const { value } = this.state;
         return `
         <input type="text" class="double-click-input" value="${value}" placeholder="${placeholder}" onmousedown="return false;" readonly>
         `
