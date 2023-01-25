@@ -59,7 +59,7 @@
   border: 1px solid #ff4343;
 }
 
-.CardBody > i.fa-pen:hover {
+.Dark .CardBody > i.fa-pen:hover {
   color: #fff;
 }
 
