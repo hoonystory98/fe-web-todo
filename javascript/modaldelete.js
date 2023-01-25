@@ -1,5 +1,5 @@
-import { API_URL_Box, API_URL_Col, API_URL_Eve } from "./main.js";
 import { deletecardmodal } from "./templates.js";
+import Server from "./server.js";
 
 function getDeleteCardModalElement() {
   const ModalHTML = document.createElement("div");
@@ -14,43 +14,14 @@ function subtractColumnCounter($cardCounter) {
   $cardCounter.innerHTML = `${newCount}`;
 }
 
-function postNewEvent(colName, cardTitle) {
-  const NewEvent = {
+function getDeletionEvent(colName, cardTitle) {
+  return {
     id: new Date().getTime(),
     ColumnName: colName,
     CardTitle: cardTitle,
     EventType: "삭제",
     EventTime: new Date().getTime(),
   };
-  fetch(API_URL_Eve, {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify(NewEvent),
-  })
-      .then((resp) => resp.json())
-      .catch((error) => console.error(error));
-}
-
-function deleteCard($targetCard) {
-  const cardId = $targetCard.id;
-  fetch(`${API_URL_Box}/${cardId}`, {
-    method: "DELETE",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify({ cardId }),
-  })
-      .then((resp) => resp.json())
-      .catch((error) => console.error(error));
-  $targetCard.remove();
-}
-
-function fetchCardList(columnId, newList) {
-  fetch(`${API_URL_Col}/${columnId}`, {
-    method: "PATCH",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify({ Lists: newList }),
-  })
-      .then((resp) => resp.json())
-      .catch((error) => console.error(error));
 }
 
 function setModalEvent($modal, $targetCard) {
@@ -69,14 +40,17 @@ function setModalEvent($modal, $targetCard) {
 
   $confirm.addEventListener("click", e => {
     subtractColumnCounter($cardCounter);
-    postNewEvent(
+    const newEvent = getDeletionEvent(
         $colTitle.innerText.split("\n")[0],
         $cardTitle.textContent);
-    deleteCard($targetCard);
-    fetchCardList(
+    Server.postNewEvent(newEvent).catch(console.log);
+    Server.deleteCard($targetCard.id)
+        .then($targetCard.remove())
+        .catch(console.log);
+    Server.fetchCardList(
         $columnList.id,
         Array.from($cardSection.children).map($card => $card.id),
-    );
+    ).catch(console.log);
   });
 }
 
