@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;400&display=swap");
+    </style>
+
+    <title>TO-DO WEB</title>
+
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/card.css" />
+    <link rel="stylesheet" href="css/column.css" />
+    <link rel="stylesheet" href="css/modal.css" />
+    <link rel="stylesheet" href="css/sidemenu.css" />
+    <link rel="stylesheet" href="css/title.css" />
+    <link rel="stylesheet" href="css/fab.css" />
+    <link rel="stylesheet" href="css/dark.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script
+      src="https://kit.fontawesome.com/55809f1341.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="TitleSection">
+      <h1 class="MainTitle">TO-DO LIST</h1>
+      <i class="fa-solid fa-bars MenuButton"></i>
+    </div>
+    <div class="ColumnSection"></div>
+    <div class="FabMenu LightMode">
+      <div class="FabBtn ClearHistory">
+        <i class="fa-solid fa-brush fa-2x"></i>
+      </div>
+      <div class="FabBtn ToggleDark">
+        <i class="fa-solid fa-moon fa-2x"></i>
+      </div>
+      <div class="FabBtn FabColumn">
+        <i class="fa-solid fa-table-columns fa-2x"></i>
+      </div>
+    </div>
+    <div class="FabButton">
+      <i class="fa-solid fa-plus fa-2x"></i>
+    </div>
+    <div class="SideMenu HiddenSideMenu">
+      <div class="MenuHead"><i class="fa-solid fa-xmark MenuButton"></i></div>
+      <div class="MenuLog"></div>
+    </div>
+  </body>
+
+  <script type="module" src="javascript/main.js"></script>
+  <script type="module" src="javascript/sidemenu.js"></script>
+  <script type="module" src="javascript/fabmenu.js"></script>
+  <script type="module" src="javascript/columns.js"></script>
+  <script type="module" src="javascript/dragndrop.js"></script>
+</html>
