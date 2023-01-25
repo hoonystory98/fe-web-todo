@@ -66,7 +66,7 @@ class TodoCard extends Component {
         console.log(await TodoDatabase.patchCollection(collection));
         this.props.onTodoMoved();
 
-        if (this.$target === $dragStart) {
+        if (this.$target === $dragStart && srcColumnId !== dstColumnId) {
             this.notifyMoved(srcTodoId, srcColumnId, dstColumnId).then(console.log);
         }
     }
