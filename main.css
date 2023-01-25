@@ -6,6 +6,7 @@
 @import url("./src/components/TodoAddForm/todoaddform.css");
 @import url("./src/components/TodoCard/todocard.css");
 @import url("./src/app.css");
+@import url("./src/core/core.css");
 
 body {
     background-color: #F5F5F7;

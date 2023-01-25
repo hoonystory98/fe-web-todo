@@ -5,11 +5,23 @@ import TodoHolder from "./components/TodoHolder/TodoHolder.js";
 import TodoDatabase from "./persistance/TodoDatabase.js";
 import DragManager from "./core/DragManager.js";
 import NotificationManager from "./core/NotificationManager.js";
+import LongClickManager from "./core/LongClickManager.js";
+import ToastManager from "./core/ToastManager.js";
 
 class App extends Component {
     initialize() {
         this.initializeDragFeature();
         this.initializeNotificationFeature();
+        this.initializeLongCLickFeature();
+        this.addEvent(LongClickManager.longClickEventTypes.START, '*', ({ target }) => {
+            ToastManager.show('longclick start', 1000);
+        });
+        this.addEvent(LongClickManager.longClickEventTypes.CANCELED, '*', ({ target }) => {
+            ToastManager.show('longclick canceled', 1000);
+        });
+        this.addEvent(LongClickManager.longClickEventTypes.END, '*', ({ target }) => {
+            ToastManager.show('longclick end', 1000);
+        });
     }
 
     template() {
@@ -67,6 +79,12 @@ class App extends Component {
     initializeNotificationFeature() {
         NotificationManager.setNotificationTargetComponentName('Header');
         NotificationManager.initialize();
+    }
+
+    initializeLongCLickFeature() {
+        LongClickManager.setLongClickStartThreshold(500);
+        LongClickManager.setLongClickEndThreshold(1500);
+        LongClickManager.initialize();
     }
 }
 
