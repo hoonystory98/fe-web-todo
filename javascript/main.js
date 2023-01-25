@@ -10,6 +10,7 @@ import { deletecolumn, changecoltitle } from "./columns.js";
 import { updatehistory } from "./sidemenu.js";
 import { dragcard } from "./dragndrop.js";
 import { showfabmenu } from "./fabmenu.js";
+import {getIsDarkMode} from "./server.js";
 
 const API_BASE_URL = "http://localhost:3000";
 const API_URL_Col = `${API_BASE_URL}/Columns`;
@@ -51,13 +52,6 @@ function makeinitcol(Columns) {
   });
 }
 
-fetch(`${API_BASE_URL}/IsDarkMode`)
-  .then((resp) => resp.json())
-  .then((viewmode) => {
-    if (viewmode.IsDarkMode) document.body.classList.toggle("Dark");
-  })
-  .catch((err) => console.error(err));
-
 async function getCardinfo() {
   await fetch(API_URL_Box)
     .then((resp) => resp.json())
@@ -82,7 +76,13 @@ async function callinitcol() {
   await getEventinfo();
 }
 
-callinitcol();
+function addEvent(eventType, selector, listener) {
+  document.addEventListener(eventType, e => {
+    const target = e.target.closest(selector);
+    if (!target) return;
+    listener(e);
+  });
+}
 
 addEvent('click', '.FabButton', e => {
   const fabbtn = e.target.closest(".FabButton");
@@ -145,12 +145,11 @@ addEvent('mouseup', '.ColumnSection', e => {
   dragAble = false;
 });
 
-function addEvent(eventType, selector, listener) {
-  document.addEventListener(eventType, e => {
-    const target = e.target.closest(selector);
-    if (!target) return;
-    listener(e);
-  });
-}
+callinitcol();
+
+getIsDarkMode().then(({ IsDarkMode }) => {
+  if (IsDarkMode)
+    document.body.classList.toggle("Dark");
+}).catch(console.log);
 
 export { API_BASE_URL, API_URL_Col, API_URL_Box, API_URL_Eve };

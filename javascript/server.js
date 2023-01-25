@@ -2,11 +2,13 @@ const API_BASE_URL = "http://localhost:3000";
 const API_URL_Col = `${API_BASE_URL}/Columns`;
 const API_URL_Box = `${API_BASE_URL}/Cards`;
 const API_URL_Eve = `${API_BASE_URL}/Events`;
+const API_URL_Dark = `${API_BASE_URL}/IsDarkMode`;
 
 let cards = [];
 
-function getfromserver() {
-  await;
+function getIsDarkMode() {
+  return fetch(API_URL_Dark)
+      .then((resp) => resp.json());
 }
 
 function makecardarr(card) {
@@ -65,4 +67,4 @@ async function callinitcol() {
   await getEventinfo();
 }
 
-export {};
+export {getIsDarkMode};
