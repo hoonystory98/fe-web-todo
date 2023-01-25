@@ -145,11 +145,14 @@ addEvent('mouseup', '.ColumnSection', e => {
   dragAble = false;
 });
 
-callinitcol();
+function initializeDarkMode() {
+  Server.getIsDarkMode().then(({ IsDarkMode }) => {
+    if (IsDarkMode)
+      document.body.classList.toggle("Dark");
+  }).catch(console.log);
+}
 
-Server.getIsDarkMode().then(({ IsDarkMode }) => {
-  if (IsDarkMode)
-    document.body.classList.toggle("Dark");
-}).catch(console.log);
+callinitcol();
+initializeDarkMode();
 
 export { API_BASE_URL, API_URL_Col, API_URL_Box, API_URL_Eve };
