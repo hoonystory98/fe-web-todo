@@ -1,4 +1,4 @@
-//import { movelogregister } from "./sidemenu.js";
+import { movelogregister } from "./sidemenu.js";
 import { API_URL_Col, API_URL_Eve } from "./main.js";
 
 let currentDroppable = null;
@@ -127,6 +127,8 @@ function dragcard(e) {
     })
       .then((resp) => resp.json())
       .catch((error) => console.error(error));
+
+    movelogregister(NewEvent.CardTitle,NewEvent.FromColumn,NewEvent.ToColumn,NewEvent.EventType,NewEvent.EventTime);
   }
 
   document.addEventListener("mouseup", onMouseup);

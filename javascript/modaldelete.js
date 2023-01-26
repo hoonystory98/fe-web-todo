@@ -1,5 +1,6 @@
 import { deletecardmodal } from "./templates.js";
 import Server from "./server.js";
+import {adddeletelogregister} from "./sidemenu.js";
 
 function getDeleteCardModalElement() {
   const ModalHTML = document.createElement("div");
@@ -16,7 +17,6 @@ function subtractColumnCounter($cardCounter) {
 
 function getDeletionEvent(colName, cardTitle) {
   return {
-    id: new Date().getTime(),
     ColumnName: colName,
     CardTitle: cardTitle,
     EventType: "삭제",
@@ -51,6 +51,7 @@ function setModalEvent($modal, $targetCard) {
         $columnList.id,
         Array.from($cardSection.children).map($card => $card.id),
     ).catch(console.log);
+    adddeletelogregister(newEvent.ColumnName,newEvent.CardTitle,newEvent.EventType,newEvent.EventTime);
   });
 }
 

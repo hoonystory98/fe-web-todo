@@ -9,7 +9,7 @@ import {
 import { deletecolumn, changecoltitle } from "./columns.js";
 import { updatehistory } from "./sidemenu.js";
 import { dragcard } from "./dragndrop.js";
-import { showfabmenu } from "./fabmenu.js";
+import {darkmode, showfabmenu} from "./fabmenu.js";
 import Server from "./server.js";
 
 const API_BASE_URL = "http://localhost:3000";
@@ -148,7 +148,7 @@ addEvent('mouseup', '.ColumnSection', e => {
 function initializeDarkMode() {
   Server.getIsDarkMode().then(({ IsDarkMode }) => {
     if (IsDarkMode)
-      document.body.classList.toggle("Dark");
+      darkmode();
   }).catch(console.log);
 }
 
