@@ -66,7 +66,7 @@ class TodoHolder extends Component {
         $todoCards.forEach($todoCard => {
             const todoId = parseInt($todoCard.dataset.todoId);
             const todo = todos.find(todo => todo.id === todoId) || { id: -1, columnId: column.id };
-            new TodoCard($todoCard, { todo, $actualHolder, onTodoMoved: this.updateMovedTodo.bind(this) });
+            new TodoCard($todoCard, { todo, $actualHolder, onTodoMoved: this.onTodoMoved.bind(this) });
         });
     }
 
@@ -90,12 +90,13 @@ class TodoHolder extends Component {
         const newTodo = await TodoDatabase.postTodo({ name, description });
         const newTodoIds = (await TodoDatabase.getColumns({ id: column.id }))[0].todoIds;
         newTodoIds.unshift(newTodo.id);
+        console.log(newTodoIds)
         column = await TodoDatabase.patchColumn({ id: column.id, todoIds: newTodoIds });
 
         const $actualHolder = this.$target.querySelector('.todoholder-actual');
         $actualHolder.insertAdjacentHTML('afterbegin',
             `<div data-component="TodoCard" data-todo-id="${newTodo.id}" data-column-id="${column.id}"></div>`);
-        new TodoCard($actualHolder.firstElementChild, { todo: newTodo, $actualHolder, onTodoMoved: this.updateMovedTodo.bind(this) });
+        new TodoCard($actualHolder.firstElementChild, { todo: newTodo, $actualHolder, onTodoMoved: this.onTodoMoved.bind(this) });
 
         this.toggleAddForm();
         this.mountTodoCounter();
@@ -115,9 +116,9 @@ class TodoHolder extends Component {
         TodoDatabase.patchColumn({ id: column.id, name: newName });
     }
 
-    updateMovedTodo() {
-        this.mountTodoCards();
-        this.mountTodoCounter();
+    async onTodoMoved() {
+        await this.mountTodoCards();
+        await this.mountTodoCounter();
     }
 }
 

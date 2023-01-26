@@ -39,7 +39,7 @@ class TodoCard extends Component {
         const $lastCollapsed = e.lastCollapsedElement;
 
         const srcTodoId = parseInt($dragStart.dataset.todoId);
-        const srcColumnId = parseInt($dragStart.dataset.columnId);
+        const srcColumnId = parseInt($dragStart.dataset.columnId)
         const dstTodoId = parseInt($lastCollapsed.dataset.todoId);
         const dstColumnId = parseInt($lastCollapsed.dataset.columnId);
 
@@ -69,12 +69,11 @@ class TodoCard extends Component {
             collection.columns.push({ id: dstColumn.id, todoIds: dstColumn.todoIds });
         }
 
-        console.log(await TodoDatabase.patchCollection(collection));
-        this.props.onTodoMoved();
-
+        await TodoDatabase.patchCollection(collection);
         if (this.$target === $dragStart && srcColumnId !== dstColumnId) {
-            this.notifyMoved(srcTodoId, srcColumnId, dstColumnId).then(console.log);
+            this.notifyMoved(srcTodoId, srcColumnId, dstColumnId).catch(console.log);
         }
+        this.props.onTodoMoved();
     }
 
     async notifyMoved(srcTodoId, srcColumnId, dstColumnId) {
