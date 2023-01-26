@@ -1,11 +1,11 @@
 import { makenewcardinner, modifycardform } from "./templates.js";
-//import { adddeletelogregister, modifylogregister } from "./sidemenu.js";
+import { adddeletelogregister, modifylogregister } from "./sidemenu.js";
 import { API_URL_Box, API_URL_Col, API_URL_Eve } from "./main.js";
+import Server from "./server.js";
 
-function showregisterform(Collist) {
+function toggleRegisterForm(Collist) {
   const CardForm = Collist.getElementsByClassName("NewCard")[0];
-
-  if (CardForm.style.display != "block") {
+  if (CardForm.style.display !== "block") {
     CardForm.style.display = "block";
     CardForm.getElementsByClassName("TitleInput")[0].focus();
   } else {
@@ -16,103 +16,61 @@ function showregisterform(Collist) {
 function cardheightadjust(InputArea) {
   const CardButton =
     InputArea.closest(".NewCard").getElementsByClassName("CardRegister")[0];
-
   CardButton.disabled = InputArea.value.trim().length <= 0;
-
   InputArea.style.height = "auto";
   InputArea.style.height = `${InputArea.scrollHeight}px`;
 }
 
-const CardForm = {
-  makenewcard: function () {
-    dd;
-  },
-  cardheightadjust: function () {},
-};
-
 function makenewcard(CardRegisterForm) {
-  let NewCardForm = document.createElement("div");
-  NewCardForm.classList = "ColumnCards";
-  let NewCardIDNum = new Date().getTime();
-  NewCardForm.id = `${
-    CardRegisterForm.closest(".ColumnList").id
-  }-${NewCardIDNum}`;
-  let NewTitle = CardRegisterForm.getElementsByClassName("TitleInput")[0].value;
-  let NewBody =
-    CardRegisterForm.getElementsByClassName("CardInput")[0].value.trim();
-  NewCardForm.innerHTML = makenewcardinner(NewTitle, NewBody, "web");
+  const $newCardForm = document.createElement('div');
+  $newCardForm.classList.add('ColumnCards');
+  $newCardForm.id = new Date().getTime().toString();
 
-  CardRegisterForm.closest(".ColumnList")
-    .getElementsByClassName("CardSection")[0]
-    .prepend(NewCardForm);
+  const $newTitle = CardRegisterForm.getElementsByClassName('TitleInput')[0];
+  const $newBody = CardRegisterForm.getElementsByClassName("CardInput")[0];
+  $newCardForm.innerHTML = makenewcardinner($newTitle.value, $newBody.value.trim(), 'web');
 
-  CardRegisterForm.getElementsByClassName("TitleInput")[0].value = "";
-  CardRegisterForm.getElementsByClassName("CardInput")[0].value = "";
-  cardheightadjust(CardRegisterForm.getElementsByClassName("CardInput")[0]);
-  CardRegisterForm.getElementsByClassName("CardRegister")[0].disabled = true;
+  const $columnList = CardRegisterForm.closest(".ColumnList");
+  const $cardSection = $columnList.getElementsByClassName("CardSection")[0];
+  $cardSection.prepend($newCardForm);
+
+  const $registerButton = CardRegisterForm.getElementsByClassName("CardRegister")[0];
+  $registerButton.disabled = true;
+
   CardRegisterForm.style.display = "none";
-  CardRegisterForm.closest(".ColumnList").getElementsByClassName(
-    "CardCount"
-  )[0].innerHTML =
-    CardRegisterForm.closest(".ColumnList").getElementsByClassName(
-      "CardSection"
-    )[0].children.length;
+  const $cardCount = $columnList.getElementsByClassName("CardCount")[0]
+  $cardCount.innerHTML = `${$cardSection.children.length}`;
+
+  const $columnTitle = $columnList.getElementsByClassName("ColumnTitle")[0];
   const NewEvent = {
-    id: new Date().getTime(),
-    ColumnName: CardRegisterForm.closest(".ColumnList")
-      .getElementsByClassName("ColumnTitle")[0]
-      .innerText.split("\n")[0],
-    CardTitle: NewTitle,
+    ColumnName: $columnTitle.innerText.split("\n")[0],
+    CardTitle: $newTitle.value,
     EventType: "등록",
     EventTime: new Date().getTime(),
   };
-  fetch(API_URL_Eve, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(NewEvent),
-  })
-    .then((resp) => resp.json())
-    .catch((error) => console.error(error));
+  Server.postNewEvent(NewEvent).catch(console.error);
 
-  // adddeletelogregister(
-  //   events[events.length - 1].ColumnName,
-  //   events[events.length - 1].CardTitle,
-  //   events[events.length - 1].EventType,
-  //   events[events.length - 1].EventTime
-  // );
+  adddeletelogregister(
+      NewEvent.ColumnName,
+      NewEvent.CardTitle,
+      NewEvent.EventType,
+      NewEvent.EventTime
+  );
 
   const NewCardObj = {
-    id: NewCardForm.id,
-    Title: NewTitle,
-    Body: NewBody,
+    id: parseInt($newCardForm.id),
+    Title: $newTitle.value,
+    Body: $newBody.value.trim(),
     Author: "web",
   };
-  let Lists = [];
-  Array.from(
-    CardRegisterForm.closest(".ColumnList").getElementsByClassName(
-      "CardSection"
-    )[0].children
-  ).forEach((card) => Lists.push(card.id));
-  fetch(API_URL_Box, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(NewCardObj),
-  })
-    .then((resp) => resp.json())
-    .catch((error) => console.error(error));
-  fetch(`${API_URL_Col}/${CardRegisterForm.closest(".ColumnList").id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify({ Lists }),
-  })
-    .then((resp) => resp.json())
-    .catch((error) => console.error(error));
+  Server.postNewCard(NewCardObj).catch(console.error);
+
+  const Lists = Array.from($cardSection.children).map(card => parseInt(card.id));
+  Server.fetchCardList($columnList.id, Lists).catch(console.error);
+
+  $newTitle.value = "";
+  $newBody.value = "";
+  cardheightadjust($newBody);
 }
 
 function modifycard(TargetCard) {
@@ -136,7 +94,6 @@ function modifycard(TargetCard) {
     TargetCard.style.height = "";
     TargetCard.className = "ColumnCards";
     const NewEvent = {
-      id: new Date().getTime(),
       FromTitle: BeforeTitle,
       ToTitle: NewTitle,
       EventType: "변경",
@@ -152,15 +109,11 @@ function modifycard(TargetCard) {
       .then((resp) => resp.json())
       .catch((error) => console.error(error));
 
-    // modifylogregister(
-    //   events[events.length - 1].FromTitle,
-    //   events[events.length - 1].ToTitle,
-    //   events[events.length - 1].EventType,
-    //   events[events.length - 1].EventTime
-    // );
+    modifylogregister(
+      NewEvent.FromTitle,NewEvent.ToTitle,NewEvent.EventType,NewEvent.EventTime
+    );
 
     const NewCardObj = {
-      id: TargetCard.id,
       Title: NewTitle,
       Body: NewBody,
       Author: "web",
@@ -186,4 +139,4 @@ function modifycard(TargetCard) {
   );
 }
 
-export { showregisterform, cardheightadjust, makenewcard, modifycard };
+export { toggleRegisterForm, cardheightadjust, makenewcard, modifycard };

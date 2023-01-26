@@ -1,7 +1,7 @@
 import { modaldeletecard } from "./modaldelete.js";
 import { makecardsection, makenewcardinner } from "./templates.js";
 import {
-  showregisterform,
+  toggleRegisterForm,
   cardheightadjust,
   makenewcard,
   modifycard,
@@ -9,7 +9,8 @@ import {
 import { deletecolumn, changecoltitle } from "./columns.js";
 import { updatehistory } from "./sidemenu.js";
 import { dragcard } from "./dragndrop.js";
-import { showfabmenu } from "./fabmenu.js";
+import {darkmode, showfabmenu} from "./fabmenu.js";
+import Server from "./server.js";
 
 const API_BASE_URL = "http://localhost:3000";
 const API_URL_Col = `${API_BASE_URL}/Columns`;
@@ -51,13 +52,6 @@ function makeinitcol(Columns) {
   });
 }
 
-fetch(`${API_BASE_URL}/IsDarkMode`)
-  .then((resp) => resp.json())
-  .then((viewmode) => {
-    if (viewmode.IsDarkMode) document.body.classList.toggle("Dark");
-  })
-  .catch((err) => console.error(err));
-
 async function getCardinfo() {
   await fetch(API_URL_Box)
     .then((resp) => resp.json())
@@ -82,85 +76,83 @@ async function callinitcol() {
   await getEventinfo();
 }
 
-callinitcol();
+function addEvent(eventType, selector, listener) {
+  document.addEventListener(eventType, e => {
+    const target = e.target.closest(selector);
+    if (!target) return;
+    listener(e);
+  });
+}
 
-document.body.addEventListener("click", (e) => {
+addEvent('click', '.FabButton', e => {
   const fabbtn = e.target.closest(".FabButton");
-  if (fabbtn != null) {
-    showfabmenu(fabbtn);
-  }
+  showfabmenu(fabbtn);
 });
 
-const acolumn = document.getElementsByClassName("ColumnSection")[0];
+addEvent('click', '.ShowInputForm', e => {
+  const collist = e.target.closest(".ColumnList");
+  if (!collist) return;
+  toggleRegisterForm(collist);
+});
 
-acolumn.addEventListener("click", (e) => {
-  const inputbuttons = e.target.closest(".ShowInputForm");
-  if (inputbuttons != null) {
-    const collist = inputbuttons.closest(".ColumnList");
-    showregisterform(collist);
-  }
+addEvent('click', '.CardModify', e => {
+  const targetcard = e.target.closest(".ColumnCards");
+  if (!targetcard) return;
+  modifycard(targetcard);
 });
-acolumn.addEventListener("click", (e) => {
-  const modifybuttons = e.target.closest(".CardModify");
-  if (modifybuttons != null) {
-    const targetcard = modifybuttons.closest(".ColumnCards");
-    modifycard(targetcard);
-  }
-});
-acolumn.addEventListener("input", (e) => {
+
+addEvent('input', '.CardInput', e => {
   const inputarea = e.target.closest(".CardInput");
-  if (inputarea != null) {
-    cardheightadjust(inputarea);
-  }
-});
-acolumn.addEventListener("click", (e) => {
-  const deletebuttons = e.target.closest(".CardDelete");
-  if (deletebuttons != null) {
-    const targetcard = deletebuttons.closest(".ColumnCards");
-    modaldeletecard(targetcard);
-  }
-});
-acolumn.addEventListener("click", (e) => {
-  const registerbutton = e.target.closest(".CardRegister");
-  if (registerbutton != null) {
-    const registerform = registerbutton.closest(".NewCard");
-    if (registerform != null) {
-      makenewcard(registerform);
-    }
-  }
-});
-acolumn.addEventListener("click", (e) => {
-  const coldeletebuttons = e.target.closest(".ColumnDelete");
-  if (coldeletebuttons != null) {
-    const targetcolumn = coldeletebuttons.closest(".ColumnList");
-    deletecolumn(targetcolumn);
-  }
-});
-acolumn.addEventListener("dblclick", (e) => {
-  const columntitle = e.target.closest(".ColumnTitle");
-  if (columntitle != null) {
-    changecoltitle(columntitle);
-  }
+  if (!inputarea) return;
+  cardheightadjust(inputarea);
 });
 
-acolumn.addEventListener("mousedown", (e) => {
-  const cursoroncard = e.target.closest(".ColumnCards");
-  if (cursoroncard != null) {
-    dragAble = true;
-  }
+addEvent('click', '.CardDelete', e => {
+  const targetcard = e.target.closest(".ColumnCards");
+  if (!targetcard) return;
+  modaldeletecard(targetcard);
 });
-acolumn.addEventListener("mousemove", (e) => {
-  const cursoroncard = e.target.closest(".ColumnCards");
-  if (cursoroncard && dragAble) {
+
+addEvent('click', '.CardRegister', e => {
+  const registerform = e.target.closest(".NewCard");
+  if (!registerform) return;
+  makenewcard(registerform);
+});
+
+addEvent('click', '.ColumnDelete', e => {
+  const targetcolumn = e.target.closest(".ColumnList");
+  deletecolumn(targetcolumn);
+});
+
+addEvent('dblclick', '.ColumnTitle', e => {
+  const columntitle = e.target.closest(".ColumnTitle");
+  if (!columntitle) return
+  changecoltitle(columntitle);
+});
+
+addEvent('mousedown', '.ColumnCards', e => {
+  dragAble = true;
+});
+
+addEvent('mousemove', '.ColumnCards', e => {
+  if (dragAble) {
     dragcard(e);
     dragAble = false;
   }
 });
-acolumn.addEventListener("mouseup", (e) => {
-  const colsec = e.target.closest(".ColumnSection");
-  if (colsec != null) {
-    dragAble = false;
-  }
+
+addEvent('mouseup', '.ColumnSection', e => {
+  dragAble = false;
 });
 
-export { API_BASE_URL, API_URL_Col, API_URL_Box, API_URL_Eve, acolumn };
+function initializeDarkMode() {
+  Server.getIsDarkMode().then(({ IsDarkMode }) => {
+    if (IsDarkMode)
+      darkmode();
+  }).catch(console.log);
+}
+
+callinitcol();
+initializeDarkMode();
+
+export { API_BASE_URL, API_URL_Col, API_URL_Box, API_URL_Eve };

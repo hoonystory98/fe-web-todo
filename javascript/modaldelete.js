@@ -1,86 +1,63 @@
-import { API_URL_Box, API_URL_Col, API_URL_Eve } from "./main.js";
-//import { adddeletelogregister } from "./sidemenu.js";
 import { deletecardmodal } from "./templates.js";
+import Server from "./server.js";
+import {adddeletelogregister} from "./sidemenu.js";
 
-function modaldeletecard(TargetCard) {
+function getDeleteCardModalElement() {
   const ModalHTML = document.createElement("div");
-  ModalHTML.classList = "Modal";
+  ModalHTML.classList.add("Modal");
   ModalHTML.innerHTML = deletecardmodal();
   document.body.append(ModalHTML);
-  let ModalTarget = ModalHTML;
-  let ModalCancel = ModalHTML.getElementsByClassName("ModalCancel")[0];
-  let ModalConfirm = ModalHTML.getElementsByClassName("ModalConfirm")[0];
+  return ModalHTML;
+}
 
-  ModalTarget.addEventListener("click", (event) => {
-    if (event.target === ModalTarget) {
-      ModalTarget.remove();
-    }
+function subtractColumnCounter($cardCounter) {
+  const newCount = parseInt($cardCounter.innerHTML) - 1;
+  $cardCounter.innerHTML = `${newCount}`;
+}
+
+function getDeletionEvent(colName, cardTitle) {
+  return {
+    ColumnName: colName,
+    CardTitle: cardTitle,
+    EventType: "삭제",
+    EventTime: new Date().getTime(),
+  };
+}
+
+function setModalEvent($modal, $targetCard) {
+  const $confirm = $modal.getElementsByClassName("ModalConfirm")[0];
+  const $columnList = $targetCard.closest(".ColumnList");
+  const $cardCounter = $columnList.getElementsByClassName("CardCount")[0];
+  const $colTitle = $columnList.getElementsByClassName("ColumnTitle")[0];
+  const $cardTitle = $targetCard.getElementsByClassName("CardTitle")[0];
+  const $cardSection = $columnList.getElementsByClassName("CardSection")[0];
+
+  $modal.addEventListener("click", ({ target }) => {
+    if (!target.closest('.ModalAlert') ||
+        !!target.closest('button'))
+      $modal.remove();
   });
-  ModalConfirm.addEventListener("click", () => {
-    TargetCard.closest(".ColumnList").getElementsByClassName(
-      "CardCount"
-    )[0].innerHTML =
-      TargetCard.closest(".ColumnList").getElementsByClassName("CardCount")[0]
-        .innerHTML - 1;
 
-    const NewEvent = {
-      id: new Date().getTime(),
-      ColumnName: TargetCard.closest(".ColumnList")
-        .getElementsByClassName("ColumnTitle")[0]
-        .innerText.split("\n")[0],
-      CardTitle: TargetCard.getElementsByClassName("CardTitle")[0].textContent,
-      EventType: "삭제",
-      EventTime: new Date().getTime(),
-    };
-    fetch(API_URL_Eve, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(NewEvent),
-    })
-      .then((resp) => resp.json())
-      .catch((error) => console.error(error));
-    // adddeletelogregister(
-    //   events[events.length - 1].ColumnName,
-    //   events[events.length - 1].CardTitle,
-    //   events[events.length - 1].EventType,
-    //   events[events.length - 1].EventTime
-    // );
-
-    let TColumn = TargetCard.closest(".ColumnList");
-    let TargetCardId = TargetCard.id;
-
-    fetch(`${API_URL_Box}/${TargetCardId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ TargetCardId }),
-    })
-      .then((resp) => resp.json())
-      .catch((error) => console.error(error));
-
-    TargetCard.remove();
-    ModalHTML.remove();
-
-    let Lists = [];
-    Array.from(
-      TColumn.getElementsByClassName("CardSection")[0].children
-    ).forEach((card) => Lists.push(card.id));
-    fetch(`${API_URL_Col}/${TColumn.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ Lists }),
-    })
-      .then((resp) => resp.json())
-      .catch((error) => console.error(error));
+  $confirm.addEventListener("click", e => {
+    subtractColumnCounter($cardCounter);
+    const newEvent = getDeletionEvent(
+        $colTitle.innerText.split("\n")[0],
+        $cardTitle.textContent);
+    Server.postNewEvent(newEvent).catch(console.log);
+    Server.deleteCard($targetCard.id)
+        .then($targetCard.remove())
+        .catch(console.log);
+    Server.fetchCardList(
+        $columnList.id,
+        Array.from($cardSection.children).map($card => $card.id),
+    ).catch(console.log);
+    adddeletelogregister(newEvent.ColumnName,newEvent.CardTitle,newEvent.EventType,newEvent.EventTime);
   });
-  ModalCancel.addEventListener("click", () => {
-    ModalHTML.remove();
-  });
+}
+
+function modaldeletecard(TargetCard) {
+  const $modal = getDeleteCardModalElement();
+  setModalEvent($modal, TargetCard);
 }
 
 export { modaldeletecard };

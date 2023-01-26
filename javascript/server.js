@@ -2,67 +2,50 @@ const API_BASE_URL = "http://localhost:3000";
 const API_URL_Col = `${API_BASE_URL}/Columns`;
 const API_URL_Box = `${API_BASE_URL}/Cards`;
 const API_URL_Eve = `${API_BASE_URL}/Events`;
+const API_URL_Dark = `${API_BASE_URL}/IsDarkMode`;
 
-let cards = [];
-
-function getfromserver() {
-  await;
+async function getIsDarkMode() {
+  return (await fetch(API_URL_Dark)).json();
 }
 
-function makecardarr(card) {
-  cards.push(card);
+async function postNewEvent(newEvent) {
+  return (await fetch(API_URL_Eve, {
+    method: "POST",
+    headers: {"Content-type": "application/json"},
+    body: JSON.stringify(newEvent),
+  })).json();
 }
 
-function makeinitcol(Columns) {
-  Columns.forEach((Column) => {
-    let ColumnCards = Column.Lists;
-    let ColumnHTML = makecardsection(
-      Column.Name,
-      Column.id,
-      ColumnCards.length
-    );
-    document.getElementsByClassName("ColumnSection")[0].innerHTML += ColumnHTML;
-
-    if (ColumnCards.length === 0) return;
-    ColumnCards.forEach((CardNum) => {
-      let NewCardForm = document.createElement("div");
-      let TargetCard = cards.find((card) => {
-        return card["id"] === CardNum;
-      });
-      NewCardForm.classList = "ColumnCards";
-      NewCardForm.id = TargetCard.id;
-      NewCardForm.innerHTML = makenewcardinner(
-        TargetCard.Title,
-        TargetCard.Body,
-        TargetCard.Author
-      );
-      document.getElementById(`cards-${Column.id}`).append(NewCardForm);
-    });
-  });
+async function postNewCard(newCard) {
+  return (await fetch(API_URL_Box, {
+    method: "POST",
+    headers: {"Content-type": "application/json"},
+    body: JSON.stringify(newCard)
+  })).json();
 }
 
-async function getCardinfo() {
-  await fetch(API_URL_Box)
-    .then((resp) => resp.json())
-    .then((boxes) => boxes.forEach((card) => makecardarr(card)))
-    .catch((err) => console.error(err));
-}
-async function getColumninfo() {
-  await fetch(API_URL_Col)
-    .then((resp) => resp.json())
-    .then((column) => makeinitcol(column))
-    .catch((err) => console.error(err));
-}
-async function getEventinfo() {
-  await fetch(API_URL_Eve)
-    .then((resp) => resp.json())
-    .then((history) => updatehistory(history))
-    .catch((err) => console.error(err));
-}
-async function callinitcol() {
-  await getCardinfo();
-  await getColumninfo();
-  await getEventinfo();
+async function deleteCard(cardId) {
+  return (await fetch(`${API_URL_Box}/${cardId}`, {
+    method: "DELETE",
+    headers: {"Content-type": "application/json"},
+    body: JSON.stringify({cardId}),
+  })).json();
 }
 
-export {};
+async function fetchCardList(columnId, newList) {
+  return (await fetch(`${API_URL_Col}/${columnId}`, {
+    method: "PATCH",
+    headers: {"Content-type": "application/json"},
+    body: JSON.stringify({Lists: newList}),
+  })).json();
+}
+
+const Server = {
+  getIsDarkMode,
+  postNewEvent,
+  deleteCard,
+  fetchCardList,
+  postNewCard,
+}
+
+export default Server;
