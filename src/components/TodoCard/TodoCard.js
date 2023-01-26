@@ -39,7 +39,7 @@ class TodoCard extends Component {
         const $lastCollapsed = e.lastCollapsedElement;
 
         const srcTodoId = parseInt($dragStart.dataset.todoId);
-        const srcColumnId = parseInt($dragStart.dataset.columnId)
+        const srcColumnId = parseInt($dragStart.dataset.columnId);
         const dstTodoId = parseInt($lastCollapsed.dataset.todoId);
         const dstColumnId = parseInt($lastCollapsed.dataset.columnId);
 
@@ -94,6 +94,26 @@ class TodoCard extends Component {
             from: beforeTodo.name,
             to: afterTodo.name
         });
+    }
+
+    notifyDelete(todoName, columnName) {
+        return NotificationManager.makeNotification({
+            type: NotificationManager.notificationTypes.DELETE,
+            from: columnName,
+            name: todoName
+        });
+    }
+
+    async deleteTodo() {
+        const { todo } = this.state;
+        const columnId = parseInt(this.$target.dataset.columnId);
+        const column = (await TodoDatabase.getColumns({ id: columnId }))[0];
+        const pos = column.todoIds.findIndex(id => id === todo.id);
+        column.todoIds.splice(pos, 1);
+        await TodoDatabase.patchColumn({ id: column.id, todoIds: column.todoIds });
+        await TodoDatabase.deleteTodo({ id: todo.id });
+        this.notifyDelete(todo.name, column.name);
+        this.props.onTodoMoved();
     }
 
     template() {
@@ -181,6 +201,7 @@ class TodoCard extends Component {
     }
     endLongclick() {
         this.$target.querySelector(".progress-click").classList.remove("on");
+        this.deleteTodo();
         ToastManager.show('삭제되었습니다', 1000);
     }
 }

@@ -80,6 +80,17 @@ const postTodo = async (todo) => {
 
 /**
  * @param {TodoEntity} todo
+ * @returns {Promise<any>}
+ */
+const deleteTodo = async (todo) => {
+    const deleteTodoRes = await fetch(`${TODO_URI}/${todo.id}`, {
+        method: 'DELETE'
+    });
+    return await deleteTodoRes.json();
+}
+
+/**
+ * @param {TodoEntity} todo
  * @returns {Promise<TodoEntity>}
  */
 const patchTodo = async (todo) => {
@@ -167,6 +178,7 @@ const TodoDatabase = {
     patchColumn: pendingWrapper(patchColumn),
     getTodos: pendingWrapper(getTodos),
     postTodo: pendingWrapper(postTodo),
+    deleteTodo: pendingWrapper(deleteTodo),
     patchTodo: pendingWrapper(patchTodo),
     getNotifications: pendingWrapper(getNotifications),
     postNotification: pendingWrapper(postNotification),
