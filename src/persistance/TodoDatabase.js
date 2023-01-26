@@ -141,16 +141,36 @@ const getQueryString = (data) => {
     return '?' + (data.author ? `&author=${data.author}` : '');
 }
 
+let nPendingWorker = 0;
+
+const pendingWrapper = (asyncFunc) => {
+    return (...args) => new Promise((resolve, reject) => {
+        if (!nPendingWorker) {
+            document.body.classList.add('pending');
+        }
+        ++nPendingWorker;
+        asyncFunc(...args)
+        .then(resolve)
+        .catch(reject)
+        .finally(() => {
+            --nPendingWorker;
+            if (!nPendingWorker) {
+                document.body.classList.remove('pending');
+            }
+        });
+    });
+};
+
 const TodoDatabase = {
-    getColumns,
-    postColumn,
-    patchColumn,
-    getTodos,
-    postTodo,
-    patchTodo,
-    getNotifications,
-    postNotification,
-    patchCollection
+    getColumns: pendingWrapper(getColumns),
+    postColumn: pendingWrapper(postColumn),
+    patchColumn: pendingWrapper(patchColumn),
+    getTodos: pendingWrapper(getTodos),
+    postTodo: pendingWrapper(postTodo),
+    patchTodo: pendingWrapper(patchTodo),
+    getNotifications: pendingWrapper(getNotifications),
+    postNotification: pendingWrapper(postNotification),
+    patchCollection: pendingWrapper(patchCollection)
 }
 
 export default TodoDatabase;
