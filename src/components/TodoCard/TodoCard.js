@@ -22,9 +22,10 @@ class TodoCard extends Component {
         this.addEvent('click', '.todocard-bgbtn', this.cancelEdit.bind(this));
         this.addEvent(DragManager.dragEventTypes.COLLAPSED, '*', this.onCollapsed.bind(this));
         this.addEvent(DragManager.dragEventTypes.END, '*', this.onDragEnded.bind(this));
+        this.addEvent('mousedown', '.todocard-delete', this.shortclick.bind(this));
         this.addEvent(LongClickManager.longClickEventTypes.START, '.todocard-delete', this.startLongclick.bind(this));
         this.addEvent(LongClickManager.longClickEventTypes.CANCELED, '.todocard-delete', this.cancelLongclick.bind(this));
-        this.addEvent(LongClickManager.longClickEventTypes.END,'.todocard-delete', this.endLongclick.bind(this));
+        this.addEvent(LongClickManager.longClickEventTypes.END, '.todocard-delete', this.endLongclick.bind(this));
     }
 
     onCollapsed(e) {
@@ -38,7 +39,7 @@ class TodoCard extends Component {
         const $lastCollapsed = e.lastCollapsedElement;
 
         const srcTodoId = parseInt($dragStart.dataset.todoId);
-        const srcColumnId = parseInt($dragStart.dataset.columnId)
+        const srcColumnId = parseInt($dragStart.dataset.columnId);
         const dstTodoId = parseInt($lastCollapsed.dataset.todoId);
         const dstColumnId = parseInt($lastCollapsed.dataset.columnId);
 
@@ -169,13 +170,15 @@ class TodoCard extends Component {
         if (this.isDummy())
             this.$target.classList.add(DragManager.BLOCK_DRAG_CLASS);
     }
+    
+    shortclick() {
+        ToastManager.show('삭제하려면 꾹 누르세요', 1000);
+    }
     startLongclick() {
         this.$target.querySelector(".progress-click").classList.add("on");
-        ToastManager.show('삭제하려면 꾹 누르세요', 1000);
     }
     cancelLongclick() {
         this.$target.querySelector(".progress-click").classList.remove("on");
-        ToastManager.show('취소되었습니다', 1000);
     }
     endLongclick() {
         this.$target.querySelector(".progress-click").classList.remove("on");

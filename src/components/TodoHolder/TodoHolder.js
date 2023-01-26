@@ -7,7 +7,7 @@ import NotificationManager from "../../core/NotificationManager.js";
 
 class TodoHolder extends Component {
     initialize() {
-        this.addEvent('click', '.add-todo-btn', this.toogleAddForm.bind(this));
+        this.addEvent('click', '.add-todo-btn', this.toggleAddForm.bind(this));
     }
 
     template() {
@@ -74,11 +74,11 @@ class TodoHolder extends Component {
         const $todoAddForm = this.$target.querySelector('[data-component="TodoAddForm"]');
         new TodoAddForm($todoAddForm, {
             addTodo: this.addTodo.bind(this),
-            addCancel: this.toogleAddForm.bind(this)
+            addCancel: this.toggleAddForm.bind(this)
         });
     }
 
-    toogleAddForm() {
+    toggleAddForm() {
         const $addForm = this.$target.querySelector('[data-component="TodoAddForm"]');
         const checked = !$addForm.toggleAttribute('hidden');
         const $button = this.$target.querySelector('.add-todo-btn');
@@ -97,8 +97,8 @@ class TodoHolder extends Component {
             `<div data-component="TodoCard" data-todo-id="${newTodo.id}" data-column-id="${column.id}"></div>`);
         new TodoCard($actualHolder.firstElementChild, { todo: newTodo, $actualHolder, onTodoMoved: this.updateMovedTodo.bind(this) });
 
-        this.toogleAddForm();
-
+        this.toggleAddForm();
+        this.mountTodoCounter();
         this.notifyAddTodo(newTodo, column.name);
     }
 
