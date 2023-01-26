@@ -16,6 +16,14 @@ async function postNewEvent(newEvent) {
   })).json();
 }
 
+async function postNewCard(newCard) {
+  return (await fetch(API_URL_Box, {
+    method: "POST",
+    headers: {"Content-type": "application/json"},
+    body: JSON.stringify(newCard)
+  })).json();
+}
+
 async function deleteCard(cardId) {
   return (await fetch(`${API_URL_Box}/${cardId}`, {
     method: "DELETE",
@@ -37,6 +45,7 @@ const Server = {
   postNewEvent,
   deleteCard,
   fetchCardList,
+  postNewCard,
 }
 
 export default Server;

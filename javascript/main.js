@@ -1,7 +1,7 @@
 import { modaldeletecard } from "./modaldelete.js";
 import { makecardsection, makenewcardinner } from "./templates.js";
 import {
-  showregisterform,
+  toggleRegisterForm,
   cardheightadjust,
   makenewcard,
   modifycard,
@@ -92,7 +92,7 @@ addEvent('click', '.FabButton', e => {
 addEvent('click', '.ShowInputForm', e => {
   const collist = e.target.closest(".ColumnList");
   if (!collist) return;
-  showregisterform(collist);
+  toggleRegisterForm(collist);
 });
 
 addEvent('click', '.CardModify', e => {
